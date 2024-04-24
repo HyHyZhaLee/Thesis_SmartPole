@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'mqtt_helper.dart';
 
-String mqtt_server = "io.adafruit.com";
-String mqtt_cliend_id = "Flutter_app";
-String mqtt_user_name = "AI_ProjectHGL" ;
-String mqtt_password = "aio_" + "rdVf662waw2mFNqq427hAJLxsDRn";
+// Your MQTT details
+String mqttServer = "io.adafruit.com";
+String mqttClientId = "Flutter_app";
+String mqttUserName = "AI_ProjectHGL";
+String mqttPassword = "aio_" + "rdVf662waw2mFNqq427hAJLxsDRn";
+String mqttTopic = "AI_ProjectHGL/feeds/pole";
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter MQTT Home Page'),
+      home: const MyHomePage(title: 'MQTT Light Control'),
     );
   }
 }
@@ -37,41 +39,51 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 10;
   late MQTTHelper _mqttHelper;
+  double _brightness = 0;
+  bool _isLightOn = false;
 
   @override
   void initState() {
     super.initState();
-    _mqttHelper = MQTTHelper(mqtt_server, mqtt_cliend_id, mqtt_user_name, mqtt_password);
+    _mqttHelper = MQTTHelper(mqttServer, mqttClientId, mqttUserName, mqttPassword);
     _initializeMQTT();
   }
 
   void _initializeMQTT() async {
     await _mqttHelper.initializeMQTTClient();
-    _mqttHelper.subscribe('AI_ProjectHGL/feeds/pole');
+    _mqttHelper.subscribe(mqttTopic);
     _mqttHelper.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final MqttPublishMessage message = c[0].payload as MqttPublishMessage;
       final payload = MqttPublishPayload.bytesToStringAsString(message.payload.message);
-
+      final brightnessValue = double.tryParse(payload) ?? _brightness;
       setState(() {
-        _counter = int.tryParse(payload) ?? _counter; // Update counter based on received payload
+        _brightness = brightnessValue;
+        _isLightOn = _brightness > 0;
       });
     });
   }
 
+  void _updateBrightness(double brightness) {
+    setState(() {
+      _brightness = brightness;
+      _isLightOn = brightness > 0;
+    });
+    _mqttHelper.publish(mqttTopic, _brightness.round().toString());
+  }
+
+  void _toggleLight(bool isOn) {
+    setState(() {
+      _isLightOn = isOn;
+      _brightness = isOn ? 100 : 0;
+    });
+    _mqttHelper.publish(mqttTopic, _brightness.round().toString());
+  }
 
   @override
   void dispose() {
     _mqttHelper.disconnect();
     super.dispose();
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-    _mqttHelper.publish('AI_ProjectHGL/feeds/pole', _counter.toString()); // Gửi giá trị hiện tại của counter
   }
 
   @override
@@ -81,25 +93,31 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            ListTile(
+              title: Text('Light Brightness'),
+              trailing: Switch(
+                value: _isLightOn,
+                onChanged: _toggleLight,
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Slider(
+              value: _brightness,
+              onChanged: _updateBrightness,
+              min: 0,
+              max: 100,
+              divisions: 100,
+              label: '${_brightness.round()}',
             ),
+            // Add more device controls here
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      // Add more functionality or navigation if needed
     );
   }
 }
