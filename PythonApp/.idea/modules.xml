@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Thesis_SmartPole.iml" filepath="$PROJECT_DIR$/.idea/Thesis_SmartPole.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/PythonApp.iml" filepath="$PROJECT_DIR$/.idea/PythonApp.iml" />
     </modules>
   </component>
 </project>
