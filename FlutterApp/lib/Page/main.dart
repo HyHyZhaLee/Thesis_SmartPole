@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'mqtt_helper.dart';
+import 'dart:convert';  // Add this to use jsonEncode
 
 // Your MQTT details
 String mqttServer = "mqttserver.tk";
@@ -64,12 +65,24 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _publishControlMessage(double brightness) {
+    // Create the JSON data structure
+    var message = jsonEncode({
+      "station_id": "air_0002",
+      "station_name": "NBIOT 0002",
+      "action": "control light",
+      "device_id": "streetlightLTK",
+      "data": brightness.round().toString()
+    });
+    _mqttHelper.publish(mqttTopic, message);  // Publish JSON as a string
+  }
+
   void _updateBrightness(double brightness) {
     setState(() {
       _brightness = brightness;
       _isLightOn = brightness > 0;
     });
-    _mqttHelper.publish(mqttTopic, _brightness.round().toString());
+    _publishControlMessage(_brightness);  // Update to send JSON message
   }
 
   void _toggleLight(bool isOn) {
@@ -77,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _isLightOn = isOn;
       _brightness = isOn ? 100 : 0;
     });
-    _mqttHelper.publish(mqttTopic, _brightness.round().toString());
+    _publishControlMessage(_brightness);  // Update to send JSON message
   }
 
   @override

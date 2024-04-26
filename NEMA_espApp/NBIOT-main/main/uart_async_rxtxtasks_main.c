@@ -318,19 +318,19 @@ static void mqtt_task(void *arg)
 
     		char config_mqtt[100];
 
-    		sprintf(config_mqtt,"AT+SMCONF=\"URL\",\"%s\"\r", BROKER);
+//    		sprintf(config_mqtt,"AT+SMCONF=\"URL\",\"%s\"\r", BROKER);
     		sendData(MQTT_TASK_TAG, config_mqtt, 3);
     		vTaskDelay(200 / portTICK_PERIOD_MS);
 
-    		sprintf(config_mqtt,"AT+SMCONF=\"CLIENTID\",\"%s\"\r", CLIENTID);
+//    		sprintf(config_mqtt,"AT+SMCONF=\"CLIENTID\",\"%s\"\r", CLIENTID);
     		sendData(MQTT_TASK_TAG, config_mqtt,3);
     		vTaskDelay(200 / portTICK_PERIOD_MS);
 
-    		sprintf(config_mqtt,"AT+SMCONF=\"USERNAME\",\"%s\"\r", USERNAME);
+//    		sprintf(config_mqtt,"AT+SMCONF=\"USERNAME\",\"%s\"\r", USERNAME);
     		sendData(MQTT_TASK_TAG, config_mqtt ,3);
 			vTaskDelay(200 / portTICK_PERIOD_MS);
 
-			sprintf(config_mqtt,"AT+SMCONF=\"PASSWORD\",\"%s\"\r", PASSWORD);
+//			sprintf(config_mqtt,"AT+SMCONF=\"PASSWORD\",\"%s\"\r", PASSWORD);
 			sendData(MQTT_TASK_TAG, config_mqtt ,3);
 			vTaskDelay(200 / portTICK_PERIOD_MS);
 
@@ -358,11 +358,11 @@ static void mqtt_task(void *arg)
     		led_status = 2;
     		char config_mqtt[100];
 
-    		sprintf(config_mqtt,"AT+SMUNSUB=\"%s\"\r\n", SUBTOPIC);
+//    		sprintf(config_mqtt,"AT+SMUNSUB=\"%s\"\r\n", SUBTOPIC);
     		sendData(MQTT_TASK_TAG, config_mqtt ,3);
     		vTaskDelay(300 / portTICK_PERIOD_MS);
 
-    		sprintf(config_mqtt,"AT+SMSUB=\"%s\",1\r\n", SUBTOPIC);
+//    		sprintf(config_mqtt,"AT+SMSUB=\"%s\",1\r\n", SUBTOPIC);
     		sendData(MQTT_TASK_TAG, config_mqtt ,3);
     		status_mqtt = 5;
 
@@ -398,7 +398,7 @@ static void mqtt_task(void *arg)
         	ceng_len = strlen(json_str);
         	//strcpy(ceng_data, json_str);
 
-        	sprintf(msg,"AT+SMPUB=\"%s\",%d,0,1\r", PUBTOPIC ,ceng_len);
+//        	sprintf(msg,"AT+SMPUB=\"%s\",%d,0,1\r", PUBTOPIC ,ceng_len);
         	sendData(MQTT_TASK_TAG, msg,3);
    	   		vTaskDelay(1000 / portTICK_PERIOD_MS);
    	   		status_mqtt = 8;
@@ -525,7 +525,7 @@ static void rx_task(void *arg)
             	   getDataCENG((char*)data);
             	   run_counter += 1;
             	   ACK = OK;
-            	   printf("Count: %d\n",run_counter);
+//            	   printf("Count: %d\n",run_counter);
                }
             }
 
@@ -539,26 +539,8 @@ static void rx_task(void *arg)
             	if (cereg == 1) ACK = OK;
             	else ACK = NOTHING;
 
-            	printf("cereg: %d\r\n",cereg);
             }
 
-
-//            else if (strstr(temp,"SGNSCMD")){
-//
-//            	if (rxBytes < 80) {
-//            		ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_ERROR);
-//            	    ACK = 0;
-//            	}
-//            	else{
-//
-//            		ACK = 1;
-//            		strcpy(ceng_data,(char*)data);
-//            		getDataCGNSINF(ceng_data);
-//            		count += 1;
-//            		printf("Count: %d\n",count);
-//            	}
-//
-//            }
 
 
 
@@ -566,7 +548,7 @@ static void rx_task(void *arg)
             else if (strstr(temp,"OK")) {
             	ACK = OK;
             	run_counter += 1;
-            	printf("Count: %d\n",run_counter);
+//            	printf("Count: %d\n",run_counter);
             }
 
             else if (strstr(temp,"ERROR")){
@@ -578,36 +560,51 @@ static void rx_task(void *arg)
             // PROCESS DIMMING SIGNAL
             // +SMSUB: "jackwrion12345/feeds/dimming","22"
             // +SMSUB: "AI_ProjectHGL/feeds/pole","22"
+            // +SMSUB: "/innovation/airmonitoring/SmartPole","{"station_id":"air_0002","station_name":"NBIOT 0002","action":"control light","device_id":"streetlightLTK","data":"46"}"
             char* idx = strstr(temp,"+SMSUB");
-            if (idx){
-				char duty_str[10];
-				int pub_len = strlen(SUBTOPIC);
-				strncpy(duty_str, idx + pub_len + 12, 3);        //idx_data = idx_topic + len_topic + offset
-				duty_str[3] = '\0';
-				int duty_cycle = atoi(duty_str);
+            if (idx) {
+                char* json_str_start = strchr(idx, '{');  // Find the start of the JSON payload
+                if (json_str_start) {
+                    char* json_str_end = strchr(json_str_start, '}');  // Find the end of the JSON payload
+                    if (json_str_end && json_str_end > json_str_start) {
+                        int json_length = json_str_end - json_str_start + 1;
+                        char json_str[json_length + 1];  // Buffer to hold the JSON string
+                        strncpy(json_str, json_str_start, json_length);
+                        json_str[json_length] = '\0';  // Null-terminate the JSON string
 
+                        cJSON *json = cJSON_Parse(json_str);  // Parse the JSON string
+                        if (json) {
+                            const cJSON *action = cJSON_GetObjectItem(json, "action");
+                            const cJSON *device_id = cJSON_GetObjectItem(json, "device_id");
+                            const cJSON *data = cJSON_GetObjectItem(json, "data");
 
-				if (duty_cycle == 200){						// TUNR-ON DEMO MODE
-					demo_mode = 1;
-					printf("DEMO_MODE_ON");
-					demo_mode = 1;
-				}
+                            // Check if action and device_id are as expected
+                            if (cJSON_IsString(action) && cJSON_IsString(device_id) &&
+                                strcmp(action->valuestring, "control light") == 0 &&
+                                strcmp(device_id->valuestring, "streetlightLTK") == 0) {
 
-				else if (duty_cycle == 99){					// TUNR-OFF DEMO, BACK TO PREVIOUS DIMMING
-					demo_mode = 0;
-					duty_cycle = lumi;
-					DimmingLight(duty_cycle);
+                                // Convert data to integer
+                                int duty_cycle = data ? atoi(data->valuestring) : 0;
 
-				}
+                                // Process duty_cycle
+                                if (duty_cycle == 200) {  // TUNR-ON DEMO MODE
+                                    demo_mode = 1;
+                                    printf("DEMO_MODE_ON");
+                                } else if (duty_cycle == 99) {  // TUNR-OFF DEMO, BACK TO PREVIOUS DIMMING
+                                    demo_mode = 0;
+                                    duty_cycle = lumi;
+                                } else {  // MANUALLY DIMMING
+                                    demo_mode = 0;
+                                    lumi = duty_cycle;
+                                }
+                                DimmingLight(duty_cycle);
+                            }
 
-				else {										// MANUALLY DIMMING
-					demo_mode = 0;
-					lumi = duty_cycle;
-					DimmingLight(duty_cycle);
-
-				}
-			}
-
+                            cJSON_Delete(json);  // Free the JSON object
+                        }
+                    }
+                }
+            }
 
 
             // handler when Error too much
