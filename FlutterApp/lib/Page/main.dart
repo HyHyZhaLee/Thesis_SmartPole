@@ -5,9 +5,9 @@ import 'mqtt_helper.dart';
 // Your MQTT details
 String mqttServer = "io.adafruit.com";
 String mqttClientId = "Flutter_app";
-String mqttUserName = "jackwrion12345";
-String mqttPassword = "aio_" + "UhKm63qUkAANckOaLeFKZFmGCF9S";
-String mqttTopic = "jackwrion12345/feeds/dimming";
+String mqttUserName = "innovation";
+String mqttPassword = "Innovation_RgPQAZoA5N";
+String mqttTopic = "/innovation/airmonitoring/SmartPole";
 
 void main() {
   runApp(const MyApp());

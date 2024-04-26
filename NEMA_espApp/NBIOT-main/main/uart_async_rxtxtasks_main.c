@@ -36,7 +36,7 @@
 
 
 //........ DESIGN FOR TEST .........//
-#define PRODUCT 1						// PRODUCT == 1  OR TESTING == 0
+#define PRODUCT 0						// PRODUCT == 1  OR TESTING == 0
 
 
 //...........MQTT DEFINE .............//
