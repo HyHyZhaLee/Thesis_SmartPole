@@ -3,7 +3,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'mqtt_helper.dart';
 
 // Your MQTT details
-String mqttServer = "io.adafruit.com";
+String mqttServer = "mqttserver.tk";
 String mqttClientId = "Flutter_app";
 String mqttUserName = "innovation";
 String mqttPassword = "Innovation_RgPQAZoA5N";

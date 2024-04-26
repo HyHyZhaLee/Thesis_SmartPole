@@ -40,12 +40,12 @@
 
 
 //...........MQTT DEFINE .............//
-#define BROKER "io.adafruit.com"
+#define BROKER "mqttserver.tk"
 #define CLIENTID "TestModuleHUYGL"
-#define USERNAME "AI_ProjectHGL"
-#define PASSWORD "aio_rdVf662waw2mFNqq427hAJLxsDRn"
-#define PUBTOPIC "AI_ProjectHGL/feeds/data"
-#define SUBTOPIC "AI_ProjectHGL/feeds/pole"
+#define USERNAME "innovation"
+#define PASSWORD "Innovation_RgPQAZoA5N"
+#define PUBTOPIC "/innovation/airmonitoring/SmartPole"
+#define SUBTOPIC "/innovation/airmonitoring/SmartPole"
 
 
 
