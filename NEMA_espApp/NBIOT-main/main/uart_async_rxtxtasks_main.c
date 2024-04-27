@@ -183,10 +183,11 @@ void getDataCENG(char* rawData){
 	cJSON_Delete(json);
 	json = cJSON_CreateObject();
 
-
-	cJSON_AddStringToObject(json, "action", "updateData");
+	cJSON_AddStringToObject(json, "station_id", "SmartPole_0002");
+	cJSON_AddStringToObject(json, "station_name", "Smart Pole 0002");
+	cJSON_AddStringToObject(json, "action", "update data");
+	cJSON_AddStringToObject(json, "device_id", "NEMA_0002");
 	cJSON_AddStringToObject(json, "ccid", ccid);
-	cJSON_AddStringToObject(json, "id", "streetlightLTK");
 	cJSON_AddNumberToObject(json, "msgid", msgID++);
 	cJSON_AddNumberToObject(json, "lumi", lumi);
 
@@ -561,7 +562,8 @@ static void rx_task(void *arg)
             // +SMSUB: "/innovation/airmonitoring/SmartPole",
             // "{"station_id":"SmartPole_0002","station_name":"Smart Pole 0002","action":"control light","device_id":"NEMA_0002","data":"46"}"
 
-            if (idx) {
+            char* idx = strstr(temp,"+SMSUB");
+			if (idx){
                 char* json_str_start = strchr(idx, '{');  // Find the start of the JSON payload
                 if (json_str_start) {
                     char* json_str_end = strchr(json_str_start, '}');  // Find the end of the JSON payload
