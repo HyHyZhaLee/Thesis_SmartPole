@@ -6,60 +6,19 @@ MQTT_PASSWORD = "Innovation_RgPQAZoA5N"
 MQTT_TOPIC = /innovation/airmonitoring/SmartPole
 
 {
-  "station_id": "air_0002",
+  "station_id": "SmartPole_0002",
   "station_name": "NBIOT 0002",
+  "action": "update data"
+  "device_id": "NEMA_0002",
+  "ccid":"89840480009185162941"
   "sensors": [
-    {
-      "id": "temp_0001",
-      "value": "23.00"
-    },
-    {
-      "id": "humi_0001",
-      "value": "56.00"
-    }
-    {
-      "id": "temp_0002",
-      "value": "23.00"
-    },
-    {
-      "id": "humi_0002",
-      "value": "2.00"
-    },
-    {
-      "id": "ph_0002",
-      "value": "7.00"
-    },
-    {
-      "id": "EC_0002",
-      "value": "0.00"
-    },
-    {
-      "id": "Nito_0002",
-      "value": "0.00"
-    },
-    {
-      "id": "Photpho_0002",
-      "value": "0.00"
-    },
-    {
-      "id": "Kali_0002",
-      "value": "0.00"
-    },
-	{
-      "id": "Relay_0001",
-      "value": "0"
-    },
-{
-      "id": "Relay_0002",
-      "value": "1"
-    },
-{
-      "id": "Relay_0003",
-      "value": "0"
-    },
-{
-      "id": "Relay_0004",
-      "value": "1"
-    }
+    "msgid":0,
+    "lumi":0,
+    "incli":"0.00",
+     "x":"0.000",
+     "y":"0.000",
+     "z":"0.000",
+     "rsrp":-94,
+     "cellID":151473406	   
   ]
 }

@@ -68,10 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void _publishControlMessage(double brightness) {
     // Create the JSON data structure
     var message = jsonEncode({
-      "station_id": "air_0002",
-      "station_name": "NBIOT 0002",
+      "station_id": "SmartPole_0002",
+      "station_name": "Smart Pole 0002",
       "action": "control light",
-      "device_id": "streetlightLTK",
+      "device_id": "NEMA_0002",
       "data": brightness.round().toString()
     });
     _mqttHelper.publish(mqttTopic, message);  // Publish JSON as a string
