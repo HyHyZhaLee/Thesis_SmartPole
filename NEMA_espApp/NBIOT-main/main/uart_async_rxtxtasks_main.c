@@ -36,7 +36,7 @@
 
 
 //........ DESIGN FOR TEST .........//
-#define PRODUCT 0						// PRODUCT == 1  OR TESTING == 0
+#define PRODUCT 1				    // PRODUCT == 1  OR TESTING == 0
 
 
 //...........MQTT DEFINE .............//
@@ -82,8 +82,9 @@ int number_of_sample = 5;
 static void DimmingLight(int duty_cycle){
 	if (duty_cycle == 0) gpio_set_level(RELAY, 0);
 	else gpio_set_level(RELAY, 1);
-
+#ifdef PRODUCT 0
 	printf("DIMMING: %d\n", duty_cycle);
+#endif
 	pwm_set_duty(duty_cycle);
 }
 
@@ -135,8 +136,10 @@ void read_acceleration(void* pvParameter)
 	if(averaging_acce(acce,number_of_sample,&acce_avg) == false) goto get_data_to_array;
 
 	inclination = bmi2_get_inclination(acce_avg.acce_z);
+#ifdef PRODUCT 0
 	printf("acce_x:%.5f, acce_y:%.5f, acce_z:%.5f\n", acce_avg.acce_x, acce_avg.acce_y, acce_avg.acce_z);
 	printf("DO nghieng: %.2f*\n\n", inclination);
+#endif
 }
 
 
@@ -425,7 +428,9 @@ static void prepare_task(void *arg)
     static const char *TX_TASK_TAG = "TX_TASK";
     esp_log_level_set(TX_TASK_TAG, ESP_LOG_INFO);
     while (1) {
+#ifdef PRODUCT 0
     	printf("At preparing step:.. %d\n",run_counter);
+#endif
 
 
     	//*************  USED FOR TURN OFF MODULE ************//
@@ -526,7 +531,9 @@ static void rx_task(void *arg)
             	   getDataCENG((char*)data);
             	   run_counter += 1;
             	   ACK = OK;
+#ifdef PRODUCT 0
             	   printf("Count: %d\n",run_counter);
+#endif
                }
             }
 
