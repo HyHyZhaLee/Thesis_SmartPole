@@ -69,16 +69,28 @@ class _MyHomePageState extends State<MyHomePage> {
   void _handleReceivedMessage(dynamic message) {
     print("Handling message: $message");
     try {
-      double brightnessValue = double.tryParse(message['data'].toString()) ?? _brightness;
-      setState(() {
-        _brightness = brightnessValue;
-        _isLightOn = _brightness > 0;
-        print("Brightness setting: $brightnessValue");
-      });
+      // Decode the message into a map
+      Map<String, dynamic> msg = jsonDecode(message);
+      // Check the contents of the message before proceeding
+      if (msg['station_id'] == 'SmartPole_0002' &&
+          msg['station_name'] == 'Smart Pole 0002' &&
+          msg['action'] == 'control light') {
+        // Safely try to parse the brightness value
+        double brightnessValue = double.tryParse(msg['data'].toString()) ?? _brightness;
+        // Update the state with the new brightness value if the conditions are met
+        setState(() {
+          _brightness = brightnessValue;
+          _isLightOn = _brightness > 0;  // Update the light state based on brightness
+          print("Brightness setting: $brightnessValue");
+        });
+      } else {
+        print("Message does not match required criteria.");
+      }
     } catch (e) {
       print('Error processing received message: $e');
     }
   }
+
 
   void _publishControlMessage(double brightness) {
     var message = jsonEncode({
@@ -129,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: CustomSliderWidget(
                 initialSliderValue: _brightness,
                 onValueChanged: (value) {
-                  _updateBrightness(value);
+                  _updateBrightness(value);  // This should also send updates to MQTT if needed
                 },
               ),
             ),

@@ -63,12 +63,7 @@ class MQTTHelper {
       final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
       final payload = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       print('Received message: $payload from topic: ${c[0].topic}');
-      try {
-        var decodedMessage = jsonDecode(payload);
-        onMessage(decodedMessage); // Callback for processing received message
-      } catch (e) {
-        print('Error in decoding JSON: $e');
-      }
+      onMessage(payload); // Ensure this calls the correct processing function
     });
   }
 
