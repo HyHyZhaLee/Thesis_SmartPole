@@ -53,7 +53,7 @@ class MQTTHelper {
   void publish(String topic, String message) {
     final builder = MqttClientPayloadBuilder();
     builder.addString(message);
-    _client.publishMessage(topic, MqttQos.exactlyOnce, builder.payload!);
+    _client.publishMessage(topic, MqttQos.exactlyOnce, builder.payload!, retain: true);
     print('Message published to $topic');
   }
 
