@@ -1,30 +1,30 @@
+// custom_slider_widget.dart
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Custom Slider',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Custom Vertical Slider'),
-        ),
-        body: CustomSliderWidget(),
-      ),
-    );
-  }
-}
-
 class CustomSliderWidget extends StatefulWidget {
+  final double initialSliderValue;
+  final Function(double) onValueChanged;
+
+  const CustomSliderWidget({
+    Key? key,
+    this.initialSliderValue = 43,
+    required this.onValueChanged,
+  }) : super(key: key);
+
   @override
   _CustomSliderWidgetState createState() => _CustomSliderWidgetState();
 }
 
 class _CustomSliderWidgetState extends State<CustomSliderWidget> {
-  double _currentSliderValue = 43;
-  bool _isSwitched = true; // Assuming the light is on initially
+  late double _currentSliderValue;
+  late bool _isSwitched;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentSliderValue = widget.initialSliderValue;
+    _isSwitched = _currentSliderValue > 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +32,16 @@ class _CustomSliderWidgetState extends State<CustomSliderWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SizedBox(height: 16), // Reduced space
+          SizedBox(height: 16),
           Text(
             _isSwitched ? '${_currentSliderValue.round()}%' : 'Off',
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
               color: _isSwitched ? Colors.black : Colors.grey,
-              // fontFamily: 'YourCustomFont', // Uncomment this when you add your font
             ),
           ),
-          Expanded( // Make the slider take up all available space
+          Expanded(
             child: RotatedBox(
               quarterTurns: 3,
               child: SliderTheme(
@@ -59,11 +58,14 @@ class _CustomSliderWidgetState extends State<CustomSliderWidget> {
                   value: _currentSliderValue,
                   min: 0,
                   max: 100,
-                  onChanged: _isSwitched ? (value) {
+                  onChanged: _isSwitched
+                      ? (value) {
                     setState(() {
                       _currentSliderValue = value;
+                      widget.onValueChanged(_currentSliderValue);
                     });
-                  } : null, // Disable the slider when the power is off
+                  }
+                      : null,
                 ),
               ),
             ),
@@ -77,16 +79,12 @@ class _CustomSliderWidgetState extends State<CustomSliderWidget> {
             onPressed: () {
               setState(() {
                 _isSwitched = !_isSwitched;
-                if (!_isSwitched) {
-                  _currentSliderValue = 0; // Turn off the light
-                }
-                else if (_isSwitched){
-                  _currentSliderValue = 100;
-                }
+                _currentSliderValue = _isSwitched ? 100 : 0;
+                widget.onValueChanged(_currentSliderValue);
               });
             },
           ),
-          SizedBox(height: 16), // Space before the bottom of the column
+          SizedBox(height: 16),
         ],
       ),
     );
