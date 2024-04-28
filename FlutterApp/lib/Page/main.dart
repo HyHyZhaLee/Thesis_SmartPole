@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'mqtt_helper.dart';
+import 'dart:convert';  // To use jsonEncode and jsonDecode
 
 // Your MQTT details
 String mqttServer = "mqttserver.tk";
@@ -21,8 +22,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter MQTT Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: const MyHomePage(title: 'MQTT Light Control'),
     );
@@ -42,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late MQTTHelper _mqttHelper;
   double _brightness = 0;
   bool _isLightOn = false;
+  String _statusMessage = 'Disconnected';
 
   @override
   void initState() {
@@ -51,17 +53,42 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _initializeMQTT() async {
-    await _mqttHelper.initializeMQTTClient();
-    _mqttHelper.subscribe(mqttTopic);
-    _mqttHelper.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
-      final MqttPublishMessage message = c[0].payload as MqttPublishMessage;
-      final payload = MqttPublishPayload.bytesToStringAsString(message.payload.message);
-      final brightnessValue = double.tryParse(payload) ?? _brightness;
+    bool isConnected = await _mqttHelper.initializeMQTTClient();
+    if (isConnected) {
+      _mqttHelper.subscribe(mqttTopic, _handleReceivedMessage);
+      setState(() {
+        _statusMessage = 'Connected';
+      });
+    } else {
+      setState(() {
+        _statusMessage = 'Connection Failed';
+      });
+    }
+  }
+
+  void _handleReceivedMessage(dynamic message) {
+    print("Handling message: $message");
+    try {
+      double brightnessValue = double.tryParse(message['data'].toString()) ?? _brightness;
       setState(() {
         _brightness = brightnessValue;
         _isLightOn = _brightness > 0;
+        print("Brightness setting: $brightnessValue");
       });
+    } catch (e) {
+      print('Error processing received message: $e');
+    }
+  }
+
+  void _publishControlMessage(double brightness) {
+    var message = jsonEncode({
+      "station_id": "SmartPole_0002",
+      "station_name": "Smart Pole 0002",
+      "action": "control light",
+      "device_id": "NEMA_0002",
+      "data": brightness.round().toString()
     });
+    _mqttHelper.publish(mqttTopic, message);
   }
 
   void _updateBrightness(double brightness) {
@@ -69,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _brightness = brightness;
       _isLightOn = brightness > 0;
     });
-    _mqttHelper.publish(mqttTopic, _brightness.round().toString());
+    _publishControlMessage(_brightness);
   }
 
   void _toggleLight(bool isOn) {
@@ -77,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _isLightOn = isOn;
       _brightness = isOn ? 100 : 0;
     });
-    _mqttHelper.publish(mqttTopic, _brightness.round().toString());
+    _publishControlMessage(_brightness);
   }
 
   @override
@@ -85,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _mqttHelper.disconnect();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {

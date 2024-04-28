@@ -36,7 +36,7 @@
 
 
 //........ DESIGN FOR TEST .........//
-#define PRODUCT 0						// PRODUCT == 1  OR TESTING == 0
+#define PRODUCT 1				    // PRODUCT == 1  OR TESTING == 0
 
 
 //...........MQTT DEFINE .............//
@@ -82,8 +82,9 @@ int number_of_sample = 5;
 static void DimmingLight(int duty_cycle){
 	if (duty_cycle == 0) gpio_set_level(RELAY, 0);
 	else gpio_set_level(RELAY, 1);
-
+#ifdef PRODUCT 0
 	printf("DIMMING: %d\n", duty_cycle);
+#endif
 	pwm_set_duty(duty_cycle);
 }
 
@@ -135,8 +136,10 @@ void read_acceleration(void* pvParameter)
 	if(averaging_acce(acce,number_of_sample,&acce_avg) == false) goto get_data_to_array;
 
 	inclination = bmi2_get_inclination(acce_avg.acce_z);
+#ifdef PRODUCT 0
 	printf("acce_x:%.5f, acce_y:%.5f, acce_z:%.5f\n", acce_avg.acce_x, acce_avg.acce_y, acce_avg.acce_z);
 	printf("DO nghieng: %.2f*\n\n", inclination);
+#endif
 }
 
 
@@ -183,10 +186,11 @@ void getDataCENG(char* rawData){
 	cJSON_Delete(json);
 	json = cJSON_CreateObject();
 
-
-	cJSON_AddStringToObject(json, "action", "updateData");
+	cJSON_AddStringToObject(json, "station_id", "SmartPole_0002");
+	cJSON_AddStringToObject(json, "station_name", "Smart Pole 0002");
+	cJSON_AddStringToObject(json, "action", "update data");
+	cJSON_AddStringToObject(json, "device_id", "NEMA_0002");
 	cJSON_AddStringToObject(json, "ccid", ccid);
-	cJSON_AddStringToObject(json, "id", "streetlightLTK");
 	cJSON_AddNumberToObject(json, "msgid", msgID++);
 	cJSON_AddNumberToObject(json, "lumi", lumi);
 
@@ -424,7 +428,9 @@ static void prepare_task(void *arg)
     static const char *TX_TASK_TAG = "TX_TASK";
     esp_log_level_set(TX_TASK_TAG, ESP_LOG_INFO);
     while (1) {
+#ifdef PRODUCT 0
     	printf("At preparing step:.. %d\n",run_counter);
+#endif
 
 
     	//*************  USED FOR TURN OFF MODULE ************//
@@ -525,7 +531,9 @@ static void rx_task(void *arg)
             	   getDataCENG((char*)data);
             	   run_counter += 1;
             	   ACK = OK;
+#ifdef PRODUCT 0
             	   printf("Count: %d\n",run_counter);
+#endif
                }
             }
 
@@ -539,26 +547,8 @@ static void rx_task(void *arg)
             	if (cereg == 1) ACK = OK;
             	else ACK = NOTHING;
 
-            	printf("cereg: %d\r\n",cereg);
             }
 
-
-//            else if (strstr(temp,"SGNSCMD")){
-//
-//            	if (rxBytes < 80) {
-//            		ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_ERROR);
-//            	    ACK = 0;
-//            	}
-//            	else{
-//
-//            		ACK = 1;
-//            		strcpy(ceng_data,(char*)data);
-//            		getDataCGNSINF(ceng_data);
-//            		count += 1;
-//            		printf("Count: %d\n",count);
-//            	}
-//
-//            }
 
 
 
@@ -566,7 +556,7 @@ static void rx_task(void *arg)
             else if (strstr(temp,"OK")) {
             	ACK = OK;
             	run_counter += 1;
-            	printf("Count: %d\n",run_counter);
+//            	printf("Count: %d\n",run_counter);
             }
 
             else if (strstr(temp,"ERROR")){
@@ -576,38 +566,53 @@ static void rx_task(void *arg)
 
 
             // PROCESS DIMMING SIGNAL
-            // +SMSUB: "jackwrion12345/feeds/dimming","22"
-            // +SMSUB: "AI_ProjectHGL/feeds/pole","22"
+            // +SMSUB: "/innovation/airmonitoring/SmartPole",
+            // "{"station_id":"SmartPole_0002","station_name":"Smart Pole 0002","action":"control light","device_id":"NEMA_0002","data":"46"}"
+
             char* idx = strstr(temp,"+SMSUB");
-            if (idx){
-				char duty_str[10];
-				int pub_len = strlen(SUBTOPIC);
-				strncpy(duty_str, idx + pub_len + 12, 3);        //idx_data = idx_topic + len_topic + offset
-				duty_str[3] = '\0';
-				int duty_cycle = atoi(duty_str);
+			if (idx){
+                char* json_str_start = strchr(idx, '{');  // Find the start of the JSON payload
+                if (json_str_start) {
+                    char* json_str_end = strchr(json_str_start, '}');  // Find the end of the JSON payload
+                    if (json_str_end && json_str_end > json_str_start) {
+                        int json_length = json_str_end - json_str_start + 1;
+                        char json_str[json_length + 1];  // Buffer to hold the JSON string
+                        strncpy(json_str, json_str_start, json_length);
+                        json_str[json_length] = '\0';  // Null-terminate the JSON string
 
+                        cJSON *json = cJSON_Parse(json_str);  // Parse the JSON string
+                        if (json) {
+                            const cJSON *action = cJSON_GetObjectItem(json, "action");
+                            const cJSON *device_id = cJSON_GetObjectItem(json, "device_id");
+                            const cJSON *data = cJSON_GetObjectItem(json, "data");
 
-				if (duty_cycle == 200){						// TUNR-ON DEMO MODE
-					demo_mode = 1;
-					printf("DEMO_MODE_ON");
-					demo_mode = 1;
-				}
+                            // Check if action and device_id are as expected
+                            if (cJSON_IsString(action) && cJSON_IsString(device_id) &&
+                                strcmp(action->valuestring, "control light") == 0 &&
+                                strcmp(device_id->valuestring, "NEMA_0002") == 0) {
 
-				else if (duty_cycle == 99){					// TUNR-OFF DEMO, BACK TO PREVIOUS DIMMING
-					demo_mode = 0;
-					duty_cycle = lumi;
-					DimmingLight(duty_cycle);
+                                // Convert data to integer
+                                int duty_cycle = data ? atoi(data->valuestring) : 0;
 
-				}
+                                // Process duty_cycle
+                                if (duty_cycle == 200) {  // TUNR-ON DEMO MODE
+                                    demo_mode = 1;
+                                    printf("DEMO_MODE_ON");
+                                } else if (duty_cycle == 99) {  // TUNR-OFF DEMO, BACK TO PREVIOUS DIMMING
+                                    demo_mode = 0;
+                                    duty_cycle = lumi;
+                                } else {  // MANUALLY DIMMING
+                                    demo_mode = 0;
+                                    lumi = duty_cycle;
+                                }
+                                DimmingLight(duty_cycle);
+                            }
 
-				else {										// MANUALLY DIMMING
-					demo_mode = 0;
-					lumi = duty_cycle;
-					DimmingLight(duty_cycle);
-
-				}
-			}
-
+                            cJSON_Delete(json);  // Free the JSON object
+                        }
+                    }
+                }
+            }
 
 
             // handler when Error too much
