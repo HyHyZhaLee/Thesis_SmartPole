@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'AppFunction/mqtt_helper.dart';
 import 'dart:convert';  // To use jsonEncode and jsonDecode
-
+import 'Widgets/custom_slider_widget.dart';
 // Your MQTT details
 String mqttServer = "mqttserver.tk";
 String mqttClientId = "Flutter_app";
@@ -113,7 +113,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,20 +125,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            ListTile(
-              title: Text('Light Brightness'),
-              trailing: Switch(
-                value: _isLightOn,
-                onChanged: _toggleLight,
+            Expanded(
+              child: CustomSliderWidget(
+                initialSliderValue: _brightness,
+                onValueChanged: (value) {
+                  _updateBrightness(value);
+                },
               ),
-            ),
-            Slider(
-              value: _brightness,
-              onChanged: _updateBrightness,
-              min: 0,
-              max: 100,
-              divisions: 100,
-              label: '${_brightness.round()}',
             ),
             // Add more device controls here
           ],

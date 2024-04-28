@@ -1,5 +1,7 @@
 // custom_slider_widget.dart
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
 
 class CustomSliderWidget extends StatefulWidget {
   final double initialSliderValue;
@@ -18,7 +20,7 @@ class CustomSliderWidget extends StatefulWidget {
 class _CustomSliderWidgetState extends State<CustomSliderWidget> {
   late double _currentSliderValue;
   late bool _isSwitched;
-
+  final _audioCache = AudioPlayer();
   @override
   void initState() {
     super.initState();
@@ -73,6 +75,7 @@ class _CustomSliderWidgetState extends State<CustomSliderWidget> {
                   },
                   onChangeEnd: (value) {
                     setState(() {
+                      SystemSound.play(SystemSoundType.click);
                       _currentSliderValue = value;
                       _isSwitched = _currentSliderValue > 0;
                       widget.onValueChanged(_currentSliderValue);
