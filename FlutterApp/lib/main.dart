@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'AppFunction/mqtt_helper.dart';
 import 'dart:convert';  // To use jsonEncode and jsonDecode
 import 'Widgets/custom_slider_widget.dart';
@@ -47,6 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    //Permission init
+
     super.initState();
     _mqttHelper = MQTTHelper(mqttServer, mqttClientId, mqttUserName, mqttPassword);
     _initializeMQTT();
