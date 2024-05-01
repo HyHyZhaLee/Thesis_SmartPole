@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'dart:convert'; // To use jsonEncode and jsonDecode
 import 'AppFunction/mqtt_helper.dart';
-import 'dart:convert';  // To use jsonEncode and jsonDecode
 import 'Widgets/custom_slider_widget.dart';
+
 // Your MQTT details
 String mqttServer = "mqttserver.tk";
 String mqttClientId = "Flutter_app";
@@ -43,13 +43,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late MQTTHelper _mqttHelper;
   double _brightness = 0;
+  double _brightness2 = 0; // Slider value for second device
   bool _isLightOn = false;
   String _statusMessage = 'Disconnected';
 
   @override
   void initState() {
-    //Permission init
-
     super.initState();
     _mqttHelper = MQTTHelper(mqttServer, mqttClientId, mqttUserName, mqttPassword);
     _initializeMQTT();
@@ -80,7 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
           msg['action'] == 'control light') {
         // Safely try to parse the brightness value
         double brightnessValue = double.tryParse(msg['data'].toString()) ?? _brightness;
-        // Update the state with the new brightness value if the conditions are met
         setState(() {
           _brightness = brightnessValue;
           _isLightOn = _brightness > 0;  // Update the light state based on brightness
@@ -94,32 +92,27 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-
-  void _publishControlMessage(double brightness) {
+  void _publishControlMessage(double brightness, String deviceId) {
     var message = jsonEncode({
       "station_id": "SmartPole_0002",
       "station_name": "Smart Pole 0002",
       "action": "control light",
-      "device_id": "NEMA_0002",
+      "device_id": deviceId,
       "data": brightness.round().toString()
     });
     _mqttHelper.publish(mqttTopic, message);
   }
 
-  void _updateBrightness(double brightness) {
+  void _updateBrightness(double brightness, String deviceId) {
     setState(() {
-      _brightness = brightness;
+      if (deviceId == "NEMA_0002") {
+        _brightness = brightness;
+      } else if (deviceId == "NEMA_0003") {
+        _brightness2 = brightness;
+      }
       _isLightOn = brightness > 0;
     });
-    _publishControlMessage(_brightness);
-  }
-
-  void _toggleLight(bool isOn) {
-    setState(() {
-      _isLightOn = isOn;
-      _brightness = isOn ? 100 : 0;
-    });
-    _publishControlMessage(_brightness);
+    _publishControlMessage(brightness, deviceId);
   }
 
   @override
@@ -141,18 +134,33 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Expanded(
-              child: CustomSliderWidget(
-                initialSliderValue: _brightness,
-                onValueChanged: (value) {
-                  _updateBrightness(value);  // This should also send updates to MQTT if needed
-                },
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CustomSliderWidget(
+                      initialSliderValue: _brightness,
+                      onValueChanged: (value) {
+                        _updateBrightness(value, "NEMA_0002");  // Updates for device NEMA_0002
+                      },
+                      deviceName: "NEMA 0002",
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomSliderWidget(
+                      initialSliderValue: _brightness2,
+                      onValueChanged: (value) {
+                        _updateBrightness(value, "NEMA_0003");  // Updates for device NEMA_0003
+                      },
+                      deviceName: "NEMA 0003",
+                    ),
+                  ),
+                ],
               ),
             ),
-            // Add more device controls here
+            // Additional controls can be placed here if needed
           ],
         ),
       ),
-      // Add more functionality or navigation if needed
     );
   }
 }

@@ -1,15 +1,18 @@
-// custom_slider_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomSliderWidget extends StatefulWidget {
   final double initialSliderValue;
   final Function(double) onValueChanged;
+  final String deviceName;  // To display device name dynamically
+  final Color activeTrackColor;  // To set slider active track color dynamically
 
   const CustomSliderWidget({
     Key? key,
     this.initialSliderValue = 0,
     required this.onValueChanged,
+    this.deviceName = "Light Brightness", // Default device name
+    this.activeTrackColor = Colors.blue, // Default color for active track
   }) : super(key: key);
 
   @override
@@ -19,6 +22,7 @@ class CustomSliderWidget extends StatefulWidget {
 class _CustomSliderWidgetState extends State<CustomSliderWidget> {
   late double _currentSliderValue;
   late bool _isSwitched;
+
   @override
   void initState() {
     super.initState();
@@ -33,8 +37,8 @@ class _CustomSliderWidgetState extends State<CustomSliderWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 10),
-          const Text(
-            "Light Brightness",
+          Text(
+            widget.deviceName,
             style: TextStyle(
               fontSize: 28,
             ),
@@ -53,7 +57,7 @@ class _CustomSliderWidgetState extends State<CustomSliderWidget> {
               quarterTurns: 3,
               child: SliderTheme(
                 data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: Color(0xFF4C9FED),
+                  activeTrackColor: widget.activeTrackColor,
                   inactiveTrackColor: Color(0xFFF4EEF4),
                   trackShape: RoundedRectSliderTrackShape(),
                   trackHeight: 70.0,
@@ -87,7 +91,7 @@ class _CustomSliderWidgetState extends State<CustomSliderWidget> {
           IconButton(
             icon: Icon(
               Icons.power_settings_new,
-              color: _isSwitched ? Color(0xFF4C9FED) : Color(0xFFF4EEF4),
+              color: _isSwitched ? widget.activeTrackColor : Color(0xFFF4EEF4),
               size: 90.0,
             ),
             onPressed: () {
