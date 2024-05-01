@@ -3,7 +3,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'dart:convert'; // To use jsonEncode and jsonDecode
 import 'AppFunction/mqtt_helper.dart';
 import 'Widgets/custom_slider_widget.dart';
-
+import 'package:connectivity_plus/connectivity_plus.dart';
 // Your MQTT details
 String mqttServer = "mqttserver.tk";
 String mqttClientId = "Flutter_app";
@@ -125,7 +125,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+
+        backgroundColor: Color(0xFF1488DB), // Set the AppBar background color
+        titleTextStyle: const TextStyle(
+        color: Colors.white, // Set the title text color to white
+        fontSize: 24, // Increase the font size for better visibility
+        fontWeight: FontWeight.bold, // Make the title bold
+        ),
+        elevation: 4, // Optional: Adds shadow below the AppBar
+        centerTitle: true, // Optional: Centers the title
         title: Text(widget.title),
       ),
       body: Padding(

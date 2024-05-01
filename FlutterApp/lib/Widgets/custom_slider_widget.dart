@@ -102,7 +102,7 @@ class _CustomSliderWidgetState extends State<CustomSliderWidget> {
               });
             },
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 60),
         ],
       ),
     );
