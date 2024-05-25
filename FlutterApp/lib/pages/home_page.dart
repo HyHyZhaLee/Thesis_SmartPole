@@ -31,11 +31,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 20),
             // app bar
             Padding(
               padding: EdgeInsets.symmetric(
@@ -53,11 +54,11 @@ class _HomePageState extends State<HomePage> {
                   ),
 
                   // account icon
-                  Icon(
-                    Icons.person,
-                    size: 45,
+                  Image.asset(
+                    'lib/icons/Logo-DH-Bach-Khoa-HCMUT.png',
+                    height: 45,
                     color: Colors.grey[800],
-                  )
+                  ),
                 ],
               ),
             ),
