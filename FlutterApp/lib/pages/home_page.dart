@@ -24,9 +24,15 @@ class _HomePageState extends State<HomePage> {
 
   // list of sensor data
   List mySensors = [
+    // Image path: svgrepo.com; thickness = 45%
     // [ sensorName, iconPath , sensorData ]
-    ["Temperature", "lib/icons/fan.png", "22°C"],
-    ["Humidity", "lib/icons/fan.png", "54%"],
+    ["Temperature", "lib/icons/temperature.png", "22°C"],
+    ["Humidity", "lib/icons/humidity.png", "54%"],
+    ["PM1.0", "lib/icons/pm1_0.png", "25 µg/m³"],
+    ["PM2.5", "lib/icons/pm25.png", "15 µg/m³"],
+    ["PM4.0", "lib/icons/pm40.png", "12 µg/m³"],
+    ["PM10", "lib/icons/pm10.png", "10 µg/m³"],
+    ["CO2", "lib/icons/co2.png", "450 ppm"],
   ];
 
   // power button switched
@@ -64,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                   Image.asset(
                     'lib/icons/Logo-DH-Bach-Khoa-HCMUT.png',
                     height: 45,
-                    color: Colors.grey[800],
+                    // color: Colors.grey[800],
                   ),
                 ],
               ),
@@ -120,8 +126,8 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 600, // Đặt chiều cao cụ thể cho GridView
               child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                // shrinkWrap: true,
+                // physics: NeverScrollableScrollPhysics(),
                 itemCount: mySmartDevices.length + mySensors.length,
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
