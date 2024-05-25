@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_app/util/smart_device_box.dart';
+import 'package:flutter_app/util/sensor_data_box.dart'; // Import thêm file này
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,13 +22,19 @@ class _HomePageState extends State<HomePage> {
     ["NEMA 0002", "lib/icons/light-bulb.png", false],
   ];
 
+  // list of sensor data
+  List mySensors = [
+    // [ sensorName, iconPath , sensorData ]
+    ["Temperature", "lib/icons/fan.png", "22°C"],
+    ["Humidity", "lib/icons/fan.png", "54%"],
+  ];
+
   // power button switched
   void powerSwitchChanged(bool value, int index) {
     setState(() {
       mySmartDevices[index][2] = value;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,23 +116,34 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 10),
 
-            // grid
+            // smart devices grid and sensor data grid combined
             SizedBox(
               height: 600, // Đặt chiều cao cụ thể cho GridView
               child: GridView.builder(
-                itemCount: mySmartDevices.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: mySmartDevices.length + mySensors.length,
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 1 / 1.3,
                 ),
                 itemBuilder: (context, index) {
-                  return SmartDeviceBox(
-                    smartDeviceName: mySmartDevices[index][0],
-                    iconPath: mySmartDevices[index][1],
-                    powerOn: mySmartDevices[index][2],
-                    onChanged: (value) => powerSwitchChanged(value, index),
-                  );
+                  if (index < mySmartDevices.length) {
+                    return SmartDeviceBox(
+                      smartDeviceName: mySmartDevices[index][0],
+                      iconPath: mySmartDevices[index][1],
+                      powerOn: mySmartDevices[index][2],
+                      onChanged: (value) => powerSwitchChanged(value, index),
+                    );
+                  } else {
+                    int sensorIndex = index - mySmartDevices.length;
+                    return SensorDataBox(
+                      sensorName: mySensors[sensorIndex][0],
+                      iconPath: mySensors[sensorIndex][1],
+                      sensorData: mySensors[sensorIndex][2],
+                    );
+                  }
                 },
               ),
             ),
