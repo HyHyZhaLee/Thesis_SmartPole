@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> {
       mySmartDevices[index][2] = value;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,19 +66,16 @@ class _HomePageState extends State<HomePage> {
                     height: 45,
                     color: Colors.grey[800],
                   ),
-
                   // account icon
                   Image.asset(
                     'lib/icons/Logo-DH-Bach-Khoa-HCMUT.png',
                     height: 45,
-                    // color: Colors.grey[800],
+                    color: Colors.grey[800],
                   ),
                 ],
               ),
             ),
-
             SizedBox(height: 20),
-
             // welcome home
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -95,9 +93,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-
             SizedBox(height: 25),
-
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 40.0),
               child: Divider(
@@ -105,9 +101,7 @@ class _HomePageState extends State<HomePage> {
                 color: Color.fromARGB(255, 204, 204, 204),
               ),
             ),
-
             SizedBox(height: 25),
-
             // smart devices grid
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -121,37 +115,44 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SizedBox(height: 10),
-
             // smart devices grid and sensor data grid combined
-            SizedBox(
-              height: 600, // Đặt chiều cao cụ thể cho GridView
-              child: GridView.builder(
-                // shrinkWrap: true,
-                // physics: NeverScrollableScrollPhysics(),
-                itemCount: mySmartDevices.length + mySensors.length,
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1 / 1.3,
-                ),
-                itemBuilder: (context, index) {
-                  if (index < mySmartDevices.length) {
-                    return SmartDeviceBox(
-                      smartDeviceName: mySmartDevices[index][0],
-                      iconPath: mySmartDevices[index][1],
-                      powerOn: mySmartDevices[index][2],
-                      onChanged: (value) => powerSwitchChanged(value, index),
-                    );
-                  } else {
-                    int sensorIndex = index - mySmartDevices.length;
-                    return SensorDataBox(
-                      sensorName: mySensors[sensorIndex][0],
-                      iconPath: mySensors[sensorIndex][1],
-                      sensorData: mySensors[sensorIndex][2],
-                    );
-                  }
-                },
-              ),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                int itemCount = mySmartDevices.length + mySensors.length;
+                int rowCount = (itemCount / 2).ceil();
+                double height = rowCount * 250; // Adjust based on your item height
+
+                return SizedBox(
+                  height: height,
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: itemCount,
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.3,
+                    ),
+                    itemBuilder: (context, index) {
+                      if (index < mySmartDevices.length) {
+                        return SmartDeviceBox(
+                          smartDeviceName: mySmartDevices[index][0],
+                          iconPath: mySmartDevices[index][1],
+                          powerOn: mySmartDevices[index][2],
+                          onChanged: (value) => powerSwitchChanged(value, index),
+                        );
+                      } else {
+                        int sensorIndex = index - mySmartDevices.length;
+                        return SensorDataBox(
+                          sensorName: mySensors[sensorIndex][0],
+                          iconPath: mySensors[sensorIndex][1],
+                          sensorData: mySensors[sensorIndex][2],
+                        );
+                      }
+                    },
+                  ),
+                );
+              },
             ),
           ],
         ),
