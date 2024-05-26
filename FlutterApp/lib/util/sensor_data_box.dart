@@ -40,7 +40,7 @@ class SensorDataBox extends StatelessWidget {
                     sensorName,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: 16,
                       color: Colors.black,
                     ),
                   ),
@@ -49,7 +49,7 @@ class SensorDataBox extends StatelessWidget {
                     sensorData,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 24,
+                      fontSize: 18,
                       color: Colors.black,
                     ),
                   ),
