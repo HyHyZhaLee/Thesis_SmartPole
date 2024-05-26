@@ -117,16 +117,17 @@ class _HomePageState extends State<HomePage> {
       } else if(deviceId == "NEMA 0002") {
         deviceId = "NEMA_0002";
       }
-      final message = jsonEncode({
+      var message = jsonEncode({
         "station_id": "SmartPole_0002",
         "station_name": "Smart Pole 0002",
         "action": "control light",
         "device_id": deviceId,
-        "data": value ? 80 : 0
+        "data": value ? "90" : "0"
       });
       mqttHelper.publish(MQTT_TOPIC, message);
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
