@@ -111,12 +111,17 @@ class _HomePageState extends State<HomePage> {
   void powerSwitchChanged(bool value, int index) {
     setState(() {
       mySmartDevices[index][2] = value;
-
+      String deviceId = mySmartDevices[index][0];
+      if(deviceId == "NEMA 0001") {
+        deviceId = "NEMA_0001";
+      } else if(deviceId == "NEMA 0002") {
+        deviceId = "NEMA_0002";
+      }
       final message = jsonEncode({
         "station_id": "SmartPole_0002",
         "station_name": "Smart Pole 0002",
         "action": "control light",
-        "device_id": mySmartDevices[index][0],
+        "device_id": deviceId,
         "data": value ? 80 : 0
       });
       mqttHelper.publish(MQTT_TOPIC, message);
