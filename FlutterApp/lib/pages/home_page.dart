@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_app/util/smart_device_box.dart';
-import 'package:flutter_app/util/sensor_data_box.dart'; // Import thêm file này
+import 'package:flutter_app/util/sensor_data_box.dart';
+import 'package:flutter_app/AppFunction/mqtt_helper.dart';
+import 'dart:convert'; // For JSON decoding
+
+const MQTT_SERVER = "mqttserver.tk";
+const MQTT_PORT = 1883;
+const MQTT_USERNAME = "innovation";
+const MQTT_PASSWORD = "Innovation_RgPQAZoA5N";
+const MQTT_TOPIC = "/innovation/airmonitoring/SmartPole";
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +19,62 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late MQTTHelper mqttHelper;
+  String _statusMessage = 'Disconnected';
+  double _brightness = 0;
+  bool _isLightOn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    mqttHelper = MQTTHelper(MQTT_SERVER, 'SmartPole_0002', MQTT_USERNAME, MQTT_PASSWORD);
+    initializeMQTT();
+  }
+
+  Future<void> initializeMQTT() async {
+    bool isConnected = await mqttHelper.initializeMQTTClient();
+    if (isConnected) {
+      mqttHelper.subscribe(MQTT_TOPIC, handleReceivedMessage);
+      setState(() {
+        _statusMessage = 'Connected';
+      });
+    } else {
+      setState(() {
+        _statusMessage = 'Connection Failed';
+      });
+    }
+  }
+
+  void handleReceivedMessage(dynamic message) {
+    print("Handling message: $message");
+    try {
+      // Decode the message into a map
+      Map<String, dynamic> msg = jsonDecode(message);
+      // Check the contents of the message before proceeding
+      if (msg['station_id'] == 'SmartPole_0002' &&
+          msg['station_name'] == 'Smart Pole 0002' &&
+          msg['action'] == 'control light') {
+        // Safely try to parse the brightness value
+        double brightnessValue = double.tryParse(msg['data'].toString()) ?? _brightness;
+        setState(() {
+          _brightness = brightnessValue;
+          _isLightOn = _brightness > 0;  // Update the light state based on brightness
+          print("Brightness setting: $brightnessValue");
+        });
+      } else {
+        print("Message does not match required criteria.");
+      }
+    } catch (e) {
+      print('Error processing received message: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    mqttHelper.disconnect();
+    super.dispose();
+  }
+
   // padding constants
   final double horizontalPadding = 40;
   final double verticalPadding = 25;
@@ -39,6 +103,16 @@ class _HomePageState extends State<HomePage> {
   void powerSwitchChanged(bool value, int index) {
     setState(() {
       mySmartDevices[index][2] = value;
+
+      // Publish message to MQTT
+      final message = jsonEncode({
+        "station_id": "SmartPole_0002",
+        "station_name": "Smart Pole 0002",
+        "action": "control light",
+        "device_id": mySmartDevices[index][0],
+        "data": value ? 80 : 0 // Assuming 80 is the brightness level
+      });
+      mqttHelper.publish(MQTT_TOPIC, message);
     });
   }
 
