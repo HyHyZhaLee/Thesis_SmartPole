@@ -1,5 +1,6 @@
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:flutter/foundation.dart' show kIsWeb; // Import kIsWeb
 import 'dart:convert'; // For JSON decoding
 
 class MQTTHelper {
@@ -8,12 +9,31 @@ class MQTTHelper {
   final String _clientIdentifier;
   final String _username;
   final String _password;
+  bool _useWebSocket;
+  int _port;
+  // Add a callback function
+  Function? onConnectedCallback;
 
-  MQTTHelper(this._server, this._clientIdentifier, this._username, this._password);
+  // Constructor with _useWebSocket as an optional parameter, default is false, port default is 1883
+  MQTTHelper(this._server, this._clientIdentifier, this._username, this._password, [this._port = 0, this._useWebSocket = false]) {
+    // Check if the build platform is web or android/ios
+    if (kIsWeb) {
+      _useWebSocket = true;
+      if (_port == 0) {
+        _port = 8084;
+      }
+    } else {
+      _useWebSocket = false;
+      if (_port == 0) {
+        _port = 1883;
+      }
+    }
+  }
 
   Future<bool> initializeMQTTClient() async {
     _client = MqttServerClient(_server, _clientIdentifier);
-    _client.port = 1883; // Default port for MQTT
+    _client.port = _port; // Use the appropriate port based on the platform
+    _client.useWebSocket = _useWebSocket;
     _client.keepAlivePeriod = 60;
     _client.onDisconnected = _onDisconnected;
     _client.onConnected = _onConnected;
@@ -57,19 +77,24 @@ class MQTTHelper {
     print('Message published to $topic');
   }
 
-  void subscribe(String topic, Function(dynamic message) onMessage) {
+  void subscribe(String topic, [Function(String topic, dynamic message)? onMessage]) {
     _client.subscribe(topic, MqttQos.atLeastOnce);
     _client.updates!.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
       final payload = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-      print('Received message: $payload from topic: ${c[0].topic}');
-      onMessage(payload); // Ensure this calls the correct processing function
+      print('Received message from topic "${c[0].topic}":\n "$payload"');
+      if (onMessage != null) {
+        onMessage(topic, payload); // Call the provided onMessage function
+      }
     });
   }
 
   // Callbacks
   void _onConnected() {
     print('Connected to MQTT Broker as $_clientIdentifier');
+    if (onConnectedCallback != null) {
+      onConnectedCallback!();
+    }
   }
 
   void _onDisconnected() {

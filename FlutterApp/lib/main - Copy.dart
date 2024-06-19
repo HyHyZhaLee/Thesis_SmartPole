@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void _handleReceivedMessage(dynamic message) {
+  void _handleReceivedMessage(String topic, dynamic message) {
     print("Handling message: $message");
     try {
       // Decode the message into a map

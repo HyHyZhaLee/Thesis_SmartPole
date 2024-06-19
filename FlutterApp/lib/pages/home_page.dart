@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void handleReceivedMessage(dynamic message) {
+  void handleReceivedMessage(String topic, dynamic message) {
     print("Handling message: $message");
     try {
       Map<String, dynamic> msg = jsonDecode(message);
