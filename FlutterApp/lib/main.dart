@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
-import 'pages/home_page.dart';
+import 'AppFunction/mqtt_manager.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key}) {
+    MqttManager(); // Initialize MQTT Manager
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: HomePage(),
+        appBar: AppBar(
+          title: Text('Flutter MQTT App'),
+        ),
+        body: Center(
+          child: Text('Hello, World!'),
+        ),
       ),
     );
   }

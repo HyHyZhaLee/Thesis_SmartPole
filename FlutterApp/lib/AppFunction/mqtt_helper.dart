@@ -1,14 +1,15 @@
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:mqtt_client/mqtt_browser_client.dart';
 import 'package:flutter/foundation.dart' show kIsWeb; // Import kIsWeb
 import 'dart:convert'; // For JSON decoding
 
 class MQTTHelper {
-  late MqttServerClient _client;
-  final String _server;
-  final String _clientIdentifier;
-  final String _username;
-  final String _password;
+  late MqttClient _client; // Use MqttClient to allow both MqttServerClient and MqttBrowserClient
+  String _server;
+  String _clientIdentifier;
+  String _username;
+  String _password;
   bool _useWebSocket;
   int _port;
   // Add a callback function
@@ -22,24 +23,30 @@ class MQTTHelper {
       if (_port == 0) {
         _port = 8084;
       }
+      _server = "wss://$_server";
     } else {
       _useWebSocket = false;
       if (_port == 0) {
         _port = 1883;
       }
     }
+    print('MQTTHelper initialized with server: $_server, port: $_port, useWebSocket: $_useWebSocket');
   }
 
   Future<bool> initializeMQTTClient() async {
-    _client = MqttServerClient(_server, _clientIdentifier);
-    _client.port = _port; // Use the appropriate port based on the platform
-    _client.useWebSocket = _useWebSocket;
+    if (kIsWeb) {
+      _client = MqttBrowserClient(_server, _clientIdentifier);
+      (_client as MqttBrowserClient).port = _port;
+    } else {
+      _client = MqttServerClient(_server, _clientIdentifier);
+      (_client as MqttServerClient).port = _port;
+    }
     _client.keepAlivePeriod = 60;
     _client.onDisconnected = _onDisconnected;
     _client.onConnected = _onConnected;
     _client.onSubscribed = _onSubscribed;
 
-    _client.secure = false;
+    // _client.secure = false;
     _client.setProtocolV311();
     _client.logging(on: true);
     _client.connectionMessage = MqttConnectMessage()
@@ -48,6 +55,7 @@ class MQTTHelper {
         .startClean();
 
     try {
+      print('Attempting to connect to MQTT server...');
       await _client.connect();
     } catch (e) {
       print('MQTT Connection Exception: $e');
