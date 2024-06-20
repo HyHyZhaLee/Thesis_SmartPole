@@ -3,7 +3,7 @@ import 'AppFunction/mqtt_manager.dart';
 import 'pages/two_slider_page.dart';  // Import the new file
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: TwoSliderPage(),
     );
   }
