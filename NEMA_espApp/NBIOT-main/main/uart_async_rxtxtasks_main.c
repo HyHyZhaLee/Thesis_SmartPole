@@ -40,12 +40,12 @@
 
 
 //...........MQTT DEFINE .............//
-#define BROKER "mqttserver.tk"
+#define BROKER "mqtt.ohstem.vn"
 #define CLIENTID "TestModuleHUYGL"
-#define USERNAME "innovation"
-#define PASSWORD "Innovation_RgPQAZoA5N"
-#define PUBTOPIC "/innovation/airmonitoring/SmartPole"
-#define SUBTOPIC "/innovation/airmonitoring/SmartPole"
+#define USERNAME "BK_SmartPole"
+#define PASSWORD " "
+#define PUBTOPIC "BK_SmartPole/feeds/V15"
+#define SUBTOPIC "BK_SmartPole/feeds/V20"
 
 
 
