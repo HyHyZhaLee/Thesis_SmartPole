@@ -1,5 +1,12 @@
 {
-  "name": "my-awesome-package",
+  "name": "your-project-name",
   "version": "1.0.0",
-  "author": "Huy huy.ly2053038@hcmut.edu.vn"
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "your-build-command"
+  },
+  "dependencies": {
+    
+  }
 }
