@@ -21,7 +21,7 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '2.10.3' # Chỉnh phiên bản Flutter phù hợp với dự án của bạn
+        flutter-version: '3.7.10' # Chỉnh phiên bản Flutter phù hợp với dự án của bạn
 
     - name: Install dependencies
       working-directory: FlutterApp
