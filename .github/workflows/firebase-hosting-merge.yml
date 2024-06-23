@@ -22,14 +22,6 @@ jobs:
             npm i
           fi
 
-      - name: Build the project
-        run: |
-          if [ -e package.json ]; then
-            npm run build
-          elif [ -e yarn.lock ]; then
-            yarn build
-          fi
-
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
