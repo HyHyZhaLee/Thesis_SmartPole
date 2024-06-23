@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "build",
+    "public": "FlutterApp",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -9,7 +9,7 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/FlutterApp/web/index.html"
+        "destination": "index.html"
       }
     ]
   }
