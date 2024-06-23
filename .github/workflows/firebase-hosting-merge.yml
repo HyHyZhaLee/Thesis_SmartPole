@@ -23,6 +23,9 @@ jobs:
       with:
         flutter-version: '2.10.3' # Chỉnh phiên bản Flutter phù hợp với dự án của bạn
 
+    - name: Move to Flutter project directory
+      run: cd FlutterApp
+
     - name: Install dependencies
       run: flutter pub get
 
