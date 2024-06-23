@@ -1,13 +1,1 @@
-{
-  "hosting": {
-    "source": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "frameworksBackend": {
-      "region": "asia-east1"
-    }
-  }
-}
+{"hosting":{"source":".","ignore":["firebase.json","**/.*","**/node_modules/**"],"frameworksBackend":{"region":"asia-east1"}},"flutter":{"platforms":{"android":{"default":{"projectId":"nema-nbiot-controller","appId":"1:512474153375:android:e2247329243342b9033daa","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"nema-nbiot-controller","configurations":{"android":"1:512474153375:android:e2247329243342b9033daa","ios":"1:512474153375:ios:60f4316d5739400b033daa","macos":"1:512474153375:ios:60f4316d5739400b033daa","web":"1:512474153375:web:f82376a013f3c76f033daa","windows":"1:512474153375:web:8691501ad523bead033daa"}}}}}}

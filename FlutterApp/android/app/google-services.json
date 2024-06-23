@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "512474153375",
+    "firebase_url": "https://nema-nbiot-controller-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "nema-nbiot-controller",
+    "storage_bucket": "nema-nbiot-controller.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512474153375:android:e2247329243342b9033daa",
+        "android_client_info": {
+          "package_name": "com.example.flutter_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAusMm747OC2m2d6LeB4v694rYs-lKNASk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
