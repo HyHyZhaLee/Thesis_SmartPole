@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_app/util/smart_device_box.dart';
-import 'package:flutter_app/util/sensor_data_box.dart';
+import 'package:flutter_app/Widgets/smart_device_box.dart';
+import 'package:flutter_app/Widgets/sensor_data_box.dart';
 import 'package:flutter_app/AppFunction/mqtt_helper.dart';
 import 'dart:convert'; // For JSON decoding
 import 'package:http/http.dart' as http;
