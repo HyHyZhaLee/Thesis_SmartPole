@@ -51,6 +51,15 @@ class _TwoSliderPageState extends State<TwoSliderPage> {
   }
 
   void _publishBrightness(double value, String deviceID) {
+    setState(() {
+      // Update the brightness value
+      if (deviceID == "NEMA_0002") {
+        _brightness = value;
+      } else if (deviceID == "NEMA_0003") {
+        _brightness2 = value;
+      }
+    });
+
     double brightness = (deviceID == "NEMA_0002") ? _brightness : _brightness2;
 
     // Setting the message to be sent to the MQTT server
