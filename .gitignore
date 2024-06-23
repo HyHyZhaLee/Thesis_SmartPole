@@ -1,0 +1,8 @@
+# Ignore all files and folders
+/*
+
+# Except the directory PythonApp
+!/PythonApp
+
+# Ensure all contents inside PythonApp are not ignored
+/PythonApp/*
