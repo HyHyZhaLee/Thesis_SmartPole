@@ -1,11 +1,12 @@
 import cv2
 import numpy as np
-import tensorflow as tf
+from pycoral.utils.edgetpu import make_interpreter
+from pycoral.adapters import common
 from deep_sort_realtime.deepsort_tracker import DeepSort
 import time
 
-# Tải mô hình TensorFlow Lite
-interpreter = tf.lite.Interpreter(model_path="weights/240_yolov9c.tflite")
+# Tạo interpreter với Coral USB Accelerator
+interpreter = make_interpreter("weights/240_yolov9c.tflite")
 interpreter.allocate_tensors()
 
 input_details = interpreter.get_input_details()
@@ -13,7 +14,7 @@ output_details = interpreter.get_output_details()
 
 def detect_objects(frame):
     input_data = cv2.resize(frame, (input_details[0]['shape'][2], input_details[0]['shape'][1]))
-    input_data = np.expand_dims(input_data, axis=0).astype(np.float32)
+    input_data = np.expand_dims(input_data, axis=0).astype(np.int8)  # Sử dụng uint8 thay vì float32
 
     interpreter.set_tensor(input_details[0]['index'], input_data)
     interpreter.invoke()
@@ -21,12 +22,11 @@ def detect_objects(frame):
     output_data = interpreter.get_tensor(output_details[0]['index'])
     return output_data
 
-#Khai báo các biến/hàm còn thiếu
-
+# Khai báo các biến/hàm còn thiếu
 SOURCE = np.array([[648, 233],[1443, 218],[1222, 28],[838, 33]])
 conf_threshold = 0.65
 
-#Giả sử chiều rộng 16m , chiều cao m
+# Giả sử chiều rộng 16m , chiều cao m
 TARGET_WIDTH = 16
 TARGET_HEIGHT = 20
 
@@ -60,7 +60,7 @@ def is_point_in_polygon(point, polygon):
 with open("data_ext/classes.names") as f:
     class_names = f.read().strip().split('\n')
 
-colors = np.random.randint(0,255, size=(len(class_names),3 ))
+colors = np.random.randint(0, 255, size=(len(class_names), 3))
 tracks = []
 previous_positions = {}
 previous_times = {}
@@ -139,3 +139,4 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+
