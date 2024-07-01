@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_app/AppFunction/global_variables.dart';
+import 'package:flutter_app/widgets/navigation_drawer.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'Widgets/navigation_rail.dart';
 import 'firebase_options.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -43,16 +45,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        fontFamily: 'Mulish',
+        textTheme: GoogleFonts.mulishTextTheme(
+          Theme.of(context).textTheme,
+        ),
         primaryColor: const Color(0xFFF9F9F9),
         scaffoldBackgroundColor: const Color(0xFFF9F9F9),
-        navigationRailTheme: NavigationRailThemeData(
-          backgroundColor: const Color(0xFF7A40F2),
-          selectedIconTheme: IconThemeData(color: Colors.white),
-          selectedLabelTextStyle: TextStyle(color: Colors.white),
-          unselectedIconTheme: IconThemeData(color: Colors.white70),
-          unselectedLabelTextStyle: TextStyle(color: Colors.white70),
-        ),
       ),
       home: DashboardScreen(),
     );
@@ -88,7 +85,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       body: Row(
         children: <Widget>[
-          CustomNavigationRail(
+          CustomNavigationDrawer(
             selectedIndex: _selectedIndex,
             onDestinationSelected: _onItemTapped,
           ),
