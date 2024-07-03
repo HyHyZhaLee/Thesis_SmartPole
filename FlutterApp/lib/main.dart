@@ -65,12 +65,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   static final List<Widget> _pages = <Widget>[
     HomePage(),
+    HomePage(),
     LightControlPage(),
     LightingSchedulePage(),
     SecurityCamerasPage(),
     AdvertisementSchedulePage(),
     EnvironmentalSensorsPage(),
     HistoricalDataPage(),
+    HomePage()
   ];
 
   void _onItemTapped(int index) {
