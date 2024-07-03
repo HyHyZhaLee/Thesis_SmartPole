@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_app/AppFunction/global_variables.dart';
 import 'package:flutter_app/widgets/navigation_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'Widgets/navigation_rail.dart';
 import 'firebase_options.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'AppFunction/mqtt_manager.dart';
