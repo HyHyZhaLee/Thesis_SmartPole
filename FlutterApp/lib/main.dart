@@ -88,7 +88,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             selectedIndex: _selectedIndex,
             onDestinationSelected: _onItemTapped,
           ),
-          const VerticalDivider(thickness: 1, width: 1),
           Expanded(
             child: _pages.elementAt(_selectedIndex),
           ),

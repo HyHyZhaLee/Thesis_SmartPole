@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 class CustomNavigationDrawer extends StatefulWidget {
   final int selectedIndex;
@@ -25,34 +26,66 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => _handleMouseEnter(true),
-      onExit: (_) => _handleMouseEnter(false),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(31),
-        child: Container(
-          width: _isExpanded ? 250 : 70,
-          color: const Color(0xFF7A40F2),
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: ListView(
-                  children: [
-                    _buildDrawerItem(0, Icons.home, 'Home'),
-                    _buildDrawerItem(1, Icons.lightbulb_outline, 'Light Control'),
-                    _buildDrawerItem(2, Icons.schedule, 'Lighting Schedule'),
-                    _buildDrawerItem(3, Icons.videocam, 'Security Cameras'),
-                    _buildDrawerItem(4, Icons.tv, 'Advertisement Schedule'),
-                    _buildDrawerItem(5, Icons.thermostat, 'Environmental Sensors'),
-                    _buildDrawerItem(6, Icons.bar_chart, 'Historical Data'),
-                    _buildDrawerItem(7, Icons.exit_to_app, 'Exit'),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Constraints for the drawer
+        return Container(
+          margin: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+          child: MouseRegion(
+            onEnter: (_) => _handleMouseEnter(true),
+            onExit: (_) => _handleMouseEnter(false),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(31),
+              child: Container(
+                width: _isExpanded ? 349 : 118,
+                color: const Color(0xFF7A40F2),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(height: 20),  // Khoảng cách từ trên xuống nút Home
+                    // Home button box
+                    Expanded(
+                      flex: 190,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          // border: Border.all(color: Colors.blueAccent)
+                        ),
+                        margin: EdgeInsets.only(top: 67),
+                        child: _buildDrawerItem(0, Icons.home, 'Home'),
+                      ),
+                    ),
+                    // Other buttons box
+                    Expanded(
+                      flex: 705,
+                      child: Container(
+                        child: ListView(
+                          children: [
+                            _buildDrawerItem(2, Icons.lightbulb_outline, 'Light Control'),
+                            _buildDrawerItem(3, Icons.schedule, 'Lighting Schedule'),
+                            _buildDrawerItem(4, Icons.videocam, 'Security Cameras'),
+                            _buildDrawerItem(5, Icons.tv, 'Advertisement Schedule'),
+                            _buildDrawerItem(6, Icons.thermostat, 'Environmental Sensors'),
+                            _buildDrawerItem(7, Icons.bar_chart, 'Historical Data'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // Exit button box
+                    Expanded(
+                      flex: 102,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          // border: Border.all(color: Colors.blueAccent)
+                        ),
+                        child: _buildDrawerItem(8, Icons.exit_to_app, 'Exit'),
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
