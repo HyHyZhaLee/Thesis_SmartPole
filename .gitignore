@@ -5,4 +5,4 @@
 !/PythonApp
 
 # Ensure all contents inside PythonApp are not ignored
-/PythonApp/*
+!/PythonApp/*
