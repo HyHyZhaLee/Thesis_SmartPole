@@ -15,12 +15,25 @@ class CustomNavigationDrawer extends StatefulWidget {
   _CustomNavigationDrawerState createState() => _CustomNavigationDrawerState();
 }
 
-class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> {
+class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with SingleTickerProviderStateMixin {
   bool _isExpanded = false;
+  late AnimationController _animationController;
+  late Animation<double> _widthAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _widthAnimation = Tween<double>(begin: 118, end: 349).animate(_animationController);
+  }
 
   void _handleMouseEnter(bool isEntering) {
     setState(() {
       _isExpanded = isEntering;
+      isEntering ? _animationController.forward() : _animationController.reverse();
     });
   }
 
@@ -28,60 +41,53 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Constraints for the drawer
         return Container(
-          margin: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+          margin: EdgeInsets.all(10),
           child: MouseRegion(
             onEnter: (_) => _handleMouseEnter(true),
             onExit: (_) => _handleMouseEnter(false),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(31),
-              child: Container(
-                width: _isExpanded ? 349 : 118,
-                color: const Color(0xFF7A40F2),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(height: 20),  // Khoảng cách từ trên xuống nút Home
-                    // Home button box
-                    Expanded(
-                      flex: 190,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          // border: Border.all(color: Colors.blueAccent)
+              child: AnimatedBuilder(
+                animation: _widthAnimation,
+                builder: (context, child) {
+                  return Container(
+                    width: _widthAnimation.value,
+                    color: const Color(0xFF7A40F2),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(height: 20),
+                        Expanded(
+                          flex: 190,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 67),
+                            child: _buildDrawerItem(0, Icons.home, 'Home'),
+                          ),
                         ),
-                        margin: EdgeInsets.only(top: 67),
-                        child: _buildDrawerItem(0, Icons.home, 'Home'),
-                      ),
-                    ),
-                    // Other buttons box
-                    Expanded(
-                      flex: 705,
-                      child: Container(
-                        child: ListView(
-                          children: [
-                            _buildDrawerItem(1, Icons.apps, 'Main Dashboard'),
-                            _buildDrawerItem(2, Icons.lightbulb_outline, 'Light Control'),
-                            _buildDrawerItem(3, Icons.schedule, 'Lighting Schedule'),
-                            _buildDrawerItem(4, Icons.videocam, 'Security Cameras'),
-                            _buildDrawerItem(5, Icons.tv, 'Advertisement Schedule'),
-                            _buildDrawerItem(6, Icons.thermostat, 'Environmental Sensors'),
-                            _buildDrawerItem(7, Icons.bar_chart, 'Historical Data'),
-                          ],
+                        Expanded(
+                          flex: 705,
+                          child: ListView(
+                            children: [
+                              _buildDrawerItem(1, Icons.apps, 'Main Dashboard'),
+                              _buildDrawerItem(2, Icons.lightbulb_outline, 'Light Control'),
+                              _buildDrawerItem(3, Icons.schedule, 'Lighting Schedule'),
+                              _buildDrawerItem(4, Icons.videocam, 'Security Cameras'),
+                              _buildDrawerItem(5, Icons.tv, 'Advertisement Schedule'),
+                              _buildDrawerItem(6, Icons.thermostat, 'Environmental Sensors'),
+                              _buildDrawerItem(7, Icons.bar_chart, 'Historical Data'),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                    // Exit button box
-                    Expanded(
-                      flex: 102,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          // border: Border.all(color: Colors.blueAccent)
+                        Expanded(
+                          flex: 102,
+                          child: Container(
+                            child: _buildDrawerItem(8, Icons.exit_to_app, 'Exit'),
+                          ),
                         ),
-                        child: _buildDrawerItem(8, Icons.exit_to_app, 'Exit'),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
           ),
