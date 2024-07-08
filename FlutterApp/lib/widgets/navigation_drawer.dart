@@ -102,8 +102,16 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
       selected: isSelected,
       selectedTileColor: const Color(0xFFF9F9F9),
       leading: Icon(icon, color: Colors.white, size: 23),
-      title: _isExpanded ? Text(title, style: TextStyle(color: isSelected ? Colors.black : Colors.white)) : null,
+      title: _isExpanded
+          ? Text(
+        title,
+        style: TextStyle(color: isSelected ? Colors.black : Colors.white),
+        overflow: TextOverflow.ellipsis, // Thêm dòng này để xử lý tràn chữ
+        maxLines: 1, // Giới hạn số dòng là 1
+      )
+          : null,
       onTap: () => widget.onDestinationSelected(index),
     );
   }
+
 }
