@@ -57,8 +57,9 @@ tracker = DeepSort(max_age=30)
 view_transformer = ViewTransformer(source=SOURCE, target=TARGET)
 
 # Khởi tạo YOLOv9
-print(torch.cuda.get_device_name(0))
-device_type = "cuda" if torch.cuda.is_available() else "cpu"
+#print(torch.cuda.get_device_name(0))
+#device_type = "cuda" if torch.cuda.is_available() else "cpu"
+device_type = "cpu"
 device = torch.device(device_type)
 model  = DetectMultiBackend(weights="weights/yolov9-c-converted.pt", device= device, fuse=True )
 model  = AutoShape(model)
