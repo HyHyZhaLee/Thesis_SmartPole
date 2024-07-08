@@ -59,6 +59,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> {
                       child: Container(
                         child: ListView(
                           children: [
+                            _buildDrawerItem(1, Icons.apps, 'Main Dashboard'),
                             _buildDrawerItem(2, Icons.lightbulb_outline, 'Light Control'),
                             _buildDrawerItem(3, Icons.schedule, 'Lighting Schedule'),
                             _buildDrawerItem(4, Icons.videocam, 'Security Cameras'),
