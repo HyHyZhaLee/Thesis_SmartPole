@@ -27,7 +27,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
       duration: Duration(milliseconds: 300),
       vsync: this,
     );
-    _widthAnimation = Tween<double>(begin: 118, end: 349).animate(_animationController);
+    _widthAnimation = Tween<double>(begin: 103, end: 349).animate(_animationController);
   }
 
   void _handleMouseEnter(bool isEntering) {
@@ -56,7 +56,6 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
                     color: const Color(0xFF7A40F2),
                     child: Column(
                       children: <Widget>[
-                        SizedBox(height: 20),
                         Expanded(
                           flex: 190,
                           child: Container(
@@ -68,13 +67,34 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
                           flex: 705,
                           child: ListView(
                             children: [
-                              _buildDrawerItem(1, Icons.apps, 'Main Dashboard'),
-                              _buildDrawerItem(2, Icons.lightbulb_outline, 'Light Control'),
-                              _buildDrawerItem(3, Icons.schedule, 'Lighting Schedule'),
-                              _buildDrawerItem(4, Icons.videocam, 'Security Cameras'),
-                              _buildDrawerItem(5, Icons.tv, 'Advertisement Schedule'),
-                              _buildDrawerItem(6, Icons.thermostat, 'Environmental Sensors'),
-                              _buildDrawerItem(7, Icons.bar_chart, 'Historical Data'),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                child: _buildDrawerItem(1, Icons.apps, 'Main Dashboard'),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                child: _buildDrawerItem(2, Icons.lightbulb_outline, 'Light Control'),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                child: _buildDrawerItem(3, Icons.schedule, 'Lighting Schedule'),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                child: _buildDrawerItem(4, Icons.videocam, 'Security Cameras'),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                child: _buildDrawerItem(5, Icons.tv, 'Advertisement Schedule'),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                child: _buildDrawerItem(6, Icons.thermostat, 'Environmental Sensors'),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                child: _buildDrawerItem(7, Icons.bar_chart, 'Historical Data'),
+                              ),
                             ],
                           ),
                         ),
@@ -101,13 +121,19 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
     return ListTile(
       selected: isSelected,
       selectedTileColor: const Color(0xFFF9F9F9),
-      leading: Icon(icon, color: Colors.white, size: 23),
+      leading: Padding(
+        //padding left 16
+        padding: const EdgeInsets.only(left: 16),
+        child: Icon(icon, color: Colors.white, size: 35),
+      ),
       title: _isExpanded
           ? Text(
         title,
-        style: TextStyle(color: isSelected ? Colors.black : Colors.white),
-        overflow: TextOverflow.ellipsis, // Thêm dòng này để xử lý tràn chữ
-        maxLines: 1, // Giới hạn số dòng là 1
+        style: TextStyle(fontSize: 20, color: isSelected ? Colors.black : Colors.white),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        //text size = 20
+
       )
           : null,
       onTap: () => widget.onDestinationSelected(index),
