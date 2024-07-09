@@ -1,0 +1,1 @@
+ D:\\Documents\\Github\\Thesis_SmartPole\\FlutterApp\\.dart_tool\\flutter_build\\d75f2086e665f41d4f56e7fe0e40f6fd\\native_assets.yaml: 
