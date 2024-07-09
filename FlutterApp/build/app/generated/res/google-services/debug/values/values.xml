@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="firebase_database_url" translatable="false">https://nema-nbiot-controller-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+    <string name="gcm_defaultSenderId" translatable="false">512474153375</string>
+    <string name="google_api_key" translatable="false">AIzaSyAusMm747OC2m2d6LeB4v694rYs-lKNASk</string>
+    <string name="google_app_id" translatable="false">1:512474153375:android:e2247329243342b9033daa</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAusMm747OC2m2d6LeB4v694rYs-lKNASk</string>
+    <string name="google_storage_bucket" translatable="false">nema-nbiot-controller.appspot.com</string>
+    <string name="project_id" translatable="false">nema-nbiot-controller</string>
+</resources>

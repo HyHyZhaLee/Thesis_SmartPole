@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+D:/Documents/Github/Thesis_SmartPole/NEMA_espApp/NBIOT-main/build/CMakeFiles/bootloader
+D:/Documents/Github/Thesis_SmartPole/NEMA_espApp/NBIOT-main/build/CMakeFiles/bootloader.rule
+D:/Documents/Github/Thesis_SmartPole/NEMA_espApp/NBIOT-main/build/CMakeFiles/bootloader-complete.rule
+D:/Documents/Github/Thesis_SmartPole/NEMA_espApp/NBIOT-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+D:/Documents/Github/Thesis_SmartPole/NEMA_espApp/NBIOT-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+D:/Documents/Github/Thesis_SmartPole/NEMA_espApp/NBIOT-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+D:/Documents/Github/Thesis_SmartPole/NEMA_espApp/NBIOT-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+D:/Documents/Github/Thesis_SmartPole/NEMA_espApp/NBIOT-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+D:/Documents/Github/Thesis_SmartPole/NEMA_espApp/NBIOT-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+D:/Documents/Github/Thesis_SmartPole/NEMA_espApp/NBIOT-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
