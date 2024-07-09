@@ -1,6 +1,7 @@
 # Smart Pole System Leveraging NB-IOT: A Straightforward Implementation
 ## Project Overview
 This project, “Smart Pole System Leveraging NB-IOT: A Straightforward Implementation,” addresses several critical issues in modern urban environments. The Smartpole System utilizes NB-IOT, AI, and video streaming technologies to create a safer, more sustainable, and intelligent urban environment.
+![image](https://github.com/HyHyZhaLee/Thesis_SmartPole/assets/113485058/3b95720a-711a-4f07-9aa0-78ee948bc007)
 
 ## Question 1: What problems do our project solve?
 
