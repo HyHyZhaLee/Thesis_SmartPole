@@ -48,6 +48,7 @@ dependencies:
   firebase_core_web: ^2.17.2
   get: ^4.6.6
   syncfusion_flutter_calendar: ^26.1.40+1
+  custom_date_range_picker: ^1.1.0
 
 dev_dependencies:
   flutter_test:

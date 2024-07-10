@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class LightingSchedulePage extends StatefulWidget {
@@ -71,9 +72,13 @@ Future<void> _showAddEventDialog(BuildContext context) async {
   final eventNameController = TextEditingController();
   final recurrenceRuleController = TextEditingController();
   final notesController = TextEditingController();
-  DateTime? startDate;
+  DateTimeRange dateRange = DateTimeRange(
+      start: DateTime.now(),
+      end: DateTime.now()
+  );
+  DateTime? startDate = dateRange.start;
+  DateTime? endDate = dateRange.end;
   TimeOfDay? startTime;
-  DateTime? endDate;
   TimeOfDay? endTime;
   String recurrenceType = 'None';
   String recurrenceRule0 = '';
@@ -94,25 +99,69 @@ Future<void> _showAddEventDialog(BuildContext context) async {
                     decoration:
                     const InputDecoration(labelText: 'Event Name'),
                   ),
-                  ListTile(
-                    title: const Text('Start Date'),
-                    subtitle: Text(startDate != null
-                        ? '${startDate!.year}-${startDate!.month}-${startDate!.day}'
-                        : 'Select Start Date'),
-                    onTap: () async {
-                      final pickedDate = await showDatePicker(
+                  TextButton (
+                    onPressed: () async {
+                      DateTimeRange? pickedDate = await showDateRangePicker(
                         context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2101),
+                        initialDateRange: dateRange,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100),
                       );
-                      if (pickedDate != null && pickedDate != startDate) {
+                      if (pickedDate != null) {
                         setState(() {
-                          startDate = pickedDate;
+                          dateRange = pickedDate;
                         });
                       }
                     },
+                    child: Column(
+                      children: [
+                        const Text('Start Date - End Date'),
+                        Text(
+                          dateRange.start != null
+                            ? '${DateFormat('dd/MM/yyyy').format(dateRange.start)} - '
+                              'Period: ${dateRange.duration.inDays} Day(s)'
+                            : 'Start Date - End Date',
+                          textAlign: TextAlign.center,
+                        )
+                      ]
+                    ),
                   ),
+                  // Expanded(
+                  //   child: ElevatedButton(
+                  //     child: const Text('Start Date - End Date'),
+                  //     onPressed: () async {
+                  //       DateTimeRange? pickedDate = await showDateRangePicker(
+                  //         context: context,
+                  //         initialDateRange: dateRange,
+                  //         firstDate: DateTime(2000),
+                  //         lastDate: DateTime(2101),
+                  //       );
+                  //       if (pickedDate != null && pickedDate.end != endDate) {
+                  //         setState(() {
+                  //           dateRange = pickedDate;
+                  //         });
+                  //       }
+                  //     }
+                  //   )
+                  // ),
+                  // ListTile(
+                  //   title: const Text('Start Date - End Date'),
+                  //   subtitle: Text(startDate != null
+                  //       ? '${startDate!.year}-${startDate!.month}-${startDate!.day}'
+                  //       : 'Select Start Date'),
+                  //   onTap: () async {
+                  //     DateTimeRange? pickedDate = await showDateRangePicker(
+                  //       context: context,
+                  //       initialDateRange: dateRange,
+                  //       firstDate: DateTime(2000),
+                  //       lastDate: DateTime(2101),
+                  //     );
+                  //     if (pickedDate == null) return;
+                  //     setState(() {
+                  //       dateRange = pickedDate;
+                  //     });
+                  //   },
+                  // ),
                   ListTile(
                     title: const Text('Start Time'),
                     subtitle: Text(startTime != null
@@ -142,11 +191,11 @@ Future<void> _showAddEventDialog(BuildContext context) async {
                         firstDate: DateTime(2000),
                         lastDate: DateTime(2101),
                       );
-                      if (pickedDate != null && pickedDate != endDate) {
-                        setState(() {
-                          endDate = pickedDate;
-                        });
-                      }
+                      // if (pickedDate != null && pickedDate != endDate) {
+                      //   setState(() {
+                      //     endDate = pickedDate;
+                      //   });
+                      // }
                     },
                   ),
                   ListTile(
