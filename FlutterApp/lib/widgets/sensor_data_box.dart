@@ -6,11 +6,11 @@ class SensorDataBox extends StatelessWidget {
   final String sensorData;
 
   const SensorDataBox({
-    Key? key,
+    super.key,
     required this.sensorName,
     required this.iconPath,
     required this.sensorData,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +38,16 @@ class SensorDataBox extends StatelessWidget {
                 children: [
                   Text(
                     sensorName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     sensorData,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                       color: Colors.black,

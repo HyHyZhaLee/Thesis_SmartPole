@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
               child: Row(
@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Column(
@@ -159,17 +159,17 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            SizedBox(height: 25),
-            Padding(
+            const SizedBox(height: 25),
+            const Padding(
               padding: EdgeInsets.symmetric(horizontal: 40.0),
               child: Divider(thickness: 1, color: Color.fromARGB(255, 204, 204, 204)),
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Text("Smart Devices", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Colors.grey.shade800)),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             LayoutBuilder(
               builder: (context, constraints) {
                 int itemCount = mySmartDevices.length + mySensors.length;
@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                   height: height,
                   child: GridView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: itemCount,
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

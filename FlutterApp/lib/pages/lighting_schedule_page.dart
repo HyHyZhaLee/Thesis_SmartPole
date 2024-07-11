@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class LightingSchedulePage extends StatefulWidget {
+  const LightingSchedulePage({super.key});
+
   @override
   _LightingSchedulePage createState() => _LightingSchedulePage();
-
 }
 
 
@@ -68,173 +70,193 @@ void _handleCalendarTap(CalendarTapDetails details) {
   }
 }
 
-Future<void> _showAddEventDialog(BuildContext context) async {
-  final eventNameController = TextEditingController();
-  final recurrenceRuleController = TextEditingController();
-  final notesController = TextEditingController();
-  DateTimeRange dateRange = DateTimeRange(
-      start: DateTime.now(),
-      end: DateTime.now()
-  );
-  DateTime? startDate = dateRange.start;
-  DateTime? endDate = dateRange.end;
-  TimeOfDay? startTime;
-  TimeOfDay? endTime;
-  String recurrenceType = 'None';
-  String recurrenceRule0 = '';
+  Future<void> _showAddEventDialog(BuildContext context) async {
+    final eventNameController = TextEditingController();
+    final recurrenceRuleController = TextEditingController();
+    final notesController = TextEditingController();
+    DateTimeRange dateRange = DateTimeRange(
+        start: DateTime.now(),
+        end: DateTime.now()
+    );
+    DateTime? startDate = dateRange.start;
+    DateTime? endDate = dateRange.end;
+    int? durationDate;
+    TimeOfDay? startTime;
+    TimeOfDay? endTime;
+    String recurrenceType = 'None';
+    String recurrenceRule0 = '';
 
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-          return AlertDialog(
-            title: const Text('Add New Event'),
-            content: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  TextField(
-                    controller: eventNameController,
-                    decoration:
-                    const InputDecoration(labelText: 'Event Name'),
-                  ),
-                  TextButton (
-                    onPressed: () async {
-                      DateTimeRange? pickedDate = await showDateRangePicker(
-                        context: context,
-                        initialDateRange: dateRange,
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(2100),
-                      );
-                      if (pickedDate != null) {
-                        setState(() {
-                          dateRange = pickedDate;
-                        });
-                      }
-                    },
-                    child: Column(
-                      children: [
-                        const Text('Start Date - End Date'),
-                        Text(
-                          dateRange.start != null
-                            ? '${DateFormat('dd/MM/yyyy').format(dateRange.start)} - '
-                              'Period: ${dateRange.duration.inDays} Day(s)'
-                            : 'Start Date - End Date',
-                          textAlign: TextAlign.center,
-                        )
-                      ]
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: const Text('Add New Event'),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    TextField(
+                      controller: eventNameController,
+                      decoration:
+                      const InputDecoration(labelText: 'Event Name'),
                     ),
-                  ),
-                  // Expanded(
-                  //   child: ElevatedButton(
-                  //     child: const Text('Start Date - End Date'),
-                  //     onPressed: () async {
-                  //       DateTimeRange? pickedDate = await showDateRangePicker(
-                  //         context: context,
-                  //         initialDateRange: dateRange,
-                  //         firstDate: DateTime(2000),
-                  //         lastDate: DateTime(2101),
-                  //       );
-                  //       if (pickedDate != null && pickedDate.end != endDate) {
-                  //         setState(() {
-                  //           dateRange = pickedDate;
-                  //         });
-                  //       }
-                  //     }
-                  //   )
-                  // ),
+
+                    TextButton (
+                      onPressed: () async {
+                        DateTimeRange? pickedDate = await showDateRangePicker(
+                          context: context,
+                          initialDateRange: dateRange,
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2100),
+                        );
+                        if (pickedDate != null) {
+                          setState(() {
+                            startDate = dateRange.start;
+                            endDate = dateRange.end;
+                            durationDate = dateRange.duration.inDays;
+                            dateRange = pickedDate;
+                          });
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          const Text('Start Date - End Date'),
+                          Text(
+                            dateRange.start != null
+                              ? '${DateFormat('dd/MM/yyyy').format(startDate!)} - '
+                                'Period: $durationDate Day(s)'
+                              : 'Start Date - End Date',
+                            textAlign: TextAlign.center,
+                          )
+                        ]
+                      ),
+                    ),
+
+                    ElevatedButton(
+                      onPressed: () async {
+                        final pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        if (pickedTime != null && pickedTime != startTime) {
+                          setState(() {
+                            startTime = pickedTime;
+                          });
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          const Text("Start Time"),
+                          if (startTime != null)...[
+                            Text(
+                              startTime!.format(context),
+                            ),
+                          ]
+                        ],
+                      ),
+                    ),
+
+                    ElevatedButton(
+                      onPressed: () async {
+                        final pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        if (pickedTime != null && pickedTime != startTime) {
+                          setState(() {
+                            endTime = pickedTime;
+                          });
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          const Text("End Time"),
+                          if (endTime != null)...[
+                            Text(
+                              endTime!.format(context),
+                            ),
+                          ]
+                        ],
+                      ),
+                    ),
+
+                    // ListTile(
+                    //   title: const Text('End Time'),
+                    //   subtitle: Text(startTime != null
+                    //       ? '${startTime!.hour}:${startTime!.minute}'
+                    //       : 'Select Start Time'),
+                    //   onTap: () async {
+                    //     final pickedTime = await showTimePicker(
+                    //       context: context,
+                    //       initialTime: TimeOfDay.now(),
+                    //     );
+                    //     if (pickedTime != null && pickedTime != startTime) {
+                    //       setState(() {
+                    //         startTime = pickedTime;
+                    //       });
+                    //     }
+                    //   },
+                    // ),
                   // ListTile(
-                  //   title: const Text('Start Date - End Date'),
-                  //   subtitle: Text(startDate != null
-                  //       ? '${startDate!.year}-${startDate!.month}-${startDate!.day}'
-                  //       : 'Select Start Date'),
+                  //   title: const Text('End Date'),
+                  //   subtitle: Text(endDate != null
+                  //       ? '${endDate.year}-${endDate.month}-${endDate.day}'
+                  //       : 'Select End Date'),
                   //   onTap: () async {
-                  //     DateTimeRange? pickedDate = await showDateRangePicker(
+                  //     final pickedDate = await showDatePicker(
                   //       context: context,
-                  //       initialDateRange: dateRange,
+                  //       initialDate: DateTime.now(),
                   //       firstDate: DateTime(2000),
                   //       lastDate: DateTime(2101),
                   //     );
-                  //     if (pickedDate == null) return;
-                  //     setState(() {
-                  //       dateRange = pickedDate;
-                  //     });
+                  //     // if (pickedDate != null && pickedDate != endDate) {
+                  //     //   setState(() {
+                  //     //     endDate = pickedDate;
+                  //     //   });
+                  //     // }
                   //   },
                   // ),
-                  ListTile(
-                    title: const Text('Start Time'),
-                    subtitle: Text(startTime != null
-                        ? '${startTime!.hour}:${startTime!.minute}'
-                        : 'Select Start Time'),
-                    onTap: () async {
-                      final pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-                      if (pickedTime != null && pickedTime != startTime) {
+                  // ListTile(
+                  //   title: const Text('End Time'),
+                  //   subtitle: Text(endTime != null
+                  //       ? '${endTime!.hour}:${endTime!.minute}'
+                  //       : 'Select End Time'),
+                  //   onTap: () async {
+                  //     final pickedTime = await showTimePicker(
+                  //       context: context,
+                  //       initialTime: TimeOfDay.now(),
+                  //     );
+                  //     if (pickedTime != null && pickedTime != endTime) {
+                  //       setState(() {
+                  //         endTime = pickedTime;
+                  //       });
+                  //     }
+                  //   },
+                  // ),
+
+                    
+                    DropdownButton<String>(
+                      value: recurrenceType,
+                      onChanged: (String? newValue) {
                         setState(() {
-                          startTime = pickedTime;
+                          recurrenceType = newValue!;
                         });
-                      }
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('End Date'),
-                    subtitle: Text(endDate != null
-                        ? '${endDate!.year}-${endDate!.month}-${endDate!.day}'
-                        : 'Select End Date'),
-                    onTap: () async {
-                      final pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2101),
-                      );
-                      // if (pickedDate != null && pickedDate != endDate) {
-                      //   setState(() {
-                      //     endDate = pickedDate;
-                      //   });
-                      // }
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('End Time'),
-                    subtitle: Text(endTime != null
-                        ? '${endTime!.hour}:${endTime!.minute}'
-                        : 'Select End Time'),
-                    onTap: () async {
-                      final pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-                      if (pickedTime != null && pickedTime != endTime) {
-                        setState(() {
-                          endTime = pickedTime;
-                        });
-                      }
-                    },
-                  ),
-                  DropdownButton<String>(
-                    value: recurrenceType,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        recurrenceType = newValue!;
-                      });
-                    },
-                    items: <String>[
-                      'None',
-                      'Daily',
-                      'Weekly',
-                      'Monthly',
-                      'Yearly'
-                    ].map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
+                      },
+                      items: <String>[
+                        'None',
+                        'Daily',
+                        'Weekly',
+                        'Monthly',
+                        'Yearly'
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
                   if (recurrenceType == 'Weekly')
                     ListTile(
                       title: const Text('Day of Week'),
@@ -344,9 +366,7 @@ Future<void> _showAddEventDialog(BuildContext context) async {
               TextButton(
                 child: const Text('Add'),
                 onPressed: () {
-                  if (startDate != null &&
-                      startTime != null &&
-                      endDate != null &&
+                  if (startTime != null &&
                       endTime != null) {
                     final DateTime startDateTime = DateTime(
                       startDate!.year,

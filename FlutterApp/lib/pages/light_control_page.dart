@@ -6,7 +6,7 @@ import 'package:flutter_app/Widgets/custom_slider_widget.dart';
 import '../AppFunction/global_helper_function.dart';
 
 class LightControlPage extends StatefulWidget {
-  const LightControlPage({Key? key}) : super(key: key);
+  const LightControlPage({super.key});
 
   @override
   _TwoSliderPageState createState() => _TwoSliderPageState();
@@ -15,8 +15,8 @@ class LightControlPage extends StatefulWidget {
 class _TwoSliderPageState extends State<LightControlPage> {
   late double _brightness = 0;
   late double _brightness2 = 0; // Slider value for second device
-  bool _isLightOn = false;
-  String _statusMessage = 'Disconnected';
+  final bool _isLightOn = false;
+  final String _statusMessage = 'Disconnected';
 
   @override
   void initState() {
@@ -85,7 +85,7 @@ class _TwoSliderPageState extends State<LightControlPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF1488DB), // Set the AppBar background color
+        backgroundColor: const Color(0xFF1488DB), // Set the AppBar background color
         titleTextStyle: const TextStyle(
           color: Colors.white, // Set the title text color to white
           fontSize: 24, // Increase the font size for better visibility

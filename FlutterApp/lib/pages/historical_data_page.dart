@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class HistoricalDataPage extends StatelessWidget {
+  const HistoricalDataPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Historical Data Page'));
+    return const Center(child: Text('Historical Data Page'));
   }
 }

@@ -23,7 +23,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -50,12 +50,14 @@ class _MyAppState extends State<MyApp> {
         primaryColor: const Color(0xFFF9F9F9),
         scaffoldBackgroundColor: const Color(0xFFF9F9F9),
       ),
-      home: DashboardScreen(),
+      home: const DashboardScreen(),
     );
   }
 }
 
 class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({super.key});
+
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
 }
@@ -64,15 +66,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 1;
 
   static final List<Widget> _pages = <Widget>[
-    HomePage(),
-    HomePage(),
-    LightControlPage(),
-    LightingSchedulePage(),
-    SecurityCamerasPage(),
-    AdvertisementSchedulePage(),
-    EnvironmentalSensorsPage(),
-    HistoricalDataPage(),
-    HomePage()
+    const HomePage(),
+    const HomePage(),
+    const LightControlPage(),
+    const LightingSchedulePage(),
+    const SecurityCamerasPage(),
+    const AdvertisementSchedulePage(),
+    const EnvironmentalSensorsPage(),
+    const HistoricalDataPage(),
+    const HomePage()
   ];
 
   void _onItemTapped(int index) {

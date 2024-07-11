@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SecurityCamerasPage extends StatelessWidget {
+  const SecurityCamerasPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Security Cameras Page'));
+    return const Center(child: Text('Security Cameras Page'));
   }
 }
