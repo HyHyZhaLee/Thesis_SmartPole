@@ -103,13 +103,29 @@ void _handleCalendarTap(CalendarTapDetails details) {
                       const InputDecoration(labelText: 'Event Name'),
                     ),
 
-                    TextButton (
+                    ElevatedButton (
                       onPressed: () async {
                         DateTimeRange? pickedDate = await showDateRangePicker(
                           context: context,
                           initialDateRange: dateRange,
                           firstDate: DateTime(1900),
                           lastDate: DateTime(2100),
+                          builder: (context, child) {
+                            return Center(
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  maxWidth: 500,
+                                  maxHeight: 600,
+                                ), // Set the desired height
+                                child: Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  child: child,
+                                ),
+                              ),
+                            );
+                          }
                         );
                         if (pickedDate != null) {
                           setState(() {
@@ -123,13 +139,15 @@ void _handleCalendarTap(CalendarTapDetails details) {
                       child: Column(
                         children: [
                           const Text('Start Date - End Date'),
-                          Text(
-                            dateRange.start != null
-                              ? '${DateFormat('dd/MM/yyyy').format(startDate!)} - '
-                                'Period: $durationDate Day(s)'
-                              : 'Start Date - End Date',
-                            textAlign: TextAlign.center,
-                          )
+                          if (durationDate != null) ...[
+                            Text(
+                              startDate != null
+                                  ? '${DateFormat('dd/MM/yyyy').format(startDate!)} - '
+                                  'Period: $durationDate Day(s)'
+                                  : 'Start Date - End Date',
+                              textAlign: TextAlign.center,
+                            )
+                          ]
                         ]
                       ),
                     ),
@@ -182,68 +200,31 @@ void _handleCalendarTap(CalendarTapDetails details) {
                       ),
                     ),
 
-                    // ListTile(
-                    //   title: const Text('End Time'),
-                    //   subtitle: Text(startTime != null
-                    //       ? '${startTime!.hour}:${startTime!.minute}'
-                    //       : 'Select Start Time'),
-                    //   onTap: () async {
-                    //     final pickedTime = await showTimePicker(
-                    //       context: context,
-                    //       initialTime: TimeOfDay.now(),
-                    //     );
-                    //     if (pickedTime != null && pickedTime != startTime) {
-                    //       setState(() {
-                    //         startTime = pickedTime;
-                    //       });
-                    //     }
-                    //   },
-                    // ),
-                  // ListTile(
-                  //   title: const Text('End Date'),
-                  //   subtitle: Text(endDate != null
-                  //       ? '${endDate.year}-${endDate.month}-${endDate.day}'
-                  //       : 'Select End Date'),
-                  //   onTap: () async {
-                  //     final pickedDate = await showDatePicker(
-                  //       context: context,
-                  //       initialDate: DateTime.now(),
-                  //       firstDate: DateTime(2000),
-                  //       lastDate: DateTime(2101),
-                  //     );
-                  //     // if (pickedDate != null && pickedDate != endDate) {
-                  //     //   setState(() {
-                  //     //     endDate = pickedDate;
-                  //     //   });
-                  //     // }
-                  //   },
-                  // ),
-                  // ListTile(
-                  //   title: const Text('End Time'),
-                  //   subtitle: Text(endTime != null
-                  //       ? '${endTime!.hour}:${endTime!.minute}'
-                  //       : 'Select End Time'),
-                  //   onTap: () async {
-                  //     final pickedTime = await showTimePicker(
-                  //       context: context,
-                  //       initialTime: TimeOfDay.now(),
-                  //     );
-                  //     if (pickedTime != null && pickedTime != endTime) {
-                  //       setState(() {
-                  //         endTime = pickedTime;
-                  //       });
-                  //     }
-                  //   },
-                  // ),
-
-                    
-                    DropdownButton<String>(
-                      value: recurrenceType,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          recurrenceType = newValue!;
-                        });
-                      },
+                    DropdownButton2(
+                      isExpanded: true,
+                      hint: const Row(
+                        children: [
+                          Icon(
+                            Icons.list,
+                            size: 16,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Select Item',
+                              // style: TextStyle(
+                              //   fontSize: 14,
+                              //   fontWeight: FontWeight.bold,
+                              //   color: Colors.yellow,
+                              // ),
+                              // overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                       items: <String>[
                         'None',
                         'Daily',
@@ -256,7 +237,57 @@ void _handleCalendarTap(CalendarTapDetails details) {
                           child: Text(value),
                         );
                       }).toList(),
+
+                      value: recurrenceType,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          recurrenceType = newValue!;
+                        });
+                      },
+
+                      buttonStyleData: ButtonStyleData(
+                        height: 50,
+                        width: 160,
+                        padding: const EdgeInsets.only(left: 14, right: 14),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: Colors.black26,
+                          ),
+                          color: Colors.white,
+                        ),
+                        elevation: 2,
+                      ),
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          Icons.arrow_forward_ios_outlined,
+                        ),
+                        iconSize: 14,
+                        iconEnabledColor: Colors.grey,
+                        iconDisabledColor: Colors.black,
+                      ),
+                      dropdownStyleData: DropdownStyleData(
+                        maxHeight: 200,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.white,
+                        ),
+                        offset: const Offset(-20, 0),
+                        scrollbarTheme: ScrollbarThemeData(
+                          radius: const Radius.circular(40),
+                          thickness: MaterialStateProperty.all(6),
+                          thumbVisibility: MaterialStateProperty.all(true),
+                        ),
+                      ),
+                      menuItemStyleData: const MenuItemStyleData(
+                        height: 40,
+                        padding: EdgeInsets.only(left: 14, right: 14),
+                      ),
                     ),
+
+                    // if
+
                   if (recurrenceType == 'Weekly')
                     ListTile(
                       title: const Text('Day of Week'),
@@ -322,6 +353,7 @@ void _handleCalendarTap(CalendarTapDetails details) {
                         }
                       },
                     ),
+
                   if (recurrenceType == 'Monthly')
                     TextField(
                       controller: recurrenceRuleController,
