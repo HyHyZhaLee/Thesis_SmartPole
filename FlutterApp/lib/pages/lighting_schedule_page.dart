@@ -225,7 +225,7 @@ Future<void> _showAddEventDialog(BuildContext context) async {
                       });
                     }
                   ),
-                  
+
                   DropdownButtonHideUnderline(
                     child: DropdownButton2<String>(
                       isExpanded: true,
@@ -279,6 +279,31 @@ Future<void> _showAddEventDialog(BuildContext context) async {
 
 
                 if (recurrenceType == 'Weekly')
+                  Row(
+                    children: [
+                      OutlinedButton(
+                        style: ButtonStyle(
+                          overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                              (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.focused)) {
+                              return Colors.red;
+                            }
+                            if (states.contains(MaterialState.pressed))
+                              return Colors.blue;
+                            return null; // Defer to the widget's default.
+                          }),
+                        ),
+                        onPressed: () {},
+                        child: const Text('Mon')
+                      ),
+                      // OutlinedButton(onPressed: onPressed, child: child),
+                      // OutlinedButton(onPressed: onPressed, child: child),
+                      // OutlinedButton(onPressed: onPressed, child: child),
+                      // OutlinedButton(onPressed: onPressed, child: child),
+                      // OutlinedButton(onPressed: onPressed, child: child),
+                      // OutlinedButton(onPressed: onPressed, child: child),
+                    ],
+                  ),
                   ListTile(
                     title: const Text('Day of Week'),
                     subtitle: Text(recurrenceRule0),
