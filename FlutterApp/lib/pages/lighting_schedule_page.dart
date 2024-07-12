@@ -208,6 +208,24 @@ Future<void> _showAddEventDialog(BuildContext context) async {
                     ),
                   ),
 
+
+                  DropdownMenu<String>(
+                    width: 200,
+                    initialSelection: 'None',
+                    label: const Text('Select Recurrence Type'),
+                    dropdownMenuEntries: recurrenceTypeItems.map((String item) {
+                      return DropdownMenuEntry<String>(
+                        value: item,
+                        label: item,
+                      );
+                    }).toList(),
+                    onSelected: (String? newValue) {
+                      setState(() {
+                        recurrenceType = newValue!;
+                      });
+                    }
+                  ),
+                  
                   DropdownButtonHideUnderline(
                     child: DropdownButton2<String>(
                       isExpanded: true,
