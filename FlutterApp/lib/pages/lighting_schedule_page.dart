@@ -108,136 +108,159 @@ Future<void> _showAddEventDialog(BuildContext context) async {
           return AlertDialog(
             title: const Text('Add New Event'),
             content: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  TextField(
-                    controller: eventNameController,
-                    decoration:
-                    const InputDecoration(labelText: 'Event Name'),
-                  ),
+              child: IntrinsicWidth(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    TextField(
+                      controller: eventNameController,
+                      decoration:
+                      const InputDecoration(labelText: 'Event Name'),
+                    ),
 
-                  ElevatedButton (
-                    onPressed: () async {
-                      DateTimeRange? pickedDate = await showDateRangePicker(
-                        context: context,
-                        initialDateRange: dateRange,
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(2100),
-                        builder: (context, child) {
-                          return Center(
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(
-                                maxWidth: 500,
-                                maxHeight: 600,
-                              ), // Set the desired height
-                              child: Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18),
+                    ElevatedButton (
+                      onPressed: () async {
+                        DateTimeRange? pickedDate = await showDateRangePicker(
+                            context: context,
+                            initialDateRange: dateRange,
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime(2100),
+                            builder: (context, child) {
+                              return Center(
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    maxWidth: 500,
+                                    maxHeight: 600,
+                                  ), // Set the desired height
+                                  child: Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18),
+                                    ),
+                                    child: child,
+                                  ),
                                 ),
-                                child: child,
+                              );
+                            }
+                        );
+                        if (pickedDate != null) {
+                          setState(() {
+                            startDate = dateRange.start;
+                            endDate = dateRange.end;
+                            durationDate = dateRange.duration.inDays;
+                            dateRange = pickedDate;
+                          });
+                        }
+                      },
+                      child: Column(
+                          children: <Widget> [
+                            const Text('Start Date - End Date'),
+                            if (durationDate != null) ...[
+                              Text(
+                                startDate != null
+                                    ? '${DateFormat('dd/MM/yyyy').format(startDate!)} - '
+                                    'Period: $durationDate Day(s)'
+                                    : 'Start Date - End Date',
+                                textAlign: TextAlign.center,
+                              )
+                            ]
+                          ]
+                      ),
+                    ),
+
+                    TextButton(
+                      onPressed: () async {
+                        final pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        if (pickedTime != null && pickedTime != startTime) {
+                          setState(() {
+                            startTime = pickedTime;
+                          });
+                        }
+                      },
+                      style: TextButton.styleFrom(
+                        minimumSize:const Size(240, 60)
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        // mainAxisSize: MainAxisSize.min,
+                        children: <Widget> [
+                          Text(
+                            "Start Time:",
+                            textAlign: TextAlign.start,
+                            style:
+                            TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: startTime == null ? 32.0 : 16.0,
+                              decoration: startTime == null ? TextDecoration.none : TextDecoration.underline,
+                            ),
+                          ),
+                          if (startTime != null)...[
+                            Text(
+                              startTime!.format(context),
+                              style: const TextStyle(
+                                fontSize: 28.0,
+                                fontWeight: FontWeight.w900,
+                                height: 1
                               ),
                             ),
-                          );
+                          ]
+                        ],
+                      ),
+                    ),
+
+                    ElevatedButton(
+                      onPressed: () async {
+                        final pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        if (pickedTime != null && pickedTime != startTime) {
+                          setState(() {
+                            endTime = pickedTime;
+                          });
                         }
-                      );
-                      if (pickedDate != null) {
-                        setState(() {
-                          startDate = dateRange.start;
-                          endDate = dateRange.end;
-                          durationDate = dateRange.duration.inDays;
-                          dateRange = pickedDate;
-                        });
-                      }
-                    },
-                    child: Column(
-                      children: <Widget> [
-                        const Text('Start Date - End Date'),
-                        if (durationDate != null) ...[
-                          Text(
-                            startDate != null
-                                ? '${DateFormat('dd/MM/yyyy').format(startDate!)} - '
-                                'Period: $durationDate Day(s)'
-                                : 'Start Date - End Date',
-                            textAlign: TextAlign.center,
-                          )
-                        ]
-                      ]
+                      },
+                      child: Column(
+                        children: <Widget> [
+                          const Text("End Time"),
+                          if (endTime != null)...[
+                            Text(
+                              endTime!.format(context),
+                            ),
+                          ]
+                        ],
+                      ),
                     ),
-                  ),
 
-                  ElevatedButton(
-                    onPressed: () async {
-                      final pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-                      if (pickedTime != null && pickedTime != startTime) {
-                        setState(() {
-                          startTime = pickedTime;
-                        });
-                      }
-                    },
-                    child: Column(
-                      children: <Widget> [
-                        const Text("Start Time"),
-                        if (startTime != null)...[
-                          Text(
-                            startTime!.format(context),
-                          ),
-                        ]
-                      ],
+
+                    DropdownMenu<String>(
+                        width: 200,
+                        initialSelection: 'None',
+                        label: const Text('Select Recurrence Type'),
+                        dropdownMenuEntries: recurrenceTypeItems.map((String item) {
+                          return DropdownMenuEntry<String>(
+                            value: item,
+                            label: item,
+                          );
+                        }).toList(),
+                        onSelected: (String? newValue) {
+                          setState(() {
+                            recurrenceType = newValue!;
+                          });
+                        }
                     ),
-                  ),
 
-                  ElevatedButton(
-                    onPressed: () async {
-                      final pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-                      if (pickedTime != null && pickedTime != startTime) {
-                        setState(() {
-                          endTime = pickedTime;
-                        });
-                      }
-                    },
-                    child: Column(
-                      children: <Widget> [
-                        const Text("End Time"),
-                        if (endTime != null)...[
-                          Text(
-                            endTime!.format(context),
-                          ),
-                        ]
-                      ],
+                    TextField(
+                      controller: notesController,
+                      decoration: const InputDecoration(labelText: 'Notes'),
+                      maxLines: 3,
                     ),
-                  ),
-
-
-                  DropdownMenu<String>(
-                    width: 200,
-                    initialSelection: 'None',
-                    label: const Text('Select Recurrence Type'),
-                    dropdownMenuEntries: recurrenceTypeItems.map((String item) {
-                      return DropdownMenuEntry<String>(
-                        value: item,
-                        label: item,
-                      );
-                    }).toList(),
-                    onSelected: (String? newValue) {
-                      setState(() {
-                        recurrenceType = newValue!;
-                      });
-                    }
-                  ),
-
-                  TextField(
-                    controller: notesController,
-                    decoration: const InputDecoration(labelText: 'Notes'),
-                    maxLines: 3,
-                  ),
-                ],
+                  ],
+                ),
               ),
+
             ),
             actions: <Widget>[
               TextButton(
