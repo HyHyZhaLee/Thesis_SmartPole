@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter_app/widgets/custom_button_choosing_date.dart';
+import 'package:flutter_app/AppFunction/get_Day_Of_Week.dart';
 
 class LightingSchedulePage extends StatefulWidget {
   const LightingSchedulePage({super.key});
@@ -70,6 +72,7 @@ void _handleCalendarTap(CalendarTapDetails details) {
   }
 }
 
+
 Future<void> _showAddEventDialog(BuildContext context) async {
   final eventNameController = TextEditingController();
   final recurrenceRuleController = TextEditingController();
@@ -85,6 +88,8 @@ Future<void> _showAddEventDialog(BuildContext context) async {
   TimeOfDay? endTime;
   String? recurrenceType;
   String recurrenceRule0 = '';
+
+
 
   final List<String> recurrenceTypeItems = [
     'None',
@@ -226,254 +231,82 @@ Future<void> _showAddEventDialog(BuildContext context) async {
                     }
                   ),
 
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2<String>(
-                      isExpanded: true,
-                      hint: Text(
-                        'Select Recurrence Type',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).hintColor,
-                        ),
-                      ),
-                      items: recurrenceTypeItems
-                          .map((String item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item,
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ))
-                          .toList(),
-                      value: recurrenceType,
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            recurrenceType = value;
-                          });
-                        }
-                      },
-                      buttonStyleData: ButtonStyleData(
-                        // height: 40,
-                        // width: 160,
-                        padding: const EdgeInsets.only( right: 14),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          // border: Border.all(
-                          //   color: Colors.black26,
-                          // ),
-                          color: Colors.white,
-                        ),
-                        elevation: 2,
-                      ),
-                      menuItemStyleData: const MenuItemStyleData(
-                        height: 40,
-                      ),
-                    ),
-                  ),
-
-                  // if
-
-
-
-                if (recurrenceType == 'Weekly')
-                  Row(
-                    children: [
-                      OutlinedButton(
-                        style: ButtonStyle(
-                          overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                              (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.focused)) {
-                              return Colors.red;
-                            }
-                            if (states.contains(MaterialState.pressed))
-                              return Colors.blue;
-                            return null; // Defer to the widget's default.
-                          }),
-                        ),
-                        onPressed: () {},
-                        child: const Text('Mon')
-                      ),
-                      // OutlinedButton(onPressed: onPressed, child: child),
-                      // OutlinedButton(onPressed: onPressed, child: child),
-                      // OutlinedButton(onPressed: onPressed, child: child),
-                      // OutlinedButton(onPressed: onPressed, child: child),
-                      // OutlinedButton(onPressed: onPressed, child: child),
-                      // OutlinedButton(onPressed: onPressed, child: child),
-                    ],
-                  ),
-                  ListTile(
-                    title: const Text('Day of Week'),
-                    subtitle: Text(recurrenceRule0),
-                    onTap: () async {
-                      final pickedDay = await showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SimpleDialog(
-                            title: const Text('Select Day of Week'),
-                            children: <Widget>[
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context, 'SU');
-                                },
-                                child: const Text('Sunday'),
-                              ),
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context, 'MO');
-                                },
-                                child: const Text('Monday'),
-                              ),
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context, 'TU');
-                                },
-                                child: const Text('Tuesday'),
-                              ),
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context, 'WE');
-                                },
-                                child: const Text('Wednesday'),
-                              ),
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context, 'TH');
-                                },
-                                child: const Text('Thursday'),
-                              ),
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context, 'FR');
-                                },
-                                child: const Text('Friday'),
-                              ),
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context, 'SA');
-                                },
-                                child: const Text('Saturday'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                      if (pickedDay != null &&
-                          pickedDay != recurrenceRule0) {
-                        setState(() {
-                          recurrenceRule0 = pickedDay;
-                        });
-                      }
-                    },
-                  ),
-
-                if (recurrenceType == 'Monthly')
                   TextField(
-                    controller: recurrenceRuleController,
-                    decoration:
-                    const InputDecoration(labelText: 'Day of Month'),
-                    keyboardType: TextInputType.number,
+                    controller: notesController,
+                    decoration: const InputDecoration(labelText: 'Notes'),
+                    maxLines: 3,
                   ),
-                if (recurrenceType == 'Yearly')
-                  ListTile(
-                    title: const Text('Month and Day'),
-                    subtitle: Text(recurrenceRule0),
-                    onTap: () async {
-                      final pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2101),
-                      );
-                      if (pickedDate != null) {
-                        setState(() {
-                          recurrenceRule0 =
-                          '${pickedDate.month}-${pickedDate.day}';
-                        });
-                      }
-                    },
-                  ),
-                TextField(
-                  controller: notesController,
-                  decoration: const InputDecoration(labelText: 'Notes'),
-                  maxLines: 3,
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Add'),
-              onPressed: () {
-                if (startTime != null &&
-                    endTime != null) {
-                  final DateTime startDateTime = DateTime(
-                    startDate!.year,
-                    startDate!.month,
-                    startDate!.day,
-                    startTime!.hour,
-                    startTime!.minute,
-                  );
-                  final DateTime endDateTime = DateTime(
-                    endDate!.year,
-                    endDate!.month,
-                    endDate!.day,
-                    endTime!.hour,
-                    endTime!.minute,
-                  );
-                  String recurrenceRule = '';
-                  if (recurrenceType != 'None') {
-                    switch (recurrenceType) {
-                      case 'Daily':
-                        recurrenceRule = 'FREQ=DAILY;INTERVAL=1';
-                        break;
-                      case 'Weekly':
-                        recurrenceRule =
-                        'FREQ=WEEKLY;BYDAY=$recurrenceRule0;INTERVAL=1';
-                        break;
-                      case 'Monthly':
-                        recurrenceRule =
-                        'FREQ=MONTHLY;BYMONTHDAY=${recurrenceRuleController.text};INTERVAL=1';
-                        break;
-                      case 'Yearly':
-                        final parts = recurrenceRule0.split('-');
-                        final month = parts[0];
-                        final day = parts[1];
-                        recurrenceRule =
-                        'FREQ=YEARLY;BYMONTH=$month;BYMONTHDAY=$day';
-                        break;
-                    }
-                  }
-                  final newEvent = Appointment(
-                    startTime: startDateTime,
-                    endTime: endDateTime,
-                    subject: eventNameController.text,
-                    notes: notesController.text,
-                    recurrenceRule: recurrenceRule,
-                    color: Colors.blue,
-                  );
-                  setState(() {
-                    _appointments.add(newEvent);
-                  });
-                  _changeCalendarView(CalendarView.month);
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
                   Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  },
-);
+                },
+              ),
+              TextButton(
+                child: const Text('Add'),
+                onPressed: () {
+                  if (startTime != null &&
+                      endTime != null) {
+                    final DateTime startDateTime = DateTime(
+                      startDate!.year,
+                      startDate!.month,
+                      startDate!.day,
+                      startTime!.hour,
+                      startTime!.minute,
+                    );
+                    final DateTime endDateTime = DateTime(
+                      endDate!.year,
+                      endDate!.month,
+                      endDate!.day,
+                      endTime!.hour,
+                      endTime!.minute,
+                    );
+                    String recurrenceRule = '';
+                    if (recurrenceType != 'None') {
+                      switch (recurrenceType) {
+                        case 'Daily':
+                          recurrenceRule = 'FREQ=DAILY;INTERVAL=1';
+                          break;
+                        case 'Weekly':
+                          recurrenceRule =
+                          'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate!)};INTERVAL=1';
+                          break;
+                        case 'Monthly':
+                          recurrenceRule =
+                          'FREQ=MONTHLY;BYMONTHDAY=${dateRange.start.day};INTERVAL=1';
+                          break;
+                        case 'Yearly':
+                          recurrenceRule =
+                          'FREQ=YEARLY;BYMONTH=${startDate!.month};BYMONTHDAY=${startDate!.day}';
+                          break;
+                      }
+                    }
+                    final newEvent = Appointment(
+                      startTime: startDateTime,
+                      endTime: endDateTime,
+                      subject: eventNameController.text,
+                      notes: notesController.text,
+                      recurrenceRule: recurrenceRule,
+                      color: Colors.blue,
+                    );
+                    setState(() {
+                      _appointments.add(newEvent);
+                    });
+                    _changeCalendarView(CalendarView.month);
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
 }
 
 Future<void> _showEventDetailsDialog(

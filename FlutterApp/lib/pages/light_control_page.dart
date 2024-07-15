@@ -27,8 +27,14 @@ class _TwoSliderPageState extends State<LightControlPage> {
   Future<void> _loadInitialBrightness() async {
     try {
       // Get the initial brightness value from the database
-      DatabaseEvent event1 = await global_databaseReference.child("NEMA_0002").child("Newest data").once();
-      DatabaseEvent event2 = await global_databaseReference.child("NEMA_0003").child("Newest data").once();
+      DatabaseEvent event1 = await global_databaseReference
+          .child("NEMA_0002")
+          .child("Newest data")
+          .once();
+      DatabaseEvent event2 = await global_databaseReference
+          .child("NEMA_0003")
+          .child("Newest data")
+          .once();
 
       if (event1.snapshot.value != null && event1.snapshot.value is Map) {
         final data1 = event1.snapshot.value as Map<dynamic, dynamic>;
@@ -85,14 +91,17 @@ class _TwoSliderPageState extends State<LightControlPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1488DB), // Set the AppBar background color
+        backgroundColor: const Color(0xFF1488DB),
+        // Set the AppBar background color
         titleTextStyle: const TextStyle(
           color: Colors.white, // Set the title text color to white
           fontSize: 24, // Increase the font size for better visibility
           fontWeight: FontWeight.bold, // Make the title bold
         ),
-        elevation: 4, // Optional: Adds shadow below the AppBar
-        centerTitle: true, // Optional: Centers the title
+        elevation: 4,
+        // Optional: Adds shadow below the AppBar
+        centerTitle: true,
+        // Optional: Centers the title
         title: const Text('Smart Pole Control'),
       ),
       body: Padding(
@@ -107,7 +116,8 @@ class _TwoSliderPageState extends State<LightControlPage> {
                     child: CustomSliderWidget(
                       initialSliderValue: _brightness,
                       onValueChanged: (value) {
-                        _publishBrightness(value, "NEMA_0002");  // Updates for device NEMA_0002
+                        _publishBrightness(
+                            value, "NEMA_0002"); // Updates for device NEMA_0002
                       },
                       deviceName: "NEMA 0002",
                     ),
@@ -116,7 +126,8 @@ class _TwoSliderPageState extends State<LightControlPage> {
                     child: CustomSliderWidget(
                       initialSliderValue: _brightness2,
                       onValueChanged: (value) {
-                        _publishBrightness(value, "NEMA_0003");  // Updates for device NEMA_0003
+                        _publishBrightness(
+                            value, "NEMA_0003"); // Updates for device NEMA_0003
                       },
                       deviceName: "NEMA 0003",
                     ),
@@ -131,4 +142,3 @@ class _TwoSliderPageState extends State<LightControlPage> {
     );
   }
 }
-
