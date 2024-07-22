@@ -49,8 +49,8 @@ class _MyAppState extends State<MyApp> {
         textTheme: GoogleFonts.mulishTextTheme(
           Theme.of(context).textTheme,
         ),
-        primaryColor: const Color(0xFFF9F9F9),
-        scaffoldBackgroundColor: const Color(0xFFF9F9F9),
+        primaryColor: PRIMARY_WHITE_COLOR,
+        scaffoldBackgroundColor: PRIMARY_WHITE_COLOR,
       ),
       home: DashboardScreen(),
     );
@@ -99,14 +99,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Expanded(
                   flex: 889,
                   child: Container(
-                    // Margin = navigation drawer before expanding 103 + padding 40
-                    margin: const EdgeInsets.only(left: 143, right: 10, top: 0 , bottom: 10),
+                    // Margin = navigation drawer before expanding 103 + padding 20
+                    margin: USE_BORDER_RADIUS?
+                      const EdgeInsets.only(left: 123, right: 10, top: 0 , bottom: 10):
+                      const EdgeInsets.only(left: 113, right: 10, top: 0 , bottom: 10),
                     // Add border radius everywhere = drawer border radius = 31 for child: _pages.elementAt(_selectedIndex),
                     child: Container(
                       //border with color #E6E5F2 width 10
                       decoration: BoxDecoration(
                         borderRadius: USE_BORDER_RADIUS ? BorderRadius.circular(31) : BorderRadius.circular(0),
-                        border: Border.all(color: Color(0xFFE6E5F2), width: 2),
+                        border: Border.all(color: PRIMARY_PAGE_BORDER_COLOR, width: 2),
 
                       ),
                       child: ClipRRect(
@@ -151,9 +153,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 // Logo with rounded border corner white background and black stroke total width of Container = 35
                 Container(
                   decoration: BoxDecoration(
-                    color: Color(0xFFF9F9F9),
+                    color: PRIMARY_WHITE_COLOR,
                     borderRadius: BorderRadius.circular(31),
-                    border: Border.all(color: Colors.black),
+                    border: Border.all(color: PRIMARY_BLACK_COLOR),
                   ),
                   padding: EdgeInsets.all(5),
                   child: Image.asset('lib/assets/icons/Logo-DH-Bach-Khoa-HCMUT.png', height: 25),

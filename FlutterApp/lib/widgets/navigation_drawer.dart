@@ -53,7 +53,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
                 builder: (context, child) {
                   return Container(
                     width: _widthAnimation.value,
-                    color: const Color(0xFF7A40F2),
+                    color: PRIMARY_PANEL_COLOR,
                     child: Column(
                       children: <Widget>[
                         Expanded(
