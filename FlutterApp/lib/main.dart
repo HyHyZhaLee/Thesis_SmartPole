@@ -14,6 +14,8 @@ import 'pages/advertisement_schedule_page.dart';
 import 'pages/environmental_sensors_page.dart';
 import 'pages/historical_data_page.dart';
 
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -103,12 +105,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Container(
                       //border with color #E6E5F2 width 10
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(31),
+                        borderRadius: USE_BORDER_RADIUS ? BorderRadius.circular(31) : BorderRadius.circular(0),
                         border: Border.all(color: Color(0xFFE6E5F2), width: 2),
 
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(31),
+                        borderRadius: USE_BORDER_RADIUS ? BorderRadius.circular(31) : BorderRadius.circular(0),
                         child: _pages.elementAt(_selectedIndex),
                       ),
                     ),
@@ -150,7 +152,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Container(
                   decoration: BoxDecoration(
                     color: Color(0xFFF9F9F9),
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(31),
                     border: Border.all(color: Colors.black),
                   ),
                   padding: EdgeInsets.all(5),

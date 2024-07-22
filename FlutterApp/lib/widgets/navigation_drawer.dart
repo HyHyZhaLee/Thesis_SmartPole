@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-
+import 'package:flutter_app/AppFunction/global_variables.dart';
 class CustomNavigationDrawer extends StatefulWidget {
   final int selectedIndex;
   final Function(int) onDestinationSelected;
@@ -24,7 +24,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 300),
+      duration: Duration(milliseconds: 50),
       vsync: this,
     );
     _widthAnimation = Tween<double>(begin: 103, end: 349).animate(_animationController);
@@ -42,12 +42,12 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
-          margin: EdgeInsets.all(10),
+          margin: USE_BORDER_RADIUS? EdgeInsets.all(10): EdgeInsets.all(0),
           child: MouseRegion(
             onEnter: (_) => _handleMouseEnter(true),
             onExit: (_) => _handleMouseEnter(false),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(31),
+              borderRadius: USE_BORDER_RADIUS ? BorderRadius.circular(31) : BorderRadius.circular(0),
               child: AnimatedBuilder(
                 animation: _widthAnimation,
                 builder: (context, child) {
