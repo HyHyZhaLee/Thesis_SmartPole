@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_app/widgets/custom_button_choosing_date.dart';
-import 'package:flutter_app/AppFunction/get_Day_Of_Week.dart';
+import 'package:flutter_app/AppFunction/get_event_details.dart';
 import 'package:flutter_app/widgets/add_event_dialog.dart';
 
 class LightingSchedulePage extends StatefulWidget {
@@ -94,6 +94,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),

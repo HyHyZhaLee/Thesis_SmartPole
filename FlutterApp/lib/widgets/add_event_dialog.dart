@@ -7,6 +7,7 @@ class AddEventDialog {
   static Future<void> show(BuildContext context, Function(Appointment) onAddEvent) async {
     final eventNameController = TextEditingController();
     final notesController = TextEditingController();
+    final intervalController = TextEditingController();
     DateTimeRange dateRange = DateTimeRange(start: DateTime.now(), end: DateTime.now());
     DateTime? startDate;
     DateTime? endDate;
@@ -14,7 +15,6 @@ class AddEventDialog {
     TimeOfDay? startTime;
     TimeOfDay? endTime;
     String? recurrenceType;
-    String recurrenceRule0 = '';
 
     final List<String> recurrenceTypeItems = [
       'None',
@@ -256,28 +256,71 @@ class AddEventDialog {
                           ],
                         ),
                         const SizedBox(height: 30),
-                        DropdownMenu<String>(
-                          width: 200,
-                          initialSelection: 'None',
-                          label: const Text(
-                            'Select Recurrence Type',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0,
-                            ),
+                        IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              DropdownMenu<String>(
+                                width: 300,
+                                initialSelection: 'None',
+                                textStyle: const TextStyle(
+                                  fontSize: 20.0,
+                                ),
+                                label: const Text(
+                                  'Select Recurrence Type',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                                dropdownMenuEntries: recurrenceTypeItems.map((String item) {
+                                  return DropdownMenuEntry<String>(
+                                    value: item,
+                                    label: item,
+                                  );
+                                }).toList(),
+                                onSelected: (String? newValue) {
+                                  setState(() {
+                                    recurrenceType = newValue!;
+                                  });
+                                },
+                              ),
+                              const SizedBox(width: 20),
+                              Expanded(
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.blueGrey),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  child: Center(
+                                    child: TextField(
+                                      controller: intervalController,
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                        hintText: 'Interval',
+                                        hintStyle: TextStyle(
+                                          textBaseline: TextBaseline.ideographic,
+                                          color: Colors.grey,
+                                        ),
+                                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                                        // alignLabelWithHint: true,
+                                        border: InputBorder.none,
+                                      ),
+                                      style: const TextStyle(
+                                        fontSize: 24.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          dropdownMenuEntries: recurrenceTypeItems.map((String item) {
-                            return DropdownMenuEntry<String>(
-                              value: item,
-                              label: item,
-                            );
-                          }).toList(),
-                          onSelected: (String? newValue) {
-                            setState(() {
-                              recurrenceType = newValue!;
-                            });
-                          },
                         ),
+
+
                         const SizedBox(height: 10),
                         TextField(
                           controller: notesController,
@@ -287,7 +330,7 @@ class AddEventDialog {
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
                             ),
-                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
                             alignLabelWithHint: true,
                           ),
                           maxLines: 3,
@@ -340,7 +383,7 @@ class AddEventDialog {
                             break;
                           case 'Weekly':
                             recurrenceRule =
-                            'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate!)};INTERVAL=1';
+                            'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate!)};INTERVAL=${intervalController.text}';
                             break;
                           case 'Monthly':
                             recurrenceRule =
