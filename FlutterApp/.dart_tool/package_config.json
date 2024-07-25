@@ -483,19 +483,19 @@
     },
     {
       "name": "syncfusion_flutter_calendar",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_calendar-26.1.42",
+      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_calendar-26.2.4",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "syncfusion_flutter_core",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_core-26.1.42",
+      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_core-26.2.4",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "syncfusion_flutter_datepicker",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_datepicker-26.1.42",
+      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_datepicker-26.2.4",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -578,7 +578,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-07-23T09:04:14.893256Z",
+  "generated": "2024-07-25T11:00:54.695098Z",
   "generator": "pub",
   "generatorVersion": "3.6.0-26.0.dev",
   "flutterRoot": "file:///C:/flutter",

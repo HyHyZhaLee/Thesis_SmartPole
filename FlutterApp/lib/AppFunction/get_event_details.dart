@@ -1,4 +1,5 @@
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:intl/intl.dart';
+
 
 class GetEventsDetails {
   static String recurrenceRuleParser (String? rule) {
@@ -22,5 +23,15 @@ class GetEventsDetails {
       }
     }
     return frequency;
+  }
+
+  static String formatDate (DateTime dateTime) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    return formatter.format(dateTime);
+  }
+
+  static String formatTime (DateTime dateTime) {
+    final DateFormat formatter = DateFormat('HH:mm');
+    return formatter.format(dateTime);
   }
 }

@@ -100,9 +100,19 @@ class AddEventDialog {
                                     ),
                                     child: Dialog(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(18),
+                                        borderRadius: BorderRadius.circular(8),
+                                        // side: const BorderSide(),
                                       ),
-                                      child: child,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(color: Colors.white),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(8), // slightly less than 30 to avoid overflow
+                                          child: child,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 );
@@ -117,6 +127,10 @@ class AddEventDialog {
                               });
                             }
                           },
+
+
+
+
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
@@ -286,36 +300,38 @@ class AddEventDialog {
                                   });
                                 },
                               ),
-                              const SizedBox(width: 20),
-                              Expanded(
-                                child: Container(
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.blueGrey),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                                  child: Center(
-                                    child: TextField(
-                                      controller: intervalController,
-                                      keyboardType: TextInputType.number,
-                                      decoration: const InputDecoration(
-                                        hintText: 'Interval',
-                                        hintStyle: TextStyle(
-                                          textBaseline: TextBaseline.ideographic,
-                                          color: Colors.grey,
+                              if (recurrenceType == 'Daily' || recurrenceType == 'Weekly' || recurrenceType == 'Monthly') ...[
+                                const SizedBox(width: 20),
+                                Expanded(
+                                  child: Container(
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.blueGrey),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    child: Center(
+                                      child: TextField(
+                                        controller: intervalController,
+                                        keyboardType: TextInputType.number,
+                                        decoration: const InputDecoration(
+                                          hintText: 'Interval',
+                                          hintStyle: TextStyle(
+                                            textBaseline: TextBaseline.ideographic,
+                                            color: Colors.grey,
+                                          ),
+                                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                                          // alignLabelWithHint: true,
+                                          border: InputBorder.none,
                                         ),
-                                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                                        // alignLabelWithHint: true,
-                                        border: InputBorder.none,
-                                      ),
-                                      style: const TextStyle(
-                                        fontSize: 24.0,
+                                        style: const TextStyle(
+                                          fontSize: 24.0,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ],
                           ),
                         ),
@@ -376,18 +392,19 @@ class AddEventDialog {
                         endTime!.minute,
                       );
                       String recurrenceRule = '';
+                      int interval = int.tryParse(intervalController.text) ?? 1;
                       if (recurrenceType != 'None') {
                         switch (recurrenceType) {
                           case 'Daily':
-                            recurrenceRule = 'FREQ=DAILY;INTERVAL=1';
+                            recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval';
                             break;
                           case 'Weekly':
                             recurrenceRule =
-                            'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate!)};INTERVAL=${intervalController.text}';
+                            'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate!)};INTERVAL=$interval';
                             break;
                           case 'Monthly':
                             recurrenceRule =
-                            'FREQ=MONTHLY;BYMONTHDAY=${dateRange.start.day};INTERVAL=1';
+                            'FREQ=MONTHLY;BYMONTHDAY=${dateRange.start.day};INTERVAL=$interval';
                             break;
                           case 'Yearly':
                             recurrenceRule =

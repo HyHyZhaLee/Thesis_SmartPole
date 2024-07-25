@@ -5,6 +5,9 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_app/widgets/custom_button_choosing_date.dart';
 import 'package:flutter_app/AppFunction/get_event_details.dart';
 import 'package:flutter_app/widgets/add_event_dialog.dart';
+import 'dart:convert';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class LightingSchedulePage extends StatefulWidget {
   const LightingSchedulePage({super.key});
@@ -16,17 +19,112 @@ class LightingSchedulePage extends StatefulWidget {
 class _LightingSchedulePage extends State<LightingSchedulePage> {
   late List<Appointment> _appointments;
   CalendarView _calendarView = CalendarView.month;
+  late CalendarDataSource _calendarDataSource;
 
   @override
   void initState() {
     super.initState();
     _appointments = getAppointments();
+    _calendarDataSource = AdvertiseDataSource(_appointments);
+    _loadAppointments();
+  }
+
+  Future<void> _loadAppointments() async {
+    final String response = await rootBundle.loadString('/jsonfile/data.json');
+    final List<dynamic> jsonData = json.decode(response);
+    for (var event in jsonData) {
+      _addAppointmentFromJson(event);
+    }
+    setState(() {
+      _calendarDataSource = AdvertiseDataSource(_appointments);
+    });
   }
 
   void _changeCalendarView(CalendarView view) {
     setState(() {
       _calendarView = view;
     });
+  }
+
+  void _addAppointmentFromJson(Map<String, dynamic> event) {
+    final eventName = event['event_name'];
+    final startDate = DateTime.parse(event['start_date']);
+    final endDate = DateTime.parse(event['end_date']);
+    final startTime = TimeOfDay(
+      hour: int.parse(event['start_time'].split(':')[0]),
+      minute: int.parse(event['start_time'].split(':')[1]),
+    );
+    final endTime = TimeOfDay(
+      hour: int.parse(event['end_time'].split(':')[0]),
+      minute: int.parse(event['end_time'].split(':')[1]),
+    );
+    final recurrenceType = event['recurrence_type'];
+    final interval = event['interval'];
+    final note = event['note'];
+
+    final startDateTime = DateTime(
+      startDate.year,
+      startDate.month,
+      startDate.day,
+      startTime.hour,
+      startTime.minute,
+    );
+    final endDateTime = DateTime(
+      endDate.year,
+      endDate.month,
+      endDate.day,
+      endTime.hour,
+      endTime.minute,
+    );
+
+    String recurrenceRule = '';
+    if (recurrenceType != 'None') {
+      switch (recurrenceType) {
+        case 'Daily':
+          recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval';
+          break;
+        case 'Weekly':
+          recurrenceRule = 'FREQ=WEEKLY;BYDAY=${_getDayOfWeek(startDate)};INTERVAL=$interval';
+          break;
+        case 'Monthly':
+          recurrenceRule = 'FREQ=MONTHLY;BYMONTHDAY=${startDate.day};INTERVAL=$interval';
+          break;
+        case 'Yearly':
+          recurrenceRule = 'FREQ=YEARLY;BYMONTH=${startDate.month};BYMONTHDAY=${startDate.day};INTERVAL=$interval';
+          break;
+      }
+    }
+
+    final appointment = Appointment(
+      startTime: startDateTime,
+      endTime: endDateTime,
+      subject: eventName,
+      notes: note,
+      recurrenceRule: recurrenceRule,
+      color: Colors.blue,
+    );
+    _appointments.add(appointment);
+  }
+
+  String _getDayOfWeek(DateTime date) {
+    switch (date.weekday) {
+      case DateTime.monday:
+        return 'MO';
+      case DateTime.tuesday:
+        return 'TU';
+      case DateTime.wednesday:
+        return 'WE';
+      case DateTime.thursday:
+        return 'TH';
+      case DateTime.friday:
+        return 'FR';
+      case DateTime.saturday:
+        return 'SA';
+      case DateTime.sunday:
+        return 'SU';
+      default:
+        return 'MO';
+    }
   }
 
   @override
@@ -36,9 +134,11 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
         view: _calendarView,
         headerHeight: 50,
         headerStyle: const CalendarHeaderStyle(
+
           textStyle: TextStyle(color: Colors.white, fontSize: 20),
           textAlign: TextAlign.center,
           backgroundColor: Colors.blue,
+
         ),
         firstDayOfWeek: 1,
         dataSource: AdvertiseDataSource(_appointments),
@@ -86,7 +186,6 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
     }
   }
 
-
   Future<void> _showEventDetailsDialog(
       BuildContext context, Appointment appointment) async {
     return showDialog<void>(
@@ -98,28 +197,106 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          title: Text(
-            appointment.subject,
-            style: const TextStyle(
+          title: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: const BoxDecoration(
               color: Colors.blue,
-              fontWeight: FontWeight.bold,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            child: Center(
+              child: Text(
+                appointment.subject,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                _buildDetailRow(Icons.access_time, 'Start Time',
-                    appointment.startTime.toString()),
-                const SizedBox(height: 10),
-                _buildDetailRow(Icons.access_time_outlined, 'End Time',
-                    appointment.endTime.toString()),
-                const SizedBox(height: 10),
-                _buildDetailRow(Icons.repeat, 'Recurrence Rule',
-                    appointment.recurrenceRule ?? 'None'),
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [               
+                      Container(
+                        color: Colors.white,
+                        child: Icon(
+                          Icons.access_time,
+                          color: Colors.blue,
+                        ),
+                      ) ,
+                      Spacer(flex: 1),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Start Date:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              GetEventsDetails.formatDate(appointment.startTime),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Spacer(flex: 2),
+                      Container(
+                        color: Colors.grey,
+                        width: 2,
+                      ),
+                      Spacer(flex: 2),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Start Time:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              GetEventsDetails.formatTime(appointment.startTime),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                
+                
+                _buildDetailRow(
+                  Icons.access_time, 
+                  'Start Time',
+                  GetEventsDetails.formatDate(appointment.startTime),
+                ),
                 const SizedBox(height: 10),
                 _buildDetailRow(
-                    Icons.notes, 'Notes', appointment.notes ?? 'None'),
+                  Icons.access_time_outlined, 
+                  'End Time',
+                  appointment.endTime.toString()
+                ),
+                const SizedBox(height: 10),
+                _buildDetailRow(
+                  Icons.repeat, 
+                  'Recurrence Rule', 
+                  GetEventsDetails.recurrenceRuleParser(appointment.recurrenceRule),
+                ),
+                const SizedBox(height: 10),
+                _buildDetailRow(
+                  Icons.notes, 
+                  'Notes', 
+                  appointment.notes ?? 'None'
+                ),
               ],
             ),
           ),
