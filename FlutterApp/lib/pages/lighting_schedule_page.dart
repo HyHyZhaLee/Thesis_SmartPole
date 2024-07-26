@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:get/get_core/get_core.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -60,6 +62,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
     );
     final recurrenceType = event['recurrence_type'];
     final interval = event['interval'];
+    final count = event['count'];
     final note = event['note'];
 
     final startDateTime = DateTime(
@@ -81,16 +84,16 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
     if (recurrenceType != 'None') {
       switch (recurrenceType) {
         case 'Daily':
-          recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval';
+          recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval;COUNT=$count';
           break;
         case 'Weekly':
-          recurrenceRule = 'FREQ=WEEKLY;BYDAY=${_getDayOfWeek(startDate)};INTERVAL=$interval';
+          recurrenceRule = 'FREQ=WEEKLY;BYDAY=${_getDayOfWeek(startDate)};INTERVAL=$interval;COUNT=$count';
           break;
         case 'Monthly':
-          recurrenceRule = 'FREQ=MONTHLY;BYMONTHDAY=${startDate.day};INTERVAL=$interval';
+          recurrenceRule = 'FREQ=MONTHLY;BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
           break;
         case 'Yearly':
-          recurrenceRule = 'FREQ=YEARLY;BYMONTH=${startDate.month};BYMONTHDAY=${startDate.day};INTERVAL=$interval';
+          recurrenceRule = 'FREQ=YEARLY;BYMONTH=${startDate.month};BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
           break;
       }
     }
@@ -192,6 +195,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
+        // var endTime = appointment.endTime;
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
@@ -217,6 +221,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+    
                 IntrinsicHeight(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -228,7 +233,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
                           color: Colors.blue,
                         ),
                       ) ,
-                      Spacer(flex: 1),
+                      SizedBox(width: 10,),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Column(
@@ -246,16 +251,50 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
                           ],
                         ),
                       ),
-                      Spacer(flex: 2),
-                      Container(
-                        color: Colors.grey,
-                        width: 2,
-                      ),
-                      Spacer(flex: 2),
+                      Spacer(),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'End Date:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              GetEventsDetails.formatDate(appointment.endTime),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Divider(
+                  height: 10,
+                  thickness: 2,
+                  color: Colors.grey,
+                ),
+
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        color: Colors.white,
+                        child: Icon(
+                          Icons.access_time_outlined,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Start Time:',
@@ -269,33 +308,148 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
                           ],
                         ),
                       ),
+                      Spacer(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'End Time:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              GetEventsDetails.formatTime(appointment.endTime),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                
-                
-                _buildDetailRow(
-                  Icons.access_time, 
-                  'Start Time',
-                  GetEventsDetails.formatDate(appointment.startTime),
+
+                Divider(
+                  height: 10,
+                  thickness: 2,
+                  color: Colors.grey,
                 ),
-                const SizedBox(height: 10),
-                _buildDetailRow(
-                  Icons.access_time_outlined, 
-                  'End Time',
-                  appointment.endTime.toString()
+
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        color: Colors.white,
+                        child: Icon(
+                          Icons.repeat,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Recurrence\nRule:',
+                              // textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              GetEventsDetails.recurrenceRuleParser(appointment.recurrenceRule),
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      ),
+                      Spacer(),
+                      Container(
+                        child: 
+                        IntrinsicWidth(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                alignment: Alignment.center,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Interval:',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      GetEventsDetails.recurrenceInterval(appointment.recurrenceRule).toString(),
+                                    ),
+                                    Container(
+                                      color: Colors.white,
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      'Repeat Time:',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      GetEventsDetails.recurrenceCount(appointment.recurrenceRule).toString(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 10),
-                _buildDetailRow(
-                  Icons.repeat, 
-                  'Recurrence Rule', 
-                  GetEventsDetails.recurrenceRuleParser(appointment.recurrenceRule),
+
+                Divider(
+                  height: 10,
+                  thickness: 2,
+                  color: Colors.grey,
                 ),
-                const SizedBox(height: 10),
-                _buildDetailRow(
-                  Icons.notes, 
-                  'Notes', 
-                  appointment.notes ?? 'None'
+
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        color: Colors.white,
+                        child: Icon(
+                          Icons.notes,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Notes:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              '${appointment.notes}'
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

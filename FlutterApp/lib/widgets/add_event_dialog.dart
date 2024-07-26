@@ -8,6 +8,7 @@ class AddEventDialog {
     final eventNameController = TextEditingController();
     final notesController = TextEditingController();
     final intervalController = TextEditingController();
+    final rtimesController = TextEditingController();
     DateTimeRange dateRange = DateTimeRange(start: DateTime.now(), end: DateTime.now());
     DateTime? startDate;
     DateTime? endDate;
@@ -39,7 +40,7 @@ class AddEventDialog {
                 ),
                 child: const Center(
                   child: Text(
-                    'ADD NEW EVENT',
+                    'Add New Event',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -127,9 +128,6 @@ class AddEventDialog {
                               });
                             }
                           },
-
-
-
 
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -276,7 +274,7 @@ class AddEventDialog {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               DropdownMenu<String>(
-                                width: 300,
+                                width: 200,
                                 initialSelection: 'None',
                                 textStyle: const TextStyle(
                                   fontSize: 20.0,
@@ -300,8 +298,40 @@ class AddEventDialog {
                                   });
                                 },
                               ),
+                              if (recurrenceType != 'None' && recurrenceType != null) ...[
+                                SizedBox(width: 10,),
+                                Expanded(
+                                  child: Container(
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.blueGrey),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    child: Center(
+                                      child: TextField(
+                                        controller: rtimesController,
+                                        keyboardType: TextInputType.number,
+                                        decoration: const InputDecoration(
+                                          hintText: 'RTimes',
+                                          hintStyle: TextStyle(
+                                            textBaseline: TextBaseline.ideographic,
+                                            color: Colors.grey,
+                                          ),
+                                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                                          // alignLabelWithHint: true,
+                                          border: InputBorder.none,
+                                        ),
+                                        style: const TextStyle(
+                                          fontSize: 20.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                               if (recurrenceType == 'Daily' || recurrenceType == 'Weekly' || recurrenceType == 'Monthly') ...[
-                                const SizedBox(width: 20),
+                                const SizedBox(width: 10),
                                 Expanded(
                                   child: Container(
                                     height: 50,
@@ -325,7 +355,7 @@ class AddEventDialog {
                                           border: InputBorder.none,
                                         ),
                                         style: const TextStyle(
-                                          fontSize: 24.0,
+                                          fontSize: 20.0,
                                         ),
                                       ),
                                     ),
@@ -400,7 +430,7 @@ class AddEventDialog {
                             break;
                           case 'Weekly':
                             recurrenceRule =
-                            'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate!)};INTERVAL=$interval';
+                            'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate!)};INTERVAL=$interval;COUNT=3';
                             break;
                           case 'Monthly':
                             recurrenceRule =

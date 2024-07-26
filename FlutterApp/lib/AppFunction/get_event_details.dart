@@ -25,8 +25,39 @@ class GetEventsDetails {
     return frequency;
   }
 
+  static int? recurrenceCount(String? rule) {
+    if (rule == null || rule.isEmpty) {
+      return null;
+    }
+
+    final List<String> ruleParts = rule.split(';');
+    for (String part in ruleParts) {
+      if (part.startsWith('COUNT')) {
+        final String count = part.replaceFirst('COUNT=', '');
+        return int.tryParse(count);
+      }
+    }
+    return null;
+  }
+
+  static int? recurrenceInterval(String? rule) {
+    if (rule == null || rule.isEmpty) {
+      return null;
+    }
+
+    final List<String> ruleParts = rule.split(';');
+    for (String part in ruleParts) {
+      if (part.startsWith('INTERVAL')) {
+        final String interval = part.replaceFirst('INTERVAL=', '');
+        return int.tryParse(interval);
+      }
+    }
+    return null;
+  }
+
+
   static String formatDate (DateTime dateTime) {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
     return formatter.format(dateTime);
   }
 
