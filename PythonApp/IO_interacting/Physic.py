@@ -58,7 +58,8 @@ class Physic:
         for i in range(len(ports)):
             port = ports[i]
             strPort = str(port)
-            if "USB" in strPort:  # Checks if the port description contains 'USB'
+            print(strPort)
+            if "/dev/ttyUSB" in strPort:  # Checks if the port description contains 'USB'
                 splitPort = strPort.split(" ")
                 commPort = splitPort[0]  # Assumes the first part is the port name
         return commPort

@@ -46,8 +46,6 @@ def append_objs_to_img(cv2_im, inference_size, objs, labels, tracker, view_trans
         bbox = obj.bbox.scale(scale_x, scale_y)
         x0, y0 = int(bbox.xmin), int(bbox.ymin)
         x1, y1 = int(bbox.xmax), int(bbox.ymax)
-        #percent = int(100 * obj.score)
-        #label = '{}% {}'.format(percent, labels.get(obj.id, obj.id))
         label = '{}'.format(labels.get(obj.id, obj.id))
         cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), (0, 255, 0), 2)
         cv2_im = cv2.putText(cv2_im, label, (x0, y0 + 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
@@ -108,7 +106,13 @@ def main():
     if args.video:
         cap = cv2.VideoCapture(args.video)
     else:
-        cap = cv2.VideoCapture(args.camera_idx)
+        # RTSP stream URL
+        rtsp_url = 'rtsp://admin:ACLAB2023@192.168.8.101/ISAPI/Streaming/channels/1'
+        cap = cv2.VideoCapture(rtsp_url)
+    
+    if not cap.isOpened():
+        print("Error: Unable to open video stream")
+        return
 
     tracker = ObjectTracker(args.tracker).trackerObject
     view_transformer = ViewTransformer(SOURCE, TARGET)
@@ -118,6 +122,7 @@ def main():
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
+            print("Error: Unable to read frame from the video stream")
             break
         cv2_im = frame
 
