@@ -428,20 +428,25 @@ class AddEventDialog {
                       if (recurrenceType != 'None') {
                         switch (recurrenceType) {
                           case 'Daily':
-                            recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval;COUNT=';
+                            recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval';
                             break;
                           case 'Weekly':
                             recurrenceRule =
-                            'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate!)};INTERVAL=$interval;COUNT=$repeatTimes';
+                            'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate!)};INTERVAL=$interval';
                             break;
                           case 'Monthly':
                             recurrenceRule =
-                            'FREQ=MONTHLY;BYMONTHDAY=${dateRange.start.day};INTERVAL=$interval;COUNT=$repeatTimes';
+                            'FREQ=MONTHLY;BYMONTHDAY=${dateRange.start.day};INTERVAL=$interval';
                             break;
                           case 'Yearly':
                             recurrenceRule =
-                            'FREQ=YEARLY;BYMONTH=${startDate!.month};BYMONTHDAY=${startDate!.day};COUNT=$repeatTimes';
+                            'FREQ=YEARLY;BYMONTH=${startDate!.month};BYMONTHDAY=${startDate!.day}';
                             break;
+                        }
+
+                        if (repeatTimes != null && repeatTimes > 0)
+                        {
+                          recurrenceRule += ';COUNT=$repeatTimes';
                         }
                       }
                       final newEvent = Appointment(
