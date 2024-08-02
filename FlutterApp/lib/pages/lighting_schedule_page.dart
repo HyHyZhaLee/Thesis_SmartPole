@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/get_core/get_core.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -191,6 +192,10 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
 
   Future<void> _showEventDetailsDialog(
       BuildContext context, Appointment appointment) async {
+        final double bodyFontSize = 20;
+        const double headerFontSize = 20;
+        const double subjectFontSize = 36;
+        final double iconSize = 36;
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -212,247 +217,310 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
                 appointment.subject,
                 style: const TextStyle(
                   color: Colors.white,
+                  fontSize: subjectFontSize,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
           content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-    
-                IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [               
-                      Container(
-                        color: Colors.white,
-                        child: Icon(
-                          Icons.access_time,
-                          color: Colors.blue,
-                        ),
-                      ) ,
-                      SizedBox(width: 10,),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Start Date:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+            child: IntrinsicWidth(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Container(
+                    width: 310,
+                    child: IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [               
+                          Container(
+                            color: Colors.white,
+                            child: Icon(
+                              Icons.access_time,
+                              color: Colors.blue,
+                              size: iconSize,
                             ),
-                            Text(
-                              GetEventsDetails.formatDate(appointment.startTime),
+                          ) ,
+
+                          SizedBox(width: 15,),
+
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Start Date:',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: headerFontSize,
+                                  ),
+                                ),
+                                Text(
+                                  GetEventsDetails.formatDate(appointment.startTime),
+                                  style: TextStyle(
+                                    fontSize: bodyFontSize,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Spacer(),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'End Date:',
+                                  style: TextStyle(
+                                    fontSize: headerFontSize,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  GetEventsDetails.formatDate(appointment.endTime),
+                                  style: TextStyle(
+                                    fontSize: bodyFontSize,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      Spacer(),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              'End Date:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              GetEventsDetails.formatDate(appointment.endTime),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
 
-                Divider(
-                  height: 10,
-                  thickness: 2,
-                  color: Colors.grey,
-                ),
-
-                IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        color: Colors.white,
-                        child: Icon(
-                          Icons.access_time_outlined,
-                          color: Colors.blue,
-                        ),
-                      ),
-                      SizedBox(width: 10,),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Start Time:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              GetEventsDetails.formatTime(appointment.startTime),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Spacer(),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              'End Time:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              GetEventsDetails.formatTime(appointment.endTime),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  Divider(
+                    height: 10,
+                    thickness: 2,
+                    color: Colors.grey,
                   ),
-                ),
 
-                Divider(
-                  height: 10,
-                  thickness: 2,
-                  color: Colors.grey,
-                ),
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          color: Colors.white,
+                          child: Icon(
+                            Icons.access_time_outlined,
+                            color: Colors.blue,
+                            size: iconSize,
+                          ),
+                        ),
 
-                IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        color: Colors.white,
-                        child: Icon(
-                          Icons.repeat,
-                          color: Colors.blue,
-                        ),
-                      ),
-                      SizedBox(width: 10,),
-                      Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Recurrence\nRule:',
-                              // textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              GetEventsDetails.recurrenceRuleParser(appointment.recurrenceRule),
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ),
-                      ),
-                      Spacer(),
-                      Container(
-                        child: 
-                        IntrinsicWidth(
+                        SizedBox(width: 15,),
+
+                        Container(
+                          alignment: Alignment.centerLeft,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                alignment: Alignment.center,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Interval:',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      GetEventsDetails.recurrenceInterval(appointment.recurrenceRule).toString(),
-                                    ),
-                                    Container(
-                                      color: Colors.white,
-                                      height: 4,
-                                    ),
-                                    Text(
-                                      'Repeat Time:',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      GetEventsDetails.recurrenceCount(appointment.recurrenceRule).toString(),
-                                    ),
-                                  ],
+                              Text(
+                                'Start Time:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: headerFontSize,
+                                ),
+                              ),
+                              Text(
+                                GetEventsDetails.formatTime(appointment.startTime),
+                                style: TextStyle(
+                                  fontSize: bodyFontSize,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Divider(
-                  height: 10,
-                  thickness: 2,
-                  color: Colors.grey,
-                ),
-
-                IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        color: Colors.white,
-                        child: Icon(
-                          Icons.notes,
-                          color: Colors.blue,
-                        ),
-                      ),
-                      SizedBox(width: 10,),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Notes:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                        Spacer(),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                'End Time:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: headerFontSize,
+                                ),
                               ),
-                            ),
-                            Text(
-                              '${appointment.notes}'
-                            ),
-                          ],
+                              Text(
+                                GetEventsDetails.formatTime(appointment.endTime),
+                                style: TextStyle(
+                                  fontSize: bodyFontSize,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+
+                  Divider(
+                    height: 10,
+                    thickness: 2,
+                    color: Colors.grey,
+                  ),
+
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          color: Colors.white,
+                          child: Icon(
+                            Icons.repeat,
+                            color: Colors.blue,
+                            size: 36,
+                          ),
+                        ),
+
+                        SizedBox(width: 15,),
+
+                        Expanded(
+                          child: IntrinsicWidth(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Recurrence Rule:',
+                                      // textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: headerFontSize,
+                                      ),
+                                    ),
+                                    Text(
+                                      GetEventsDetails.recurrenceRuleParser(appointment.recurrenceRule),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: bodyFontSize,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Divider(
+                                  height: 10,
+                                  thickness: 2,
+                                ),
+                                IntrinsicHeight(
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Interval:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: headerFontSize,
+                                              ),
+                                            ),
+                                            Text(
+                                              (GetEventsDetails.recurrenceInterval(appointment.recurrenceRule) != null
+                                                && GetEventsDetails.recurrenceInterval(appointment.recurrenceRule)! > 0) ? '1'
+                                                : GetEventsDetails.recurrenceInterval(appointment.recurrenceRule).toString(),
+                                              style: TextStyle(
+                                                fontSize: bodyFontSize,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Repeat Times:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: headerFontSize,
+                                              ),
+                                            ),
+                                            Text(
+                                              (GetEventsDetails.recurrenceCount(appointment.recurrenceRule) != null 
+                                                && GetEventsDetails.recurrenceCount(appointment.recurrenceRule)! > 0) ?
+                                                GetEventsDetails.recurrenceCount(appointment.recurrenceRule).toString() : 'Infinity',
+                                              style: TextStyle(
+                                                fontSize: bodyFontSize,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Divider(
+                    height: 10,
+                    thickness: 2,
+                    color: Colors.grey,
+                  ),
+
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          color: Colors.white,
+                          child: Icon(
+                            Icons.notes,
+                            color: Colors.blue,
+                            size: iconSize,
+                          ),
+                        ),
+                        SizedBox(width: 15,),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Notes:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: headerFontSize,
+                                ),
+                              ),
+                              Text(
+                                '${appointment.notes}',
+                                style: TextStyle(
+                                  fontSize:bodyFontSize,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
+            
           ),
           actions: <Widget>[
             TextButton(
@@ -461,6 +529,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
                 style: TextStyle(
                   color: Colors.blue,
                   fontWeight: FontWeight.bold,
+                  fontSize: headerFontSize,
                 ),
               ),
               onPressed: () {
@@ -479,6 +548,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
                 style: TextStyle(
                   color: Colors.blue,
                   fontWeight: FontWeight.bold,
+                  fontSize: headerFontSize,
                 ),
               ),
             )

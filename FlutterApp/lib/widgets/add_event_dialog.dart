@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/AppFunction/get_event_details.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -422,23 +423,24 @@ class AddEventDialog {
                         endTime!.minute,
                       );
                       String recurrenceRule = '';
-                      int interval = int.tryParse(intervalController.text) ?? 1;
+                      int interval =  int.tryParse(intervalController.text) ?? 1;
+                      int? repeatTimes = int.tryParse(rtimesController.text);
                       if (recurrenceType != 'None') {
                         switch (recurrenceType) {
                           case 'Daily':
-                            recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval';
+                            recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval;COUNT=';
                             break;
                           case 'Weekly':
                             recurrenceRule =
-                            'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate!)};INTERVAL=$interval;COUNT=3';
+                            'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate!)};INTERVAL=$interval;COUNT=$repeatTimes';
                             break;
                           case 'Monthly':
                             recurrenceRule =
-                            'FREQ=MONTHLY;BYMONTHDAY=${dateRange.start.day};INTERVAL=$interval';
+                            'FREQ=MONTHLY;BYMONTHDAY=${dateRange.start.day};INTERVAL=$interval;COUNT=$repeatTimes';
                             break;
                           case 'Yearly':
                             recurrenceRule =
-                            'FREQ=YEARLY;BYMONTH=${startDate!.month};BYMONTHDAY=${startDate!.day}';
+                            'FREQ=YEARLY;BYMONTH=${startDate!.month};BYMONTHDAY=${startDate!.day};COUNT=$repeatTimes';
                             break;
                         }
                       }
