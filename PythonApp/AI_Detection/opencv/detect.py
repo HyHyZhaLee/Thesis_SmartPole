@@ -8,6 +8,7 @@ from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter, run_inference
 from tracker import ObjectTracker
 import time
+import threading
 
 # Config value
 SOURCE = np.array([[648, 233], [1443, 218], [1222, 28], [838, 33]])
@@ -21,6 +22,17 @@ TARGET = np.array(
         [0, TARGET_HEIGHT - 1],
     ]
 )
+
+SPEED_THRESHOLD = 80.0  # Tốc độ ngưỡng (km/h)
+SAVE_DIR = 'captured_vehicles'  # Thư mục để lưu hình ảnh
+os.makedirs(SAVE_DIR, exist_ok=True)
+lock = threading.Lock()
+
+# Variables for debouncing
+Detect_1 = False
+Detect_2 = False
+Detect_3 = False
+label_name = None
 
 class ViewTransformer:
     def __init__(self, source: np.ndarray, target: np.ndarray) -> None:
@@ -37,18 +49,21 @@ class ViewTransformer:
         return transformed_points.reshape(-1, 2)
 
 def append_objs_to_img(cv2_im, inference_size, objs, labels, tracker, view_transformer, previous_positions, previous_times):
+    global label_name
     height, width, channels = cv2_im.shape
     scale_x, scale_y = width / inference_size[0], height / inference_size[1]
-    current_time = time.time()
 
     detect = []
     for obj in objs:
         bbox = obj.bbox.scale(scale_x, scale_y)
         x0, y0 = int(bbox.xmin), int(bbox.ymin)
         x1, y1 = int(bbox.xmax), int(bbox.ymax)
-        label = '{}'.format(labels.get(obj.id, obj.id))
+        with lock:
+            label_name = '{}'.format(labels.get(obj.id, obj.id))
+            if label_name == 'car':
+                Detect_1 = True
         cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), (0, 255, 0), 2)
-        cv2_im = cv2.putText(cv2_im, label, (x0, y0 + 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
+        cv2_im = cv2.putText(cv2_im, label_name, (x0, y0 + 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
         detect.append([x0, y0, x1, y1, obj.score])
 
     tracks = tracker.update(np.array(detect))
@@ -68,15 +83,53 @@ def append_objs_to_img(cv2_im, inference_size, objs, labels, tracker, view_trans
             previous_position = previous_positions[track_id]
             previous_time = previous_times[track_id]
             distance = np.linalg.norm(np.array(transformed_position) - np.array(previous_position))
-            time_diff = current_time - previous_time
+            time_diff = time.time() - previous_time
             speed = distance / time_diff if time_diff > 0 else 0
             speed_kmh = speed * 3.6  # convert m/s to km/h
-            cv2.putText(cv2_im, f"Speed: {speed_kmh:.2f} km/h", (x0 + 5, y1 + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            cv2.putText(cv2_im, f"Speed: {speed_kmh:.2f} km/h", (x0 + 5, y1 + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                        (255, 255, 255), 2)
 
         previous_positions[track_id] = transformed_position
-        previous_times[track_id] = current_time
+        previous_times[track_id] = time.time()
 
     return cv2_im
+
+car_count = 0
+def debounce_thread():
+    global Detect_1, Detect_2, Detect_3, label_name, car_count
+    while True:
+        time.sleep(0.3)  # Chờ 0.3 giây
+
+        # with lock:
+        if label_name == 'car':
+            # Debouncing logic
+            if Detect_1 and Detect_2:  # Nếu Detect_1 và Detect_2 đều là True từ trước
+                Detect_3 = True  # Đặt Detect_3 thành True
+            elif Detect_1:  # Nếu chỉ có Detect_1 là True
+                Detect_2 = True  # Đặt Detect_2 thành True
+                Detect_3 = False  # Reset Detect_3
+            else:
+                Detect_1 = True  # Đặt Detect_1 thành True
+                Detect_2 = Detect_3 = False  # Reset Detect_2 và Detect_3
+
+            # Debugging output to check the states
+            # print('State 3:', Detect_3)
+            # print('State 2:', Detect_2)
+            # print('State 1:', Detect_1)
+
+            if Detect_1 and Detect_2 and Detect_3:
+                print('OK')
+                car_count += 1
+                print(car_count)
+        else:
+            Detect_1 = Detect_2 = Detect_3 = False  # Đặt lại nếu không phát hiện 'car'
+
+
+
+# Khởi động thread debounce
+thread = threading.Thread(target=debounce_thread)
+thread.daemon = True
+thread.start()
 
 def main():
     default_model_dir = '../all_models'
@@ -109,7 +162,7 @@ def main():
         # RTSP stream URL
         rtsp_url = 'rtsp://admin:ACLAB2023@192.168.8.101/ISAPI/Streaming/channels/1'
         cap = cv2.VideoCapture(rtsp_url)
-    
+
     if not cap.isOpened():
         print("Error: Unable to open video stream")
         return
@@ -130,7 +183,8 @@ def main():
         cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
         run_inference(interpreter, cv2_im_rgb.tobytes())
         objs = get_objects(interpreter, args.threshold)[:args.top_k]
-        cv2_im = append_objs_to_img(cv2_im, inference_size, objs, labels, tracker, view_transformer, previous_positions, previous_times)
+        cv2_im = append_objs_to_img(cv2_im, inference_size, objs, labels, tracker, view_transformer, previous_positions,
+                                    previous_times)
 
         cv2.imshow('frame', cv2_im)
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -141,4 +195,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
