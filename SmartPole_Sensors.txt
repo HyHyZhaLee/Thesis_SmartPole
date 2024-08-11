@@ -1,4 +1,4 @@
-
+URL: https://nema-nbiot-controller.web.app/
 MQTT_SERVER = "mqttserver.tk"
 MQTT_PORT = 1883
 MQTT_USERNAME = "innovation"
