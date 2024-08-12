@@ -8,7 +8,7 @@ Wifi_esp32 atom_wifi(
 void setup()
 {
   Serial.begin(115200);
-  M5.begin(true, false, false);
+  M5.begin(true, false, true);
   Serial.println("ATOM is ready");
 
   atom_wifi.setupWifi();
