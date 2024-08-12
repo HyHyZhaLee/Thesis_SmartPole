@@ -59,10 +59,11 @@ class Physic:
             port = ports[i]
             strPort = str(port)
             print(strPort)
-            if "/dev/ttyUSB" in strPort:  # Checks if the port description contains 'USB'
+            if "USB Serial" in strPort:  # Checks if the port description contains 'USB'
                 splitPort = strPort.split(" ")
                 commPort = splitPort[0]  # Assumes the first part is the port name
         return commPort
+
 
     def serial_read_data(self):
         """Reads incoming data from the serial port and decodes it."""

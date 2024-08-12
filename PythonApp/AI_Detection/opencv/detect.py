@@ -34,6 +34,9 @@ Detect_2 = False
 Detect_3 = False
 label_name = None
 
+# Variables for allowed Coco labels
+ALLOWED_LABEL_IDS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # person, bicycle, car, motorcycle, airplane, bus, train, truck, boat, traffic light, fire hydrant
+
 class ViewTransformer:
     def __init__(self, source: np.ndarray, target: np.ndarray) -> None:
         source = source.astype(np.float32)
@@ -55,6 +58,12 @@ def append_objs_to_img(cv2_im, inference_size, objs, labels, tracker, view_trans
 
     detect = []
     for obj in objs:
+        if obj.id not in ALLOWED_LABEL_IDS:
+             continue  # Bỏ qua các object không nằm trong danh sách duyệt
+
+        if obj.score < 0.6:
+            continue  # Bỏ qua nếu xác suất không đủ cao
+
         bbox = obj.bbox.scale(scale_x, scale_y)
         x0, y0 = int(bbox.xmin), int(bbox.ymin)
         x1, y1 = int(bbox.xmax), int(bbox.ymax)
@@ -65,8 +74,10 @@ def append_objs_to_img(cv2_im, inference_size, objs, labels, tracker, view_trans
         cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), (0, 255, 0), 2)
         cv2_im = cv2.putText(cv2_im, label_name, (x0, y0 + 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
         detect.append([x0, y0, x1, y1, obj.score])
-
-    tracks = tracker.update(np.array(detect))
+    if len(detect) > 0:
+        tracks = tracker.update(np.array(detect))
+    else:
+        tracks = []  # Không có đối tượng nào được phát hiện
 
     for track in tracks:
         track_id = int(track[4])
