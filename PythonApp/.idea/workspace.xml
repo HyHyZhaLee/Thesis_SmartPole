@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="eb791212-c987-4586-82b4-d4be366dfdc3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI_Detection/gstreamer/gstreamer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI_Detection/gstreamer/gstreamer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI_Detection/opencv/Cmd to RUn.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/AI_Detection/opencv/detect.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI_Detection/opencv/detect.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IO_interacting/Physic.py" beforeDir="false" afterPath="$PROJECT_DIR$/IO_interacting/Physic.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,9 +41,10 @@
     "Python tests.Python tests in test_rtsp.py.executor": "Run",
     "Python.Physic.executor": "Run",
     "Python.detect.executor": "Run",
+    "Python.main.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "NUC__Dev__Ver3.6",
+    "git-widget-placeholder": "NUC__Dev__Ver3.7",
     "last_opened_file_path": "/home/aclab/Desktop/HuyNhatAnhTrongDuy/Thesis_SmartPole/PythonApp",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }

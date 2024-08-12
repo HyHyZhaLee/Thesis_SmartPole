@@ -59,7 +59,7 @@ class GstPipeline:
         # Run pipeline.
         self.pipeline.set_state(Gst.State.PLAYING)
         try:
-            Gtk.main()
+            Gtk.run_AI()
         except:
             pass
 
