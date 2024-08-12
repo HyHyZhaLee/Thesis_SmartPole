@@ -14,7 +14,7 @@ void taskHandlePoleControl (void*);
 void taskPublish2Server(void*);
 void taskHandleControlFlag (void*);
 
-
-
+extern String feedPole_01;
+extern MyMQTT atom_MQTT;
 
 #endif

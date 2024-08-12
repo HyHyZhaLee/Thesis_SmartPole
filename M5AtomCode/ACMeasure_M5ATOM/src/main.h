@@ -9,7 +9,7 @@
 #include <task.h>
 #include <Watch_dog.h>
 
-extern MyMQTT atom_MQTT;
+
 
 
 #endif

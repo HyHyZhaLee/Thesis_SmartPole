@@ -5,13 +5,6 @@ Wifi_esp32 atom_wifi(
     "ACLAB2023"
 );
 
-
-MyMQTT atom_MQTT(
-    "mqtt.ohstem.vn",
-    "BK_SmartPole",
-    " "
-);
-
 void setup()
 {
   Serial.begin(115200);
@@ -26,6 +19,7 @@ void setup()
   // pinMode(26, OUTPUT);
   // digitalWrite(32, HIGH);
   WatchdogInit();
+  atom_MQTT.publish(feedPole_01, OFF_Json());
 
   xTaskCreate(taskHandlePoleControl, "", 4096, NULL, 1, NULL);
   xTaskCreate(taskHandleControlFlag, "", 4096, NULL, 1, NULL);

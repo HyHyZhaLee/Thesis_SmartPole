@@ -6,6 +6,11 @@
 #define TURN_ON_SIGNAL                  LOW
 #define TURN_OFF_SIGNAL                 HIGH
 
+MyMQTT atom_MQTT(
+    "mqtt.ohstem.vn",
+    "BK_SmartPole",
+    " "
+);
 
 int8_t setValuePublish = TURN_OFF_SIGNAL;
 int8_t prevStatusPublish = setValuePublish;
@@ -15,7 +20,7 @@ int8_t oldPinValue = TURN_OFF_SIGNAL;
 int8_t prevPinValue = oldPinValue;
 int8_t prev2PinValue = oldPinValue;
 int8_t currPinValue = oldPinValue;
-// int8_t timerPinValueDebouncingFactor = TIME_DEBOUNCING_FACTOR;
+
 int16_t timerTurnOffLightFactor = TIME_DELAY_TURN_OFF_FACTOR;
 bool turn_flag = false;
 bool prev_turn_flag = false;
