@@ -9,7 +9,7 @@
 #include <task.h>
 #include <Watch_dog.h>
 
-
+#define INPUT_PIN                 32
 
 
 #endif
