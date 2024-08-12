@@ -61,6 +61,7 @@ void taskHandlePoleControl (void* pvParameters)
   {
     if (turn_flag != prev_turn_flag)
     {
+      Serial.println(turn_flag);
       prev_turn_flag = turn_flag;
       if (turn_flag == false)
       {
