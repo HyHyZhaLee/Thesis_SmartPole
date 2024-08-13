@@ -23,11 +23,14 @@
 #define BLUE                            0x0000f0
 #define GREEN                           0x00ff00
 #define BLACK                           0x000000
+#define WHITE                           0xffffff
 
+void taskLedBlink(void*);
 void taskPublish2Server(void*);
 void taskHandleControlFlag (void*);
 
 extern String feedPole_01;
 extern MyMQTT atom_MQTT;
+extern int led_color;
 
 #endif

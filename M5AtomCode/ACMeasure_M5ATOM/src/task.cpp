@@ -11,17 +11,35 @@ int8_t prevStatusPublish = TURN_OFF_SIGNAL;
 int8_t currStatusPublish = TURN_OFF_SIGNAL;
 
 int8_t oldPinValue = TURN_OFF_SIGNAL;
-int8_t prevPinValue = oldPinValue;
-int8_t prev2PinValue = oldPinValue;
-int8_t currPinValue = oldPinValue;
+int8_t prevPinValue = TURN_OFF_SIGNAL;
+int8_t prev2PinValue = TURN_OFF_SIGNAL;
+int8_t currPinValue = TURN_OFF_SIGNAL;
 
 int16_t timerTurnOffLightFactor = TIME_DELAY_TURN_OFF_FACTOR;
 
 bool turn_flag = false;
 bool prev_turn_flag = false;
+
 bool blink_flag = false;
+int led_color = WHITE;
 
 String feedPole_01 = "BK_SmartPole/feeds/V20";
+
+void taskLedBlink (void* pvParameters)
+{
+  while (1)
+  {
+    led_color = (pvParameters != NULL) 
+              ? (*(int *) pvParameters) 
+              : (WHITE);
+    if (blink_flag)
+      M5.dis.drawpix(0, BLACK); 
+    else
+      M5.dis.drawpix(0, led_color);
+    blink_flag = !blink_flag;
+    vTaskDelay(1000);
+  }
+}
 
 void taskHandleControlFlag (void* pvParameters)
 {
@@ -74,17 +92,7 @@ void taskPublish2Server(void* pvParameter)
       turn_flag = false;
       break;
     case HAVE_PERSON:
-      if (blink_flag == false)
-      {
-        M5.dis.drawpix(0, BLACK);
-        blink_flag = true;
-      }
-      else
-      {
-        M5.dis.drawpix(0, GREEN);
-        blink_flag = false;
-      }
-
+      led_color = GREEN;
 
       if (turn_flag == false)
       {
@@ -100,17 +108,7 @@ void taskPublish2Server(void* pvParameter)
       break;
 
     case DONT_HAVE_PERSON:
-
-      if (blink_flag == false)
-      {
-        M5.dis.drawpix(0, BLACK);
-        blink_flag = true;
-      }
-      else
-      {
-        M5.dis.drawpix(0, BLUE);
-        blink_flag = false;
-      }
+      led_color = BLUE;
 
       if (turn_flag == true)
       {

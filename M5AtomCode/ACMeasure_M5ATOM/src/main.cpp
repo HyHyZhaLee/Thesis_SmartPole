@@ -21,6 +21,7 @@ void setup()
   WatchdogInit();
   atom_MQTT.publish(feedPole_01, OFF_Json());
 
+  xTaskCreate(taskLedBlink, "", 4096, &led_color, 1, NULL);
   xTaskCreate(taskHandleControlFlag, "", 4096, NULL, 1, NULL);
   xTaskCreate(taskPublish2Server, "", 4096, NULL, 1, NULL);
 }
