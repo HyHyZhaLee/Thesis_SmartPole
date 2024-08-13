@@ -37,7 +37,7 @@ void taskLedBlink (void* pvParameters)
     else
       M5.dis.drawpix(0, led_color);
     blink_flag = !blink_flag;
-    vTaskDelay(1000);
+    vTaskDelay(331);
   }
 }
 
@@ -92,10 +92,10 @@ void taskPublish2Server(void* pvParameter)
       turn_flag = false;
       break;
     case HAVE_PERSON:
-      led_color = GREEN;
 
       if (turn_flag == false)
       {
+        led_color = BLUE;
         state_pole = DONT_HAVE_PERSON;
 
         String message = OFF_Json();
@@ -108,10 +108,10 @@ void taskPublish2Server(void* pvParameter)
       break;
 
     case DONT_HAVE_PERSON:
-      led_color = BLUE;
 
       if (turn_flag == true)
       {
+        led_color = GREEN;
         state_pole = HAVE_PERSON;
 
         String message = ON_Json();
