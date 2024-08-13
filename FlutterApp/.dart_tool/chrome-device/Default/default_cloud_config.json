@@ -206,14 +206,14 @@
       "appId": "a3f5b7c9d1e2f4a6b8c7d9e1f2a3b4d6",
       "appName": "topsites",
       "data": {
-         "latestOperationVersion": "2.3",
-         "latestOperationVersionForTesting": "2.3",
+         "latestOperationVersion": "2.7",
+         "latestOperationVersionForTesting": "2.7",
          "topSitesV2Enabled": false
       },
       "effectStrategy": "launch",
       "instanceId": "3e7a9c4b1f8d6e5c2a9b7e4d1c8f3e7b",
       "type": "normal",
-      "version": "1009"
+      "version": "1013"
    }, {
       "appId": "71146be72c1663fbeca572989b494b56",
       "appName": "shared_links",
@@ -233,12 +233,12 @@
       "appName": "darkmode",
       "data": {
          "androidBlocklist": [ "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(www\\.msn\\.)(.*\\/news\\/other.*)$", "^https?:\\/\\/edge\\.microsoft\\.com\\/edgeedrop\\/continuity\\/index\\.html(?:\\?.*)?$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(sponsor\\.microsoft\\.com)(\\/?.*?)$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(wio\\.scania\\.com)(\\/?.*?)$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?([^/]*\\.)?(ixigua\\.com)(\\/?.*?)$" ],
-         "iOSBlocklist": [ "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(www\\.msn\\.)(.*\\/news\\/other.*)$", "^https?:\\/\\/edge\\.microsoft\\.com\\/edgeedrop\\/continuity\\/index\\.html(?:\\?.*)?$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(reddit\\.com)(\\/?.*?)$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(amazon\\.com)(\\/?.*?)$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(copilot\\.microsoft\\.com)(\\/?.*?)$", "msn.com", "reddit.com", "amazon.com", "m.youtube.com", "copilot.microsoft.com", "build.microsoft.com", "sponsor.microsoft.com" ]
+         "iOSBlocklist": [ "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(www\\.msn\\.)(.*\\/news\\/other.*)$", "^https?:\\/\\/edge\\.microsoft\\.com\\/edgeedrop\\/continuity\\/index\\.html(?:\\?.*)?$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(reddit\\.com)(\\/?.*?)$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(amazon\\.com)(\\/?.*?)$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(copilot\\.microsoft\\.com)(\\/?.*?)$", "msn.com", "reddit.com", "amazon.com", "m.youtube.com", "copilot.microsoft.com", "build.microsoft.com", "sponsor.microsoft.com", ".pdf" ]
       },
       "effectStrategy": "launch",
       "instanceId": "3e7a9c4b1f8d6e5c2a9b7e4d1c8f3e7a",
       "type": "builtin",
-      "version": "1003"
+      "version": "1004"
    }, {
       "appId": "8f6c546d0514482c9898cd8f963453cc",
       "appName": "operation_platform",
@@ -300,5 +300,5 @@
       "type": "normal",
       "version": "1003"
    } ],
-   "version": "202407030001"
+   "version": "202407240001"
 }

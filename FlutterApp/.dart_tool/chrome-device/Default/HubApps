@@ -602,29 +602,29 @@
       "description": "Play popular games for free",
       "icon": {
          "raster_icon": {
-            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_dark.png/1.7.14/asset",
-            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_hc.png/1.7.14/asset",
-            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_light.png/1.7.14/asset"
+            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_dark.png/1.7.15/asset",
+            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_hc.png/1.7.15/asset",
+            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_light.png/1.7.15/asset"
          },
          "raster_icon|flight:msEdgeHubAppGamesNewIconCard": {
-            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_dark_card.png/1.7.14/asset",
-            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_hc_card.png/1.7.14/asset",
-            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_light_card.png/1.7.14/asset"
+            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_dark_card.png/1.7.15/asset",
+            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_hc_card.png/1.7.15/asset",
+            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_light_card.png/1.7.15/asset"
          },
          "raster_icon|flight:msEdgeHubAppGamesNewIconController": {
-            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_dark_controller.png/1.7.14/asset",
-            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_hc_controller.png/1.7.14/asset",
-            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_light_controller.png/1.7.14/asset"
+            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_dark_controller.png/1.7.15/asset",
+            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_hc_controller.png/1.7.15/asset",
+            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_light_controller.png/1.7.15/asset"
          },
          "raster_icon|flight:msEdgeHubAppGamesNewIconJoystick": {
-            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_dark_joystick.png/1.7.14/asset",
-            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_hc_joystick.png/1.7.14/asset",
-            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_light_joystick.png/1.7.14/asset"
+            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_dark_joystick.png/1.7.15/asset",
+            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_hc_joystick.png/1.7.15/asset",
+            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_light_joystick.png/1.7.15/asset"
          },
          "raster_icon|flight:msEdgeHubAppGamesNewIconPuzzle": {
-            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_dark_puzzle.png/1.7.14/asset",
-            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_hc_puzzle.png/1.7.14/asset",
-            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_light_puzzle.png/1.7.14/asset"
+            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_dark_puzzle.png/1.7.15/asset",
+            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_hc_puzzle.png/1.7.15/asset",
+            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_games_maximal_light_puzzle.png/1.7.15/asset"
          }
       },
       "id": "96defd79-4015-4a32-bd09-794ff72183ef",
@@ -670,6 +670,7 @@
          "url|flight:msEdgeHubAppGameSearchEnabled": "https://www.msn.com/widgets/fullpage/gaming/widget?experiences=CasualGamesHub&sharedHeader=1&playInSidebar=1&gameSearchEnabled=1",
          "url|flight:msEdgeHubAppGamesNewIconCard": "https://www.msn.com/widgets/fullpage/cgSideBar/widget?experiences=CasualGamesHub&sharedHeader=1&ocid=iconCard",
          "url|flight:msEdgeHubAppGamesNewIconController": "https://www.msn.com/widgets/fullpage/cgSideBar/widget?experiences=CasualGamesHub&sharedHeader=1&ocid=iconController",
+         "url|flight:msEdgeHubAppGamesNewIconExpC": "https://www.msn.com/widgets/fullpage/cgSideBar/widget?experiences=CasualGamesHub&sharedHeader=1&ocid=iconExpC",
          "url|flight:msEdgeHubAppGamesNewIconJoystick": "https://www.msn.com/widgets/fullpage/cgSideBar/widget?experiences=CasualGamesHub&sharedHeader=1&ocid=iconJoystick",
          "url|flight:msEdgeHubAppGamesNewIconPuzzle": "https://www.msn.com/widgets/fullpage/cgSideBar/widget?experiences=CasualGamesHub&sharedHeader=1&ocid=iconPuzzle",
          "url|flight:msEdgeHubAppPlayGamesInSidebar": "https://www.msn.com/widgets/fullpage/gaming/widget?experiences=CasualGamesHub&sharedHeader=1&playInSidebar=1",
@@ -684,11 +685,12 @@
          "url|locale:zh_CN": "https://www.msn.cn/widgets/fullpage/gaming/widget?experiences=CasualGamesHub&sharedHeader=1",
          "url|locale:zh_CN|flight:msEdgeHubAppGamesNewIconCard": "https://www.msn.cn/widgets/fullpage/cgSideBar/widget?experiences=CasualGamesHub&sharedHeader=1&ocid=iconCard",
          "url|locale:zh_CN|flight:msEdgeHubAppGamesNewIconController": "https://www.msn.cn/widgets/fullpage/cgSideBar/widget?experiences=CasualGamesHub&sharedHeader=1&ocid=iconController",
+         "url|locale:zh_CN|flight:msEdgeHubAppGamesNewIconExpC": "https://www.msn.cn/widgets/fullpage/cgSideBar/widget?experiences=CasualGamesHub&sharedHeader=1&ocid=iconExpC",
          "url|locale:zh_CN|flight:msEdgeHubAppGamesNewIconJoystick": "https://www.msn.cn/widgets/fullpage/cgSideBar/widget?experiences=CasualGamesHub&sharedHeader=1&ocid=iconJoystick",
          "url|locale:zh_CN|flight:msEdgeHubAppGamesNewIconPuzzle": "https://www.msn.cn/widgets/fullpage/cgSideBar/widget?experiences=CasualGamesHub&sharedHeader=1&ocid=iconPuzzle",
          "url|locale:zh_CN|flight:msEdgeHubAppUseCGSideBar": "https://www.msn.cn/widgets/fullpage/cgSideBar/widget?experiences=CasualGamesHub&sharedHeader=1"
       },
-      "version": "1.7.14"
+      "version": "1.7.15"
    }, {
       "auto_show": {
          "enabled": true,
@@ -829,10 +831,6 @@
          "enabled": true,
          "enabled|flight:msEdgeHubAppOutlookAutoOpenOff": false,
          "enabled|flight:msEdgeHubAppsAutoOpenOutlookV2": false,
-         "fallback_notification": {
-            "show_count": 5,
-            "text": "View source email"
-         },
          "fre_notification": {
             "enabled": true,
             "header": "We opened Outlook to show your email side-by-side with the link you opened",
@@ -892,9 +890,9 @@
       "description": "Check email while staying in your flow",
       "icon": {
          "raster_icon": {
-            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_outlook_dark.png/1.12.12/asset",
-            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_outlook_hc.png/1.12.12/asset",
-            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_outlook_light.png/1.12.12/asset"
+            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_outlook_dark.png/1.12.13/asset",
+            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_outlook_hc.png/1.12.13/asset",
+            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_outlook_light.png/1.12.13/asset"
          }
       },
       "id": "8682d0fa-50b3-4ece-aa5b-e0b33f9919e2",
@@ -920,7 +918,7 @@
       },
       "trusted_domains": [ "live.com", "office.com", "microsoftonline.com", "microsoft.com", "office365.com" ],
       "trusted_types": [ "default", "dompurify" ],
-      "version": "1.12.12"
+      "version": "1.12.13"
    }, {
       "capabilities|flight:msDesignerSinglePrompt": {
          "enable_force_dark_mode": true
@@ -1612,10 +1610,6 @@
          "enabled": true,
          "enabled|flight:msEdgeAutoOpenTeamsHubAppV2": false,
          "enabled|flight:msEdgeHubAppTeamsAutoOpenOff": false,
-         "fallback_notification": {
-            "show_count": 5,
-            "text": "View your Teams chat"
-         },
          "fre_notification": {
             "enabled": true,
             "header": "We opened Teams to show your chat side-by-side with the link you opened",
@@ -1648,9 +1642,9 @@
       },
       "icon": {
          "raster_icon": {
-            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_teams_dark.png/1.5.10/asset",
-            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_teams_hc.png/1.5.10/asset",
-            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_teams_light.png/1.5.10/asset"
+            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_teams_dark.png/1.5.11/asset",
+            "high_contrast": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_teams_hc.png/1.5.11/asset",
+            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_teams_light.png/1.5.11/asset"
          }
       },
       "id": "bc25fcef-8964-4e72-8287-23e2b496c128",
@@ -1670,7 +1664,7 @@
       "target": {
          "url": "https://teams.microsoft.com/embed-client/chats/list?layout=singlePane&hostCtx=edge"
       },
-      "version": "1.5.10"
+      "version": "1.5.11"
    }, {
       "capabilities": {
          "show_domain_in_header": true
@@ -2197,6 +2191,7 @@
             "hubappparams": "ocid=stpromoshoreline",
             "hubappsubpath": "/ja-jp/weather",
             "signal_name": "IsYahooJapanWeatherTop",
+            "signal_name|flight:msHubAppMsStartYJWeatherV3": "IsYahooJapanWeather",
             "signal_threshold": 0.5
          }
       } ],
@@ -2225,8 +2220,8 @@
       "flights": [ "msEdgeHubAppStart", "msEdgeTransientAppAutoOpen" ],
       "icon": {
          "raster_icon": {
-            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_msstart_logo_dark.png/1.2.15/asset",
-            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_msstart_logo_light.png/1.2.15/asset"
+            "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_msstart_logo_dark.png/1.2.16/asset",
+            "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_msstart_logo_light.png/1.2.16/asset"
          }
       },
       "id": "b7a8e9f2-6b0d-4c5b-ae7d-8a6e1f2c7a6f",
@@ -2242,7 +2237,7 @@
          "url": "https://www.msn.com/widgets/fullpage/winWidgets/sidebar?experiences=WindowsWidgetsHub",
          "url|market:CN": "https://www.msn.cn/widgets/fullpage/winWidgets/sidebar?experiences=WindowsWidgetsHub"
       },
-      "version": "1.2.15"
+      "version": "1.2.16"
    }, {
       "capabilities": {
          "hide_navigation_buttons": true

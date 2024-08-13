@@ -8,12 +8,12 @@ class CustomSliderWidget extends StatefulWidget {
   final Color activeTrackColor;  // To set slider active track color dynamically
 
   const CustomSliderWidget({
-    Key? key,
+    super.key,
     this.initialSliderValue = 0,
     required this.onValueChanged,
     this.deviceName = "Light Brightness", // Default device name
     this.activeTrackColor = Colors.blue, // Default color for active track
-  }) : super(key: key);
+  });
 
   @override
   _CustomSliderWidgetState createState() => _CustomSliderWidgetState();
@@ -39,7 +39,7 @@ class _CustomSliderWidgetState extends State<CustomSliderWidget> {
           const SizedBox(height: 10),
           Text(
             widget.deviceName,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 28,
             ),
           ),
@@ -58,12 +58,12 @@ class _CustomSliderWidgetState extends State<CustomSliderWidget> {
               child: SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: widget.activeTrackColor,
-                  inactiveTrackColor: Color(0xFFF4EEF4),
-                  trackShape: RoundedRectSliderTrackShape(),
+                  inactiveTrackColor: const Color(0xFFF4EEF4),
+                  trackShape: const RoundedRectSliderTrackShape(),
                   trackHeight: 70.0,
-                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 35),
+                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 35),
                   overlayColor: Colors.blue.withAlpha(10),
-                  overlayShape: RoundSliderOverlayShape(overlayRadius: 60),
+                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 60),
                 ),
                 child: Slider(
                   value: _currentSliderValue,
@@ -91,7 +91,7 @@ class _CustomSliderWidgetState extends State<CustomSliderWidget> {
           IconButton(
             icon: Icon(
               Icons.power_settings_new,
-              color: _isSwitched ? widget.activeTrackColor : Color(0xFFF4EEF4),
+              color: _isSwitched ? widget.activeTrackColor : const Color(0xFFF4EEF4),
               size: 90.0,
             ),
             onPressed: () {

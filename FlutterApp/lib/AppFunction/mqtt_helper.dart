@@ -2,14 +2,14 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:mqtt_client/mqtt_browser_client.dart';
 import 'package:flutter/foundation.dart' show kIsWeb; // Import kIsWeb
-import 'dart:convert'; // For JSON decoding
+// For JSON decoding
 
 class MQTTHelper {
   late MqttClient _client; // Use MqttClient to allow both MqttServerClient and MqttBrowserClient
   String _server;
-  String _clientIdentifier;
-  String _username;
-  String _password;
+  final String _clientIdentifier;
+  final String _username;
+  final String _password;
   bool _useWebSocket;
   int _port;
   // Add a callback function

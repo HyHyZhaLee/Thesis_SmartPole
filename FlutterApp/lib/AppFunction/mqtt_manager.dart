@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:flutter_app/AppFunction/global_helper_function.dart';
 import 'mqtt_helper.dart';
 import 'global_variables.dart';
@@ -15,7 +13,7 @@ class MqttManager {
  */
 
   MqttManager() {
-    String randomClientId = "Smartpole_0002; " +getCurrentTimestamp();
+    String randomClientId = "Smartpole_0002; ${getCurrentTimestamp()}";
     global_mqttHelper = MQTTHelper(MQTT_SERVER, randomClientId, MQTT_USERNAME, MQTT_PASSWORD);
     global_mqttHelper.onConnectedCallback = () {
       print("MQTT Connected");
