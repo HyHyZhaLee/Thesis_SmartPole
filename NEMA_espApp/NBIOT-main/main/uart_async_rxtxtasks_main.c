@@ -172,7 +172,7 @@ int sendData(const char* logName, const char* data, uint8_t try)
 
 
 //TODO: Process MQTT
-#define WIFI_SSID "ACLAB"
+#define WIFI_SSID "BK_SMART_POLE_STATION"
 #define WIFI_PASS "ACLAB2023"
 #define MQTT_SERVER "mqtt://mqtt.ohstem.vn:1883"
 
