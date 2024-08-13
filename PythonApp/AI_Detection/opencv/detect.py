@@ -183,6 +183,9 @@ def main():
     previous_positions = {}
     previous_times = {}
 
+    # Thiết lập cửa sổ toàn màn hình
+    #cv2.namedWindow("frame", cv2.WND_PROP_FULLSCREEN)
+    #cv2.setWindowProperty("frame", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
