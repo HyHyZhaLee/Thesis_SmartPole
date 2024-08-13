@@ -9,8 +9,19 @@ MQTT_SERVER = "mqtt.ohstem.vn"
 MQTT_PORT = 8084
 MQTT_USERNAME = "BK_SmartPole"
 MQTT_PASSWORD = " "
-MQTT_TOPIC = "BK_SmartPole/feeds/V20"
 
+
+
+MQTT_CONTROL_LIGHT_TOPIC = "BK_SmartPole/feeds/V20"
+{
+  "station_id": "SmartPole_0002",
+  "station_name": "Smart Pole 0002",
+  "action": "control light",
+  "device_id": "NEMA_0002",
+  "data": "70"
+}
+
+MQTT_NEMA_SENSOR_TOPIC = "BK_SmartPole/feeds/V15"
 {
   "station_id": "SmartPole_0002",
   "station_name": "Smart Pole 0002",
@@ -27,11 +38,11 @@ MQTT_TOPIC = "BK_SmartPole/feeds/V20"
   "cellID": 151473406
 }
 
-
+MQTT_CT01_SENSOR_TOPIC = "BK_SmartPole/feeds/V21"
 {
   "station_id": "SmartPole_0002",
   "station_name": "Smart Pole 0002",
-  "action": "control light",
-  "device_id": "NEMA_0002",
-  "data": "70"
+  "action": "update data",
+  "device_id": "CT01_0002",
+  "data": "1"
 }
