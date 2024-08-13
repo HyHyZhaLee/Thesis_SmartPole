@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="eb791212-c987-4586-82b4-d4be366dfdc3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI_Detection/gstreamer/gstreamer.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI_Detection/gstreamer/gstreamer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AI_Detection/opencv/Cmd to RUn.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/AI_Detection/opencv/detect.py" beforeDir="false" afterPath="$PROJECT_DIR$/AI_Detection/opencv/detect.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,7 +42,7 @@
     "Python.main.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "NUC__Dev__Ver3.7",
+    "git-widget-placeholder": "NUC__Dev__Ver3.8",
     "last_opened_file_path": "/home/aclab/Desktop/HuyNhatAnhTrongDuy/Thesis_SmartPole/PythonApp",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }

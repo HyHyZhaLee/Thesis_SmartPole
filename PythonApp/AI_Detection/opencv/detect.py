@@ -66,7 +66,9 @@ class AI_dectection:
         scale_x, scale_y = width / inference_size[0], height / inference_size[1]
 
         detect = []
-        self.Person_detected = False  # Reset trạng thái trước khi kiểm tra
+
+
+
 
         for obj in objs:
             if obj.id not in self.ALLOWED_LABEL_IDS:
@@ -82,11 +84,10 @@ class AI_dectection:
                 self.label_name = '{}'.format(labels.get(obj.id, obj.id))
                 if self.label_name == 'person':
                     self.Detect_1 = True
-                else:
-                    self.Person_detected = False
-            cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), (0, 255, 0), 2)
-            cv2_im = cv2.putText(cv2_im, self.label_name, (x0, y0 + 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
-            detect.append([x0, y0, x1, y1, obj.score])
+
+                cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), (0, 255, 0), 2)
+                cv2_im = cv2.putText(cv2_im, self.label_name, (x0, y0 + 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
+                detect.append([x0, y0, x1, y1, obj.score])
 
         if len(detect) > 0:
             tracks = tracker.update(np.array(detect))
@@ -127,6 +128,7 @@ class AI_dectection:
             time.sleep(0.3)  # Chờ 0.3 giây
 
             with lock:
+            #print(self.label_name)
                 if self.label_name == 'person':
                     # Debouncing logic
                     if self.Detect_1 and self.Detect_2:  # Nếu Detect_1 và Detect_2 đều là True từ trước
@@ -143,6 +145,8 @@ class AI_dectection:
                 else:
                     self.Detect_1 = self.Detect_2 = self.Detect_3 = False  # Đặt lại nếu không phát hiện 'person'
                     self.Person_detected = False
+                self.label_name = None
+
 
     def run(self):
         default_model_dir = '../all_models'
@@ -187,7 +191,7 @@ class AI_dectection:
 
         frames_batch = []  # Batch of frames
 
-        # Tạo cửa sổ và thiết lập chế độ toàn màn hình
+        # # Tạo cửa sổ và thiết lập chế độ toàn màn hình
         cv2.namedWindow("frame", cv2.WND_PROP_FULLSCREEN)
         cv2.setWindowProperty("frame", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
@@ -219,22 +223,23 @@ class AI_dectection:
 
 if __name__ == '__main__':
     ai = AI_dectection()
-    ai.run()
-    # thread2 = threading.Thread(target=ai.run, name="Thread-2")
-    # thread2.daemon = True
-    # print('Thread 2 name: ', thread2.name)
-    # thread2.start()
+    #ai.run()
+    thread2 = threading.Thread(target=ai.run, name="Thread-2")
+    thread2.daemon = True
+    print('Thread 2 name: ', thread2.name)
+    thread2.start()
 
-    # thread1 = threading.Thread(target=ai.debounce_thread, name="Thread-1")
-    # thread1.daemon = True
-    # thread1.start()
-    # print('Thread 1 name: ', thread1.name)
+    thread1 = threading.Thread(target=ai.debounce_thread, name="Thread-1")
+    thread1.daemon = True
+    thread1.start()
+    print('Thread 1 name: ', thread1.name)
 
-    # while True:
-    #     if ai.Person_detected is not None:
-    #         if ai.Person_detected:
-    #             print("HAVE PERSON!!")
-    #         else:
-    #             print("NO PERSON!!")
-    #     time.sleep(1)
+    while True:
+        if ai.Person_detected is not None:
+            if ai.Person_detected:
+                print("HAVE PERSON!!")
+            else:
+                print("NO PERSON!!")
+        time.sleep(1)
+
 
