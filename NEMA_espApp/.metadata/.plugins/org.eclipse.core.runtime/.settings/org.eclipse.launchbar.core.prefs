@@ -1,6 +1,6 @@
 LaunchTargetManager/com.espressif.idf.launch.serial.core.serialFlashTarget,esp32/arch=xtensa
 LaunchTargetManager/com.espressif.idf.launch.serial.core.serialFlashTarget,esp32/com.espressif.idf.launch.serial.core.idfTarget=esp32
-LaunchTargetManager/com.espressif.idf.launch.serial.core.serialFlashTarget,esp32/com.espressif.idf.launch.serial.core.serialPort=COM3
+LaunchTargetManager/com.espressif.idf.launch.serial.core.serialFlashTarget,esp32/com.espressif.idf.launch.serial.core.serialPort=COM5
 LaunchTargetManager/com.espressif.idf.launch.serial.core.serialFlashTarget,esp32/name=esp32
 LaunchTargetManager/com.espressif.idf.launch.serial.core.serialFlashTarget,esp32/os=esp32
 LaunchTargetManager/com.espressif.idf.launch.serial.core.serialFlashTarget,esp32c2/arch=riscv32
