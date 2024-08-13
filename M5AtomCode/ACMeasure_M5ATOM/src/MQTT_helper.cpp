@@ -43,6 +43,7 @@ void MyMQTT::checkConnect(){
     if (!client.connected()) {
         Serial.println("MQTT Connection lost!");
         reConnect();
+        MQTT_disconnected_flag = true;
     }
     client.loop();
 }

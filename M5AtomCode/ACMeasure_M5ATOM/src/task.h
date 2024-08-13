@@ -11,7 +11,7 @@
 #include <main.h>
 
 #define TIME_DEBOUNCING_FACTOR          5
-#define TIME_DELAY_TURN_OFF_FACTOR      750 //250 * 20
+#define TIME_DELAY_TURN_OFF_FACTOR      500 //250 * 20
 
 #define TURN_ON_SIGNAL                  LOW
 #define TURN_OFF_SIGNAL                 HIGH
@@ -24,6 +24,7 @@
 #define GREEN                           0x00ff00
 #define BLACK                           0x000000
 #define WHITE                           0xffffff
+#define RED                             0xff0000
 
 void taskLedBlink(void*);
 void taskPublish2Server(void*);
@@ -32,5 +33,6 @@ void taskHandleControlFlag (void*);
 extern String feedPole_01;
 extern MyMQTT atom_MQTT;
 extern int led_color;
+extern bool MQTT_disconnected_flag;
 
 #endif

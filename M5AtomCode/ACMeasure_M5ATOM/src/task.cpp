@@ -19,9 +19,12 @@ int16_t timerTurnOffLightFactor = TIME_DELAY_TURN_OFF_FACTOR;
 
 bool turn_flag = false;
 bool prev_turn_flag = false;
+bool MQTT_disconnect_flag = false;
 
 bool blink_flag = false;
 int led_color = WHITE;
+
+
 
 String feedPole_01 = "BK_SmartPole/feeds/V20";
 
@@ -37,7 +40,7 @@ void taskLedBlink (void* pvParameters)
     else
       M5.dis.drawpix(0, led_color);
     blink_flag = !blink_flag;
-    vTaskDelay(331);
+    vTaskDelay(1999);
   }
 }
 
@@ -70,6 +73,7 @@ void taskHandleControlFlag (void* pvParameters)
           if (timerTurnOffLightFactor <= 0)
           {
             turn_flag = false;
+            timerTurnOffLightFactor = TIME_DELAY_TURN_OFF_FACTOR;
           }
         }
       }
@@ -90,13 +94,20 @@ void taskPublish2Server(void* pvParameter)
       state_pole = DONT_HAVE_PERSON;
 
       turn_flag = false;
+      led_color = RED;
       break;
     case HAVE_PERSON:
-      led_color = GREEN;
+
+      if (MQTT_disconnect_flag)
+      {
+        String message = ON_Json();
+        atom_MQTT.publish(feedPole_01, message);
+        MQTT_disconnect_flag = false;
+      }
 
       if (turn_flag == false)
       {
-
+        led_color = RED;
         state_pole = DONT_HAVE_PERSON;
 
         String message = OFF_Json();
@@ -109,10 +120,17 @@ void taskPublish2Server(void* pvParameter)
       break;
 
     case DONT_HAVE_PERSON:
-      led_color = BLUE;
+
+      if (MQTT_disconnect_flag)
+      {
+        String message = OFF_Json();
+        atom_MQTT.publish(feedPole_01, message);
+        MQTT_disconnect_flag = false;
+      }
 
       if (turn_flag == true)
       {
+        led_color = GREEN;
         state_pole = HAVE_PERSON;
 
         String message = ON_Json();

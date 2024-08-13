@@ -11,6 +11,8 @@
 #include <PubSubClient.h>
 #include <WiFi.h>
 
+#include <task.h>
+
 class MyMQTT {
 private:
     String mqtt_server;
