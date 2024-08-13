@@ -6,7 +6,7 @@ from pycoral.adapters.common import input_size
 from pycoral.adapters.detect import get_objects
 from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter, run_inference
-from tracker import ObjectTracker
+from AI_Detection.opencv.tracker import ObjectTracker
 import time
 import threading
 
@@ -30,7 +30,8 @@ class ViewTransformer:
         return transformed_points.reshape(-1, 2)
 
 class AI_dectection:
-    def __init__(self):
+    def __init__(self, fullScreen = True):
+        self.fullScreen = fullScreen
         # Config value
         self.SOURCE = np.empty((0, 2), dtype=np.float32)
         self.TARGET_WIDTH = 16
@@ -149,7 +150,7 @@ class AI_dectection:
 
 
     def run(self):
-        default_model_dir = '../all_models'
+        default_model_dir = 'AI_Detection/all_models'
         default_model = 'mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
         default_labels = 'coco_labels.txt'
         parser = argparse.ArgumentParser()
@@ -192,8 +193,9 @@ class AI_dectection:
         frames_batch = []  # Batch of frames
 
         # # Tạo cửa sổ và thiết lập chế độ toàn màn hình
-        cv2.namedWindow("frame", cv2.WND_PROP_FULLSCREEN)
-        cv2.setWindowProperty("frame", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+        if self.fullScreen:
+            cv2.namedWindow("frame", cv2.WND_PROP_FULLSCREEN)
+            cv2.setWindowProperty("frame", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
         while cap.isOpened():
             ret, frame = cap.read()
