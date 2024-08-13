@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:flutter_app/AppFunction/global_variables.dart';
 
+const double space_between_icon = 30.0;
+const double space = 10.0;
 class CustomNavigationDrawer extends StatefulWidget {
   final int selectedIndex;
   final Function(int) onDestinationSelected;
+
 
   const CustomNavigationDrawer({
     Key? key,
@@ -24,10 +28,10 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 300),
+      duration: Duration(milliseconds: 50),
       vsync: this,
     );
-    _widthAnimation = Tween<double>(begin: 103, end: 349).animate(_animationController);
+    _widthAnimation = Tween<double>(begin: 103 - space, end: 349).animate(_animationController);
   }
 
   void _handleMouseEnter(bool isEntering) {
@@ -42,18 +46,18 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
-          margin: EdgeInsets.all(10),
+          margin: USE_BORDER_RADIUS? EdgeInsets.all(10): EdgeInsets.all(0),
           child: MouseRegion(
             onEnter: (_) => _handleMouseEnter(true),
             onExit: (_) => _handleMouseEnter(false),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(31),
+              borderRadius: USE_BORDER_RADIUS ? BorderRadius.circular(31) : BorderRadius.circular(0),
               child: AnimatedBuilder(
                 animation: _widthAnimation,
                 builder: (context, child) {
                   return Container(
                     width: _widthAnimation.value,
-                    color: const Color(0xFF7A40F2),
+                    color: PRIMARY_PANEL_COLOR,
                     child: Column(
                       children: <Widget>[
                         Expanded(
@@ -68,31 +72,31 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
                           child: ListView(
                             children: [
                               Container(
-                                margin: const EdgeInsets.only(bottom: 12),
+                                margin: const EdgeInsets.only(bottom: space_between_icon, top: space_between_icon),
                                 child: _buildDrawerItem(1, Icons.apps, 'Main Dashboard'),
                               ),
                               Container(
-                                margin: const EdgeInsets.only(bottom: 12),
+                                margin: const EdgeInsets.only(bottom: space_between_icon ),
                                 child: _buildDrawerItem(2, Icons.lightbulb_outline, 'Light Control'),
                               ),
                               Container(
-                                margin: const EdgeInsets.only(bottom: 12),
+                                margin: const EdgeInsets.only(bottom: space_between_icon ),
                                 child: _buildDrawerItem(3, Icons.schedule, 'Lighting Schedule'),
                               ),
                               Container(
-                                margin: const EdgeInsets.only(bottom: 12),
+                                margin: const EdgeInsets.only(bottom: space_between_icon ),
                                 child: _buildDrawerItem(4, Icons.videocam, 'Security Cameras'),
                               ),
                               Container(
-                                margin: const EdgeInsets.only(bottom: 12),
+                                margin: const EdgeInsets.only(bottom: space_between_icon ),
                                 child: _buildDrawerItem(5, Icons.tv, 'Advertisement Schedule'),
                               ),
                               Container(
-                                margin: const EdgeInsets.only(bottom: 12),
+                                margin: const EdgeInsets.only(bottom: space_between_icon ),
                                 child: _buildDrawerItem(6, Icons.thermostat, 'Environmental Sensors'),
                               ),
                               Container(
-                                margin: const EdgeInsets.only(bottom: 12),
+                                margin: const EdgeInsets.only(bottom: space_between_icon ),
                                 child: _buildDrawerItem(7, Icons.bar_chart, 'Historical Data'),
                               ),
                             ],
@@ -123,7 +127,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
       selectedTileColor: const Color(0xFFF9F9F9),
       leading: Padding(
         //padding left 16
-        padding: const EdgeInsets.only(left: 16),
+        padding: const EdgeInsets.only(left: 8),
         child: Icon(icon, color: Colors.white, size: 35),
       ),
       title: _isExpanded

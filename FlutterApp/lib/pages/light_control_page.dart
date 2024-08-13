@@ -85,7 +85,7 @@ class _TwoSliderPageState extends State<LightControlPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF1488DB), // Set the AppBar background color
+        backgroundColor: PRIMARY_PANEL_COLOR, // Set the AppBar background color
         titleTextStyle: const TextStyle(
           color: Colors.white, // Set the title text color to white
           fontSize: 24, // Increase the font size for better visibility
