@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include "unity.h"
 
-#include "cJSON.h"
+#include "cJSON.h"s
 #include "pwm.h"
 #include "bmi2.h"
 #include "initgpio.h"
@@ -44,7 +44,7 @@
 #define CLIENTID "TestModuleHUYGL"
 #define USERNAME "BK_SmartPole"
 #define PASSWORD " "
-#define PUBTOPIC "BK_SmartPole/feeds/V15"
+#define PUBTOPIC "BK_SmartPole/feeds/V18"
 #define SUBTOPIC "BK_SmartPole/feeds/V20"
 
 
@@ -182,28 +182,30 @@ int ceng_len = 0;
 
 char *psi,*rsrp,*rsrq,*sinr,*cellID;
 int msgID = 0;
+int counter_to_test = 0;
 void getDataCENG(char* rawData){
 	cJSON_Delete(json);
 	json = cJSON_CreateObject();
 
 	cJSON_AddStringToObject(json, "station_id", "SmartPole_0002");
-	cJSON_AddStringToObject(json, "station_name", "Smart Pole 0002");
-	cJSON_AddStringToObject(json, "action", "update data");
-	cJSON_AddStringToObject(json, "device_id", "NEMA_0002");
-	cJSON_AddStringToObject(json, "ccid", ccid);
-	cJSON_AddNumberToObject(json, "msgid", msgID++);
-	cJSON_AddNumberToObject(json, "lumi", lumi);
+	cJSON_AddNumberToObject(json, "counter", counter_to_test);
+//	cJSON_AddStringToObject(json, "station_name", "Smart Pole 0002");
+//	cJSON_AddStringToObject(json, "action", "update data");
+//	cJSON_AddStringToObject(json, "device_id", "NEMA_0002");
+//	cJSON_AddStringToObject(json, "ccid", ccid);
+//	cJSON_AddNumberToObject(json, "msgid", msgID++);
+//	cJSON_AddNumberToObject(json, "lumi", lumi);
 
 	char accel_str[20];
 
 	sprintf(accel_str, "%.2f", inclination);
-	cJSON_AddStringToObject(json, "incli", accel_str);
+//	cJSON_AddStringToObject(json, "incli", accel_str);
 	sprintf(accel_str, "%.3f", acce_avg.acce_x);
-	cJSON_AddStringToObject(json, "x", accel_str);
+//	cJSON_AddStringToObject(json, "x", accel_str);
 	sprintf(accel_str, "%.3f", acce_avg.acce_y);
-	cJSON_AddStringToObject(json, "y", accel_str);
+//	cJSON_AddStringToObject(json, "y", accel_str);
 	sprintf(accel_str, "%.3f", acce_avg.acce_z);
-	cJSON_AddStringToObject(json, "z", accel_str);
+//	cJSON_AddStringToObject(json, "z", accel_str);
 
 
 	int count2 = 2;
@@ -221,10 +223,10 @@ void getDataCENG(char* rawData){
 
 
         if(count2 == 3){
-        	cJSON_AddNumberToObject(json, "rsrp", atoi(presentData));
+//        	cJSON_AddNumberToObject(json, "rsrp", atoi(presentData));
         }
         else if(count2 ==8){
-        	cJSON_AddNumberToObject(json, "cellID", atoi(presentData));
+//        	cJSON_AddNumberToObject(json, "cellID", atoi(presentData));
         }
         count2++;
     }
@@ -250,15 +252,15 @@ void getDataCGNSINF(char* rawData){
 		arrData[i] = data[i];
 	}
 	char* presentData = strtok(arrData,",");
-	cJSON_AddStringToObject(json, "date", presentData);
+//	cJSON_AddStringToObject(json, "date", presentData);
 
 	while(presentData != NULL && count3 <9){
 	        presentData = strtok(NULL, ",");
 	        if(count3 == 1){
-	        	cJSON_AddNumberToObject(json, "latitude", strtod(presentData,NULL));
+//	        	cJSON_AddNumberToObject(json, "latitude", strtod(presentData,NULL));
 	        }
 	        else if(count3 == 2){
-	        	cJSON_AddNumberToObject(json, "longitude", strtod(presentData,NULL));
+//	        	cJSON_AddNumberToObject(json, "longitude", strtod(presentData,NULL));
 	        }
 	        count3++;
 	    }
@@ -414,7 +416,8 @@ static void mqtt_task(void *arg)
            	sendData(MQTT_TASK_TAG, json_str,3);
             cJSON_free(json_str);
            	status_mqtt = 5;
-           	vTaskDelay(55000 / portTICK_PERIOD_MS);
+           	vTaskDelay(4000 / portTICK_PERIOD_MS);
+           	counter_to_test++;
         }
     }
 }

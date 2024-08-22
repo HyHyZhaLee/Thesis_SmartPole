@@ -9374,3 +9374,87 @@ org.eclipse.swt.SWTException: Widget is disposed
 
 !ENTRY com.espressif.idf.core 1 0 2024-08-22 07:50:33.058
 !MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:49:18.033
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:49:18.035
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:49:51.197
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:49:51.198
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:55:44.605
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:55:44.606
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:56:29.382
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:56:29.384
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:56:46.780
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:56:46.782
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:57:21.584
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:57:21.587
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:58:10.852
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 09:58:10.853
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:03:39.395
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:03:39.396
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:06:50.791
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:06:50.792
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:06:55.577
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:06:55.578
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:07:55.789
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:07:55.790
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:10:42.448
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:10:42.449
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:10:53.587
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:10:53.588
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:11:22.254
+!MESSAGE C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
+
+!ENTRY com.espressif.idf.core 1 0 2024-08-22 10:11:22.255
+!MESSAGE flash command: C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf.py -p COM4 flash
