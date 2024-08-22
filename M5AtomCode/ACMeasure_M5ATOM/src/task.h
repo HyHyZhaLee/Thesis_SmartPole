@@ -25,6 +25,7 @@
 #define BLACK                           0x000000
 #define WHITE                           0xffffff
 #define RED                             0xff0000
+#define ORANGE                          0xffa500
 
 void taskLedBlink(void*);
 void taskPublish2Server(void*);
@@ -33,6 +34,6 @@ void taskHandleControlFlag (void*);
 extern String feedPole_01;
 extern MyMQTT atom_MQTT;
 extern int led_color;
-extern bool MQTT_disconnected_flag;
+
 
 #endif

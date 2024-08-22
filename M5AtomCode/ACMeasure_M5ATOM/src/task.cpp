@@ -19,7 +19,7 @@ int16_t timerTurnOffLightFactor = TIME_DELAY_TURN_OFF_FACTOR;
 
 bool turn_flag = false;
 bool prev_turn_flag = false;
-bool MQTT_disconnect_flag = false;
+
 
 bool blink_flag = false;
 int led_color = WHITE;
