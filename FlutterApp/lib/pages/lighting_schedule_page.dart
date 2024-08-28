@@ -132,11 +132,9 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
         view: _calendarView,
         headerHeight: 50,
         headerStyle: const CalendarHeaderStyle(
-
           textStyle: TextStyle(color: Colors.white, fontSize: 20),
           textAlign: TextAlign.center,
           backgroundColor: Colors.blue,
-
         ),
         firstDayOfWeek: 1,
         dataSource: AdvertiseDataSource(_appointments),
@@ -147,6 +145,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
         allowViewNavigation: false,
         showCurrentTimeIndicator: true,
         allowAppointmentResize: true,
+        cellBorderColor: Colors.transparent,
         onTap: handleCalendarTap,
         monthViewSettings: const MonthViewSettings(
           appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
