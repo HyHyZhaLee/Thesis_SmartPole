@@ -7,6 +7,7 @@
 
 #include "MQTT_helper.h"
 
+
 void MyMQTT::connectToMQTT() {
     client.setServer(mqtt_server.c_str(), 1883);
     reConnect();
@@ -43,6 +44,7 @@ void MyMQTT::checkConnect(){
     if (!client.connected()) {
         Serial.println("MQTT Connection lost!");
         reConnect();
+        MQTT_disconnect_flag = true;
     }
     client.loop();
 }
