@@ -10,8 +10,7 @@
 
 #include <PubSubClient.h>
 #include <WiFi.h>
-
-// #include <task.h>
+#include <task.h>
 
 class MyMQTT {
 private:
@@ -38,6 +37,6 @@ private:
     void reConnect(); // Hàm bổ trợ cho hàm checkConnect trường hợp không có connect đến server
 };
 
-extern bool MQTT_disconnect_flag;
+
 
 #endif

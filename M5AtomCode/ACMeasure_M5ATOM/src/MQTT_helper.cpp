@@ -7,7 +7,6 @@
 
 #include "MQTT_helper.h"
 
-bool MQTT_disconnect_flag = false;
 
 void MyMQTT::connectToMQTT() {
     client.setServer(mqtt_server.c_str(), 1883);

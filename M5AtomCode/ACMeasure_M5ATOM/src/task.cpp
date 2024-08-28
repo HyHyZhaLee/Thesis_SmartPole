@@ -1,4 +1,5 @@
 #include <task.h>
+#include <MQTT_helper.h>
 
 MyMQTT atom_MQTT(
     "mqtt.ohstem.vn",
@@ -24,7 +25,7 @@ bool prev_turn_flag = false;
 bool blink_flag = false;
 int led_color = WHITE;
 
-
+bool MQTT_disconnect_flag = false;
 
 String feedPole_01 = "BK_SmartPole/feeds/V20";
 

@@ -4,7 +4,7 @@
 #define TASK_H_
 
 #include <wifi_setup.h>
-#include <MQTT_helper.h>
+// #include <MQTT_helper.h>
 #include <JsonHelper.h>
 #include <Watch_dog.h>
 #include <M5Atom.h>
@@ -31,9 +31,10 @@ void taskLedBlink(void*);
 void taskPublish2Server(void*);
 void taskHandleControlFlag (void*);
 
+class MyMQTT;
 extern String feedPole_01;
 extern MyMQTT atom_MQTT;
 extern int led_color;
-
+extern bool MQTT_disconnect_flag;
 
 #endif
