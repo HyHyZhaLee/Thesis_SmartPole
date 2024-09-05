@@ -6,7 +6,11 @@ from pycoral.adapters.common import input_size
 from pycoral.adapters.detect import get_objects
 from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter, run_inference
-from AI_Detection.opencv.tracker import ObjectTracker
+from DS.deep_sort.tracker import Tracker
+from DS.deep_sort import nn_matching
+from DS.tools.generate_detections import create_box_encoder
+from DS.deep_sort.detection import Detection
+
 import time
 import threading
 
@@ -30,7 +34,7 @@ class ViewTransformer:
         return transformed_points.reshape(-1, 2)
 
 class AI_dectection:
-    def __init__(self, fullScreen = True):
+    def __init__(self, fullScreen=True):
         self.fullScreen = fullScreen
         # Config value
         self.SOURCE = np.empty((0, 2), dtype=np.float32)
@@ -45,113 +49,63 @@ class AI_dectection:
             ]
         )
 
-        self.BATCH_SIZE = 4  # Số lượng khung hình trong một batch
+        self.BATCH_SIZE = 1  # Số lượng khung hình trong một batch
         self.SPEED_THRESHOLD = 80.0  # Tốc độ ngưỡng (km/h)
         self.SAVE_DIR = 'captured_vehicles'  # Thư mục để lưu hình ảnh
 
         # Variables for allowed Coco labels
-        self.ALLOWED_LABEL_IDS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-                                  10]  # person, bicycle, car, motorcycle, airplane, bus, train, truck, boat, traffic light, fire hydrant
-
-        # Variables for debouncing signal
-        self.Person_detected = None
-        self.Detect_1 = False
-        self.Detect_2 = False
-        self.Detect_3 = False
-        self.label_name = None
+        self.ALLOWED_LABEL_IDS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # Các label của đối tượng được phép
 
         os.makedirs(self.SAVE_DIR, exist_ok=True)
 
-    def append_objs_to_img(self, cv2_im, inference_size, objs, labels, tracker, view_transformer, previous_positions, previous_times):
+        # Deep SORT initialization
+        model_filename = 'DS/model_data/mars-small128.pb'
+        self.encoder = create_box_encoder(model_filename, batch_size=32)
+        self.metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance=0.3, nn_budget=None)
+        self.tracker = Tracker(self.metric, max_iou_distance=0.7, max_age=70, n_init=3)
+
+    def append_objs_to_img(self, cv2_im, inference_size, objs, labels, previous_positions, previous_times):
         height, width, channels = cv2_im.shape
         scale_x, scale_y = width / inference_size[0], height / inference_size[1]
 
-        detect = []
-
-
-
+        bbox_xywh = []
+        confidences = []
+        classes = []
 
         for obj in objs:
             if obj.id not in self.ALLOWED_LABEL_IDS:
                 continue  # Bỏ qua các object không nằm trong danh sách duyệt
 
-            if obj.score < 0.5:
-                continue  # Bỏ qua nếu xác suất không đủ cao
-
             bbox = obj.bbox.scale(scale_x, scale_y)
             x0, y0 = int(bbox.xmin), int(bbox.ymin)
             x1, y1 = int(bbox.xmax), int(bbox.ymax)
-            with lock:
-                self.label_name = '{}'.format(labels.get(obj.id, obj.id))
-                if self.label_name == 'person':
-                    self.Detect_1 = True
+            bbox_xywh.append([(x0 + x1) / 2, (y0 + y1) / 2, x1 - x0, y1 - y0])
+            confidences.append(obj.score)
+            classes.append(obj.id)
 
-                cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), (0, 255, 0), 2)
-                cv2_im = cv2.putText(cv2_im, self.label_name, (x0, y0 + 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
-                detect.append([x0, y0, x1, y1, obj.score])
+            cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), (0, 255, 0), 2)
+            label = '{}: {:.2f}'.format(labels.get(obj.id, obj.id), obj.score)
+            cv2_im = cv2.putText(cv2_im, label, (x0, y0 + 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
 
-        if len(detect) > 0:
-            tracks = tracker.update(np.array(detect))
-        else:
-            tracks = []  # Không có đối tượng nào được phát hiện
-
-        # Xử lý các phát hiện (vẫn giữ nguyên từ code trước)
-        for track in tracks:
-            track_id = int(track[4])
-            x0, y0, x1, y1 = map(int, track[:4])
-            color = (0, 255, 0)
-            label = "ID: {}".format(track_id)
-            cv2.rectangle(cv2_im, (x0, y0), (x1, y1), color, 2)
-            cv2.putText(cv2_im, label, (x0, y0 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-
-            # Không thực hiện biến đổi nếu không có SOURCE
-            if view_transformer.m is not None:
-                current_position = ((x0 + x1) // 2, (y0 + y1) // 2)
-                transformed_position = view_transformer.transform_points(np.array([current_position]))[0]
-
-                if track_id in previous_positions:
-                    previous_position = previous_positions[track_id]
-                    previous_time = previous_times[track_id]
-                    distance = np.linalg.norm(np.array(transformed_position) - np.array(previous_position))
-                    time_diff = time.time() - previous_time
-                    speed = distance / time_diff if time_diff > 0 else 0
-                    speed_kmh = speed * 3.6  # convert m/s to km/h
-                    cv2.putText(cv2_im, f"Speed: {speed_kmh:.2f} km/h", (x0 + 5, y1 + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-                                (255, 255, 255), 2)
-
-                previous_positions[track_id] = transformed_position
-                previous_times[track_id] = time.time()
+        if bbox_xywh:
+            features = self.encoder(cv2_im, bbox_xywh)
+            detections = [Detection(bbox_xywh[i], confidences[i], features[i]) for i in range(len(bbox_xywh))]
+            self.tracker.predict()
+            tracks = self.tracker.update(detections)
+            for track in tracks:
+                if not track.is_confirmed() or track.time_since_update > 1:
+                    continue
+                track_id = track.track_id
+                bbox = track.to_tlbr()
+                x0, y0, x1, y1 = map(int, bbox)
+                cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), (255, 0, 0), 2)
+                cv2_im = cv2.putText(cv2_im, f"ID: {track_id}", (x0, y0 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), 2)
 
         return cv2_im
 
-    def debounce_thread(self):
-        while True:
-            time.sleep(0.3)  # Chờ 0.3 giây
-
-            with lock:
-            #print(self.label_name)
-                if self.label_name == 'person':
-                    # Debouncing logic
-                    if self.Detect_1 and self.Detect_2:  # Nếu Detect_1 và Detect_2 đều là True từ trước
-                        self.Detect_3 = True  # Đặt Detect_3 thành True
-                    elif self.Detect_1:  # Nếu chỉ có Detect_1 là True
-                        self.Detect_2 = True  # Đặt Detect_2 thành True
-                        self.Detect_3 = False  # Reset Detect_3
-                    else:
-                        self.Detect_1 = True  # Đặt Detect_1 thành True
-                        self.Detect_2 = self.Detect_3 = False  # Reset Detect_2 và Detect_3
-
-                    if self.Detect_1 and self.Detect_2 and self.Detect_3:
-                        self.Person_detected = True
-                else:
-                    self.Detect_1 = self.Detect_2 = self.Detect_3 = False  # Đặt lại nếu không phát hiện 'person'
-                    self.Person_detected = False
-                self.label_name = None
-
-
     def run(self):
         default_model_dir = 'AI_Detection/all_models'
-        default_model = 'mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
+        default_model = 'ssdlite_mobiledet_coco_qat_postprocess_edgetpu.tflite'
         default_labels = 'coco_labels.txt'
         parser = argparse.ArgumentParser()
         parser.add_argument('--model', help='.tflite model path',
@@ -165,7 +119,7 @@ class AI_dectection:
                             help='classifier score threshold')
         parser.add_argument('--video', help='Path to the video file', default=None)
         parser.add_argument('--tracker', help='Name of the Object Tracker To be used.',
-                            default='sort', choices=['sort'])
+                            default='deepsort', choices=['sort', 'deepsort'])
         args = parser.parse_args()
 
         print('Loading {} with {} labels.'.format(args.model, args.labels))
@@ -185,17 +139,10 @@ class AI_dectection:
             print("Error: Unable to open video stream")
             return
 
-        tracker = ObjectTracker(args.tracker).trackerObject
-        view_transformer = ViewTransformer(self.SOURCE, self.TARGET)
         previous_positions = {}
         previous_times = {}
 
         frames_batch = []  # Batch of frames
-
-        # # Tạo cửa sổ và thiết lập chế độ toàn màn hình
-        if self.fullScreen:
-            cv2.namedWindow("frame", cv2.WND_PROP_FULLSCREEN)
-            cv2.setWindowProperty("frame", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
         while cap.isOpened():
             ret, frame = cap.read()
@@ -209,10 +156,10 @@ class AI_dectection:
                 for cv2_im in frames_batch:
                     cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
                     cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
+
                     run_inference(interpreter, cv2_im_rgb.tobytes())
                     objs = get_objects(interpreter, args.threshold)[:args.top_k]
-                    cv2_im = self.append_objs_to_img(cv2_im, inference_size, objs, labels, tracker, view_transformer,
-                                                     previous_positions, previous_times)
+                    cv2_im = self.append_objs_to_img(cv2_im, inference_size, objs, labels, previous_positions, previous_times)
 
                     cv2.imshow('frame', cv2_im)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -225,23 +172,4 @@ class AI_dectection:
 
 if __name__ == '__main__':
     ai = AI_dectection()
-    #ai.run()
-    thread2 = threading.Thread(target=ai.run, name="Thread-2")
-    thread2.daemon = True
-    print('Thread 2 name: ', thread2.name)
-    thread2.start()
-
-    thread1 = threading.Thread(target=ai.debounce_thread, name="Thread-1")
-    thread1.daemon = True
-    thread1.start()
-    print('Thread 1 name: ', thread1.name)
-
-    while True:
-        if ai.Person_detected is not None:
-            if ai.Person_detected:
-                print("HAVE PERSON!!")
-            else:
-                print("NO PERSON!!")
-        time.sleep(1)
-
-
+    ai.run()
