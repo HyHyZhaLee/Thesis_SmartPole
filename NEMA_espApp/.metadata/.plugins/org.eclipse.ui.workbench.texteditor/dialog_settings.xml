@@ -6,8 +6,9 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="LOOP"/>
+		<item key="selection" value="BK"/>
 		<list key="findhistory">
+			<item value="BK"/>
 			<item value="loop"/>
 			<item value="int counter_to_test = 0"/>
 			<item value="get"/>

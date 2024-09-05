@@ -1,13 +1,13 @@
 Total sizes:
-Used static DRAM:   11168 bytes ( 169568 remain, 6.2% used)
-      .data size:    8648 bytes
-      .bss  size:    2520 bytes
-Used static IRAM:   56206 bytes (  74866 remain, 42.9% used)
-      .text size:   55179 bytes
+Used static DRAM:   33332 bytes ( 147404 remain, 18.4% used)
+      .data size:   15172 bytes
+      .bss  size:   18160 bytes
+Used static IRAM:   93782 bytes (  37290 remain, 71.5% used)
+      .text size:   92755 bytes
    .vectors size:    1027 bytes
-Used Flash size :  215707 bytes
-           .text:  156595 bytes
-         .rodata:   58856 bytes
-Total image size:  280561 bytes (.bin may be padded larger)
+Used Flash size :  804143 bytes
+           .text:  647475 bytes
+         .rodata:  156412 bytes
+Total image size:  913097 bytes (.bin may be padded larger)
 C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.2/\components\partition_table\gen_esp32part.py D:\Documents\Github\Thesis_SmartPole\NEMA_espApp\NBIOT-main\build\partition_table\partition-table.bin
-Total time taken to build the project: 7,537 ms
+Total time taken to build the project: 624 ms

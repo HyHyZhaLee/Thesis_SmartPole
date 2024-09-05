@@ -8,14 +8,19 @@
 */
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/event_groups.h"
 #include "esp_system.h"
 #include "esp_log.h"
+#include "nvs_flash.h"
+#include "esp_event.h"
+#include "esp_wifi.h"
+#include "mqtt_client.h"
 #include "driver/uart.h"
 #include "string.h"
 #include <stdlib.h>
 #include "unity.h"
 
-#include "cJSON.h"s
+#include "cJSON.h"
 #include "pwm.h"
 #include "bmi2.h"
 #include "initgpio.h"
@@ -36,7 +41,7 @@
 
 
 //........ DESIGN FOR TEST .........//
-#define PRODUCT 1				    // PRODUCT == 1  OR TESTING == 0
+#define PRODUCT 0				    // PRODUCT == 1  OR TESTING == 0
 
 
 //...........MQTT DEFINE .............//
@@ -44,7 +49,7 @@
 #define CLIENTID "TestModuleHUYGL"
 #define USERNAME "BK_SmartPole"
 #define PASSWORD " "
-#define PUBTOPIC "BK_SmartPole/feeds/V18"
+#define PUBTOPIC "BK_SmartPole/feeds/V15"
 #define SUBTOPIC "BK_SmartPole/feeds/V20"
 
 
@@ -166,6 +171,125 @@ int sendData(const char* logName, const char* data, uint8_t try)
 }
 
 
+//TODO: Process MQTT
+//#define WIFI_SSID "BK_SMART_POLE_STATION"
+#define WIFI_SSID "ACLAB"
+#define WIFI_PASS "ACLAB2023"
+#define MQTT_SERVER "mqtt://mqtt.ohstem.vn:1883"
+
+#define MQTT_PORT 8084
+#define MQTT_USERNAME "BK_SmartPole"
+#define MQTT_PASSWORD " "
+#define MQTT_TOPIC "BK_SmartPole/feeds/V20"
+
+static const char *TAG = "MQTT_EXAMPLE";
+static EventGroupHandle_t wifi_event_group;
+const int WIFI_CONNECTED_BIT = BIT0;
+
+// Khai báo client toàn cục
+static esp_mqtt_client_handle_t client;
+
+static void event_handler(void *arg, esp_event_base_t event_base,
+                          int32_t event_id, void *event_data) {
+    if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
+        esp_wifi_connect();
+    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
+        esp_wifi_connect();
+        xEventGroupClearBits(wifi_event_group, WIFI_CONNECTED_BIT);
+    } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
+        xEventGroupSetBits(wifi_event_group, WIFI_CONNECTED_BIT);
+    }
+}
+
+void wifi_init_sta(void) {
+    wifi_event_group = xEventGroupCreate();
+    esp_netif_init();
+    esp_event_loop_create_default();
+    esp_netif_create_default_wifi_sta();
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    esp_wifi_init(&cfg);
+    esp_event_handler_instance_t instance_any_id;
+    esp_event_handler_instance_t instance_got_ip;
+    esp_event_handler_instance_register(WIFI_EVENT,
+                                        ESP_EVENT_ANY_ID,
+                                        &event_handler,
+                                        NULL,
+                                        &instance_any_id);
+    esp_event_handler_instance_register(IP_EVENT,
+                                        IP_EVENT_STA_GOT_IP,
+                                        &event_handler,
+                                        NULL,
+                                        &instance_got_ip);
+
+    wifi_config_t wifi_config = {
+        .sta = {
+            .ssid = WIFI_SSID,
+            .password = WIFI_PASS,
+        },
+    };
+    esp_wifi_set_mode(WIFI_MODE_STA);
+    esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config);
+    esp_wifi_start();
+    xEventGroupWaitBits(wifi_event_group,
+                        WIFI_CONNECTED_BIT,
+                        pdFALSE,
+                        pdTRUE,
+                        portMAX_DELAY);
+}
+
+static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data) {
+    esp_mqtt_event_handle_t event = event_data;
+    esp_mqtt_client_handle_t client = event->client;
+
+    switch (event->event_id) {
+    case MQTT_EVENT_CONNECTED:
+        ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
+        esp_mqtt_client_subscribe(client, MQTT_TOPIC, 0);
+        break;
+    case MQTT_EVENT_DATA:
+        ESP_LOGI(TAG, "MQTT_EVENT_DATA RECEIVED");
+        printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
+        printf("DATA=%.*s\r\n", event->data_len, event->data);
+
+        cJSON *json = cJSON_Parse(event->data);
+        if (json == NULL) {
+            ESP_LOGE(TAG, "Failed to parse JSON");
+            return;
+        }
+
+        cJSON *data = cJSON_GetObjectItem(json, "data");
+        if (cJSON_IsString(data) && (data->valuestring != NULL)) {
+            int duty_cycle = atoi(data->valuestring);
+            DimmingLight(duty_cycle);
+        }
+        cJSON_Delete(json);
+        break;
+    case MQTT_EVENT_ERROR:
+        ESP_LOGI(TAG, "MQTT_EVENT_ERROR");
+        break;
+    default:
+        ESP_LOGI(TAG, "Other event id:%d", event->event_id);
+        break;
+    }
+}
+
+void mqtt_app_start(void) {
+    esp_mqtt_client_config_t mqtt_cfg = {
+        .broker.address.uri = MQTT_SERVER,
+        .broker.address.port = MQTT_PORT,
+        .credentials.username = MQTT_USERNAME,
+        .credentials.authentication.password = MQTT_PASSWORD,
+    };
+
+    client = esp_mqtt_client_init(&mqtt_cfg);  // Khởi tạo client toàn cục
+    if (client == NULL) {
+        ESP_LOGE(TAG, "Failed to initialize MQTT client");
+        return;
+    }
+    esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, client);
+    esp_mqtt_client_start(client);
+}
+
 
 
 
@@ -182,35 +306,37 @@ int ceng_len = 0;
 
 char *psi,*rsrp,*rsrq,*sinr,*cellID;
 int msgID = 0;
-int counter_to_test = 0;
-void getDataCENG(char* rawData){
-	cJSON_Delete(json);
-	json = cJSON_CreateObject();
+void getDataCENG(char* rawData) {
+    // Xóa đối tượng JSON cũ nếu tồn tại
+    cJSON_Delete(json);
+    // Tạo đối tượng JSON mới
+    json = cJSON_CreateObject();
 
-	cJSON_AddStringToObject(json, "station_id", "SmartPole_0002");
-	cJSON_AddNumberToObject(json, "counter", counter_to_test);
-//	cJSON_AddStringToObject(json, "station_name", "Smart Pole 0002");
-//	cJSON_AddStringToObject(json, "action", "update data");
-//	cJSON_AddStringToObject(json, "device_id", "NEMA_0002");
-//	cJSON_AddStringToObject(json, "ccid", ccid);
-//	cJSON_AddNumberToObject(json, "msgid", msgID++);
-//	cJSON_AddNumberToObject(json, "lumi", lumi);
+    // Thêm các trường thông tin vào JSON
+    cJSON_AddStringToObject(json, "station_id", "SmartPole_0002");
+    cJSON_AddStringToObject(json, "station_name", "Smart Pole 0002");
+    cJSON_AddStringToObject(json, "action", "update data");
+    cJSON_AddStringToObject(json, "device_id", "NEMA_0002");
+    cJSON_AddStringToObject(json, "ccid", ccid);
+    cJSON_AddNumberToObject(json, "msgid", msgID++);
+    cJSON_AddNumberToObject(json, "lumi", lumi);
 
-	char accel_str[20];
+    char accel_str[20];
 
-	sprintf(accel_str, "%.2f", inclination);
-//	cJSON_AddStringToObject(json, "incli", accel_str);
-	sprintf(accel_str, "%.3f", acce_avg.acce_x);
-//	cJSON_AddStringToObject(json, "x", accel_str);
-	sprintf(accel_str, "%.3f", acce_avg.acce_y);
-//	cJSON_AddStringToObject(json, "y", accel_str);
-	sprintf(accel_str, "%.3f", acce_avg.acce_z);
-//	cJSON_AddStringToObject(json, "z", accel_str);
+    // Thêm dữ liệu gia tốc vào JSON
+    sprintf(accel_str, "%.2f", inclination);
+    cJSON_AddStringToObject(json, "incli", accel_str);
+    sprintf(accel_str, "%.3f", acce_avg.acce_x);
+    cJSON_AddStringToObject(json, "x", accel_str);
+    sprintf(accel_str, "%.3f", acce_avg.acce_y);
+    cJSON_AddStringToObject(json, "y", accel_str);
+    sprintf(accel_str, "%.3f", acce_avg.acce_z);
+    cJSON_AddStringToObject(json, "z", accel_str);
 
-
-	int count2 = 2;
-	if(rawData == NULL)
-		return;
+    // Xử lý dữ liệu rawData
+    int count2 = 2;
+    if(rawData == NULL)
+        return;
     char* data = strstr(rawData,"\"");
 
     char arrData[strlen(data)];
@@ -218,22 +344,30 @@ void getDataCENG(char* rawData){
         arrData[i] = data[i];
     }
     char* presentData = strtok(arrData," \",");
-    while(presentData != NULL && count2 <9){
+    while(presentData != NULL && count2 < 9){
         presentData = strtok(NULL, " ,");
 
-
         if(count2 == 3){
-//        	cJSON_AddNumberToObject(json, "rsrp", atoi(presentData));
+            cJSON_AddNumberToObject(json, "rsrp", atoi(presentData));
         }
-        else if(count2 ==8){
-//        	cJSON_AddNumberToObject(json, "cellID", atoi(presentData));
+        else if(count2 == 8){
+            cJSON_AddNumberToObject(json, "cellID", atoi(presentData));
         }
         count2++;
     }
 
-    count2 = 2;
+    // Chuyển JSON thành chuỗi
+    char *json_str = cJSON_PrintUnformatted(json);
 
+    // Publish dữ liệu JSON qua MQTT
+    esp_mqtt_client_publish(client, SUBTOPIC, json_str, 0, 1, 0);
+
+    // Giải phóng bộ nhớ chuỗi JSON
+    cJSON_free(json_str);
+
+    count2 = 2;
 }
+
 
 
 //**************************
@@ -252,15 +386,15 @@ void getDataCGNSINF(char* rawData){
 		arrData[i] = data[i];
 	}
 	char* presentData = strtok(arrData,",");
-//	cJSON_AddStringToObject(json, "date", presentData);
+	cJSON_AddStringToObject(json, "date", presentData);
 
 	while(presentData != NULL && count3 <9){
 	        presentData = strtok(NULL, ",");
 	        if(count3 == 1){
-//	        	cJSON_AddNumberToObject(json, "latitude", strtod(presentData,NULL));
+	        	cJSON_AddNumberToObject(json, "latitude", strtod(presentData,NULL));
 	        }
 	        else if(count3 == 2){
-//	        	cJSON_AddNumberToObject(json, "longitude", strtod(presentData,NULL));
+	        	cJSON_AddNumberToObject(json, "longitude", strtod(presentData,NULL));
 	        }
 	        count3++;
 	    }
@@ -416,8 +550,7 @@ static void mqtt_task(void *arg)
            	sendData(MQTT_TASK_TAG, json_str,3);
             cJSON_free(json_str);
            	status_mqtt = 5;
-           	vTaskDelay(4000 / portTICK_PERIOD_MS);
-           	counter_to_test++;
+           	vTaskDelay(55000 / portTICK_PERIOD_MS);
         }
     }
 }
@@ -686,10 +819,18 @@ void app_main(void)
     led_init();
     relay_init();
 
-    if (PRODUCT) bmi2_init();
+//    if (PRODUCT) bmi2_init();
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
 
+    wifi_init_sta();
+    mqtt_app_start();
 
-    xTaskCreate(rx_task, "uart_rx_task", 1024*2, NULL, configMAX_PRIORITIES, NULL);
-    xTaskCreate(prepare_task, "uart_tx_task", 3200, NULL, configMAX_PRIORITIES-3, NULL);
+//    xTaskCreate(rx_task, "uart_rx_task", 1024*2, NULL, configMAX_PRIORITIES, NULL);
+//    xTaskCreate(prepare_task, "uart_tx_task", 3200, NULL, configMAX_PRIORITIES-3, NULL);
     xTaskCreate(led_task, "LED_task", 1024, NULL, configMAX_PRIORITIES-2, NULL);
 }
