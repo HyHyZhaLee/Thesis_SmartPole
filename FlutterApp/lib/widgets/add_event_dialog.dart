@@ -1,7 +1,201 @@
+import 'package:firebase_core_web/firebase_core_web.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/AppFunction/get_event_details.dart';
+import 'package:flutter_app/widgets/navigation_drawer.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:flutter_app/utils/convertDateTime.dart';
+
+class AddEventPage extends StatefulWidget {
+  final Appointment? newAppoitment;
+
+  const AddEventPage({
+    Key? key,
+    this.newAppoitment,
+  }) : super (key:key);
+
+  @override
+  _AddEventPageStage createState() => _AddEventPageStage();
+}
+
+class _AddEventPageStage extends State<AddEventPage>{
+  final _formKey = GlobalKey<FormState>();
+  final eventNameController = TextEditingController();
+  final notesController = TextEditingController();
+  final intervalController = TextEditingController();
+  final rtimesController = TextEditingController();
+
+  late DateTime startDate;
+  late DateTime endDate;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.newAppoitment == null) {
+      startDate = DateTime.now();
+      endDate = DateTime.now().add( const Duration(hours: 2));
+    }
+  }
+
+  @override
+  void dispose(){
+    eventNameController.dispose();
+    notesController.dispose();
+    intervalController.dispose();
+    rtimesController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Dialog(
+    insetPadding: EdgeInsets.all(4),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+    shadowColor: Colors.grey,
+    elevation: 8,
+    child: Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      height: MediaQuery.of(context).size.height * 0.8,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          width: 3.0,
+        ),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Form(
+        key: _formKey,
+        child: bodyAddEventDialog(),
+      ),
+    ),
+  );
+
+  Widget bodyAddEventDialog() => Column(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      Expanded(
+        flex: 1,
+        child: buildAddTitle(),
+      ),
+      Spacer(flex:1),
+      Expanded(
+        flex: 1,
+        child: buildEventName(),
+      ),
+      // Expanded(
+      //   flex: 1,
+      //   child: buildStart(),
+      // ),
+      // Expanded(
+      //   flex: 1,
+      //   child:
+      // ),
+      // Expanded(
+      //   flex: 1,
+      //   child: buildEnd(),
+      // ),
+      // Expanded(
+      //   flex: 1,
+      //   child: buildRecurrenceRule(),
+      // ),
+      // Expanded(
+      //   child: buildLink(),
+      // )
+      Spacer(flex: 3,),
+    ],
+  );
+
+  Widget buildAddTitle() => Container(
+    width: MediaQuery.of(context).size.width * 0.5,
+    height: MediaQuery.of(context).size.height * 0.1,
+    decoration: BoxDecoration(
+      color: Colors.deepPurpleAccent,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: const Center(
+      child: Text(
+        'Add New Event',
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 40.0,
+        ),
+      ),
+    ),
+  );
+
+  Widget buildEventName() => Container(
+    width: MediaQuery.of(context).size.width * 0.6,
+    height:  MediaQuery.of(context).size.height * 0.1,
+    decoration: BoxDecoration(
+      color: Colors.grey,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: TextFormField(
+      validator: (name) =>
+          name != null && name.isEmpty ? 'Name event cannot be empty' : null,
+      controller: eventNameController,
+      decoration: const InputDecoration(
+        hintText: 'Event Name',
+        labelStyle: TextStyle(
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      style: const TextStyle(
+        fontSize: 20.0,
+      ),
+    ),
+  );
+
+  Widget buildStart() => Container(
+    width: MediaQuery.of(context).size.width * 0.6,
+    height:  MediaQuery.of(context).size.height * 0.1,
+    decoration: BoxDecoration(
+      color: Colors.grey,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Row(
+      children: [
+        Expanded(
+          child: buildDropdownField(
+            text: convertReadableDateTime.toDate(startDate),
+            onClicked: () {},
+          ),
+        ),
+        Expanded(
+          child: buildDropdownField(
+            text: convertReadableDateTime.toTime(startDate),
+            onClicked: () {},
+          ),
+        ),
+      ],
+    ),
+  );
+
+  Widget buildDropdownField({
+    required String text,
+    required VoidCallback onClicked,
+  }) =>
+      Container(
+        decoration: BoxDecoration(
+
+        ),
+        child: ListTile(
+          title: Text(text),
+          trailing: Icon(Icons.arrow_drop_down_circle_rounded),
+          onTap: onClicked,
+        ),
+      )
+
+
+} // class _AddEventPageStage
+
 
 
 class AddEventDialog {

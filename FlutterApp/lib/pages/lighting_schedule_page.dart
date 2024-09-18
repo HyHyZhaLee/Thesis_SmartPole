@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_app/widgets/event_details_dialog.dart';
+import 'package:flutter_app/utils/custom_route.dart';
 
 class LightingSchedulePage extends StatefulWidget {
   const LightingSchedulePage({super.key});
@@ -154,12 +155,9 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurpleAccent,
         shape: const CircleBorder(),
-        onPressed: () => AddEventDialog.show(context, (newEvent) {
-          setState(() {
-            _appointments.add(newEvent);
-          });
-          _changeCalendarView(CalendarView.month);
-        }),
+        onPressed: () => Navigator.of(context).push(
+          AddEventPageRuote(page: AddEventPage())
+        ),
         child: const Icon(
           Icons.add,
           color: Colors.white,
@@ -167,6 +165,18 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       ),
     );
   }
+
+  // Widget addEventShowDialog() => Container(
+  //         width: MediaQuery.of(context).size.width *0.5,
+  //         height: MediaQuery.of(context).size.height *0.5,
+  //         padding: const EdgeInsets.all(4),
+  //         decoration:  BoxDecoration(
+  //           color: Colors.blue,  // Content background is still white
+  //           borderRadius: BorderRadius.circular(16),
+  //         ),
+  //         child: AddEventPage(),
+  //       );
+
 
   void handleCalendarTap(CalendarTapDetails details) {
     if (details.targetElement == CalendarElement.appointment) {
