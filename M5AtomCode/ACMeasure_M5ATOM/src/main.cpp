@@ -1,7 +1,7 @@
 #include <main.h>
 
 Wifi_esp32 atom_wifi(
-    "ACLAB",
+    "BK_SMART_POLE_STATION",
     "ACLAB2023"
 );
 

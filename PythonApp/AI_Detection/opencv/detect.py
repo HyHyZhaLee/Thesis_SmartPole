@@ -8,63 +8,31 @@ from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter, run_inference
 from DS.deep_sort.tracker import Tracker
 from DS.deep_sort import nn_matching
-from DS.tools.generate_detections import create_box_encoder
 from DS.deep_sort.detection import Detection
+from DS.tools.generate_detections import create_box_encoder
 
 import time
 import threading
 
 lock = threading.Lock()
 
-class ViewTransformer:
-    def __init__(self, source: np.ndarray, target: np.ndarray) -> None:
-        if source.shape[0] != 4 or target.shape[0] != 4:
-            self.m = None  # Không thực hiện biến đổi nếu không đủ 4 điểm
-        else:
-            source = source.astype(np.float32)
-            target = target.astype(np.float32)
-            self.m = cv2.getPerspectiveTransform(source, target)
-
-    def transform_points(self, points: np.ndarray) -> np.ndarray:
-        if points.size == 0 or self.m is None:
-            return points  # Trả về điểm gốc nếu không có biến đổi phối cảnh
-
-        reshaped_points = points.reshape(-1, 1, 2).astype(np.float32)
-        transformed_points = cv2.perspectiveTransform(reshaped_points, self.m)
-        return transformed_points.reshape(-1, 2)
-
 class AI_dectection:
     def __init__(self, fullScreen=True):
         self.fullScreen = fullScreen
         # Config value
-        self.SOURCE = np.empty((0, 2), dtype=np.float32)
-        self.TARGET_WIDTH = 16
-        self.TARGET_HEIGHT = 20
-        self.TARGET = np.array(
-            [
-                [0, 0],
-                [self.TARGET_WIDTH - 1, 0],
-                [self.TARGET_WIDTH - 1, self.TARGET_HEIGHT - 1],
-                [0, self.TARGET_HEIGHT - 1],
-            ]
-        )
-
         self.BATCH_SIZE = 1  # Số lượng khung hình trong một batch
         self.SPEED_THRESHOLD = 80.0  # Tốc độ ngưỡng (km/h)
-        self.SAVE_DIR = 'captured_vehicles'  # Thư mục để lưu hình ảnh
 
-        # Variables for allowed Coco labels
-        self.ALLOWED_LABEL_IDS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # Các label của đối tượng được phép
+        # Variables for allowed Coco labels (chỉ theo dõi phương tiện giao thông)
+        self.ALLOWED_LABEL_IDS = [2, 3, 5, 7]  # Nhãn COCO cho: car, motorcycle, bus, truck
 
-        os.makedirs(self.SAVE_DIR, exist_ok=True)
-
-        # Deep SORT initialization
+        # Deep SORT initialization (không cần tạo đặc trưng từ CNN)
         model_filename = 'DS/model_data/mars-small128.pb'
-        self.encoder = create_box_encoder(model_filename, batch_size=32)
-        self.metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance=0.3, nn_budget=None)
+        self.encoder = create_box_encoder(model_filename, batch_size=32)  # Khởi tạo encoder
+        self.metric = nn_matching.NearestNeighborDistanceMetric("cosine", 0.3, None)
         self.tracker = Tracker(self.metric, max_iou_distance=0.7, max_age=70, n_init=3)
 
-    def append_objs_to_img(self, cv2_im, inference_size, objs, labels, previous_positions, previous_times):
+    def append_objs_to_img(self, cv2_im, inference_size, objs, labels):
         height, width, channels = cv2_im.shape
         scale_x, scale_y = width / inference_size[0], height / inference_size[1]
 
@@ -90,8 +58,12 @@ class AI_dectection:
         if bbox_xywh:
             features = self.encoder(cv2_im, bbox_xywh)
             detections = [Detection(bbox_xywh[i], confidences[i], features[i]) for i in range(len(bbox_xywh))]
-            self.tracker.predict()
             tracks = self.tracker.update(detections)
+
+            if tracks is None:
+                print("No tracks found")
+                return cv2_im
+
             for track in tracks:
                 if not track.is_confirmed() or track.time_since_update > 1:
                     continue
@@ -99,13 +71,15 @@ class AI_dectection:
                 bbox = track.to_tlbr()
                 x0, y0, x1, y1 = map(int, bbox)
                 cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), (255, 0, 0), 2)
-                cv2_im = cv2.putText(cv2_im, f"ID: {track_id}", (x0, y0 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), 2)
+                cv2_im = cv2.putText(cv2_im, f"ID: {track_id}", (x0, y0 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
+                                     (255, 255, 255), 2)
 
         return cv2_im
 
     def run(self):
-        default_model_dir = 'AI_Detection/all_models'
-        default_model = 'ssdlite_mobiledet_coco_qat_postprocess_edgetpu.tflite'
+        default_model_dir = '/home/aclabnuc/Desktop/hdaproject/Thesis_SmartPole/PythonApp/AI_Detection/all_models'
+        #default_model = 'ssdlite_mobiledet_coco_qat_postprocess_edgetpu.tflite'
+        default_model = 'mobilenet_ssd_v1_coco_quant_postprocess_edgetpu.tflite'
         default_labels = 'coco_labels.txt'
         parser = argparse.ArgumentParser()
         parser.add_argument('--model', help='.tflite model path',
@@ -118,8 +92,6 @@ class AI_dectection:
         parser.add_argument('--threshold', type=float, default=0.1,
                             help='classifier score threshold')
         parser.add_argument('--video', help='Path to the video file', default=None)
-        parser.add_argument('--tracker', help='Name of the Object Tracker To be used.',
-                            default='deepsort', choices=['sort', 'deepsort'])
         args = parser.parse_args()
 
         print('Loading {} with {} labels.'.format(args.model, args.labels))
@@ -139,33 +111,24 @@ class AI_dectection:
             print("Error: Unable to open video stream")
             return
 
-        previous_positions = {}
-        previous_times = {}
-
-        frames_batch = []  # Batch of frames
-
         while cap.isOpened():
             ret, frame = cap.read()
             if not ret:
                 print("Error: Unable to read frame from the video stream")
                 break
 
-            frames_batch.append(frame)
+            # Chuyển đổi ảnh để thực hiện inference
+            cv2_im_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
 
-            if len(frames_batch) == self.BATCH_SIZE:
-                for cv2_im in frames_batch:
-                    cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
-                    cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
+            run_inference(interpreter, cv2_im_rgb.tobytes())
+            objs = get_objects(interpreter, args.threshold)[:args.top_k]
+            frame = self.append_objs_to_img(frame, inference_size, objs, labels)
 
-                    run_inference(interpreter, cv2_im_rgb.tobytes())
-                    objs = get_objects(interpreter, args.threshold)[:args.top_k]
-                    cv2_im = self.append_objs_to_img(cv2_im, inference_size, objs, labels, previous_positions, previous_times)
-
-                    cv2.imshow('frame', cv2_im)
-                    if cv2.waitKey(1) & 0xFF == ord('q'):
-                        break
-
-                frames_batch = []  # Reset batch after processing
+            # Hiển thị video
+            cv2.imshow('frame', frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
         cap.release()
         cv2.destroyAllWindows()
