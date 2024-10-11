@@ -19,6 +19,6 @@ class convertReadableDateTime {
   static String toTime(DateTime dateTime) {
     final time = DateFormat.Hm().format(dateTime);
 
-    return  time;
+    return time;
   }
 }

@@ -70,7 +70,7 @@
    }, {
       "appName": "reading_view",
       "data": {
-         "blockList": [ "gisdvl-jrvoice2.jreast.co.jp", "jrvoice2.jreast.co.jp", "www.marriott.com" ],
+         "blockList": [ "gisdvl-jrvoice2.jreast.co.jp", "jrvoice2.jreast.co.jp", "www.marriott.com", "www.eki-net.com" ],
          "textLengthThreshold": 40,
          "whiteList": [ "mip.shengxuxu.com" ]
       },
@@ -206,14 +206,14 @@
       "appId": "a3f5b7c9d1e2f4a6b8c7d9e1f2a3b4d6",
       "appName": "topsites",
       "data": {
-         "latestOperationVersion": "2.7",
-         "latestOperationVersionForTesting": "2.7",
+         "latestOperationVersion": "2.10",
+         "latestOperationVersionForTesting": "2.10",
          "topSitesV2Enabled": false
       },
       "effectStrategy": "launch",
       "instanceId": "3e7a9c4b1f8d6e5c2a9b7e4d1c8f3e7b",
       "type": "normal",
-      "version": "1013"
+      "version": "1017"
    }, {
       "appId": "71146be72c1663fbeca572989b494b56",
       "appName": "shared_links",
@@ -233,72 +233,79 @@
       "appName": "darkmode",
       "data": {
          "androidBlocklist": [ "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(www\\.msn\\.)(.*\\/news\\/other.*)$", "^https?:\\/\\/edge\\.microsoft\\.com\\/edgeedrop\\/continuity\\/index\\.html(?:\\?.*)?$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(sponsor\\.microsoft\\.com)(\\/?.*?)$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(wio\\.scania\\.com)(\\/?.*?)$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?([^/]*\\.)?(ixigua\\.com)(\\/?.*?)$" ],
-         "iOSBlocklist": [ "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(www\\.msn\\.)(.*\\/news\\/other.*)$", "^https?:\\/\\/edge\\.microsoft\\.com\\/edgeedrop\\/continuity\\/index\\.html(?:\\?.*)?$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(reddit\\.com)(\\/?.*?)$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(amazon\\.com)(\\/?.*?)$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(copilot\\.microsoft\\.com)(\\/?.*?)$", "msn.com", "reddit.com", "amazon.com", "m.youtube.com", "copilot.microsoft.com", "build.microsoft.com", "sponsor.microsoft.com", ".pdf" ]
+         "iOSBlocklist": [ "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(www\\.msn\\.)(.*\\/news\\/other.*)$", "^https?:\\/\\/edge\\.microsoft\\.com\\/edgeedrop\\/continuity\\/index\\.html(?:\\?.*)?$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(reddit\\.com)(\\/?.*?)$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(amazon\\.com)(\\/?.*?)$", "^(.*?\\:\\/{2,3})?([^/]*?\\.)?(copilot\\.microsoft\\.com)(\\/?.*?)$", "msn.com", "reddit.com", "amazon.com", "m.youtube.com", "copilot.microsoft.com", "build.microsoft.com", "sponsor.microsoft.com", ".pdf", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".mp4", ".avi", ".mkv", ".mov", ".wmv", ".flv", ".webm" ]
       },
       "effectStrategy": "launch",
       "instanceId": "3e7a9c4b1f8d6e5c2a9b7e4d1c8f3e7a",
       "type": "builtin",
-      "version": "1004"
+      "version": "1006"
    }, {
-      "appId": "8f6c546d0514482c9898cd8f963453cc",
-      "appName": "operation_platform",
+      "appId": "12a18a00e3c9415cad6a2f88ad76d372",
+      "appName": "growthEngine",
       "data": {
-         "operation_notification_config": {
-            "body": "Sample Body",
-            "max_datetime_str": "31 Mar 2024 13:00 GMT",
-            "max_version": 125,
-            "min_datetime_str": "1 Mar 2024 13:00 GMT",
-            "min_version": 122,
-            "navigate_to": "microsoft-edge-x://action/copilot?query=weather+in+seattle&input=Keyboard&launchsource=DeeplinkAppStore&mode=Precise",
-            "operation_id": 1,
-            "schedule_datetime": "12:00",
-            "target_user_profile": {
-               "copilot_eligiable": true,
-               "language_code": "en",
-               "operation_debug_user": true
+         "campaigns": [ {
+            "campaignId": 1,
+            "description": "Growth Engine demo campaign",
+            "enabled": false,
+            "surface": {
+               "properties": {
+                  "isFullScreen": true,
+                  "pageName": "edgeConfigurableUpsellDemo"
+               },
+               "type": "configurableUpsell"
             },
-            "title": "Sample Title"
-         },
-         "operation_upsell_config": {
-            "is_full_screen": false,
-            "max_datetime_str": "31 Mar 2024 13:00 GMT",
-            "max_version": 125,
-            "min_datetime_str": "1 Mar 2024 13:00 GMT",
-            "min_version": 122,
-            "operation_id": 1,
-            "target_user_profile": {
-               "copilot_eligiable": true,
-               "language_code": "en",
-               "operation_debug_user": true
-            },
-            "upsell_url": "https://edgemobile-operationplatform.azurewebsites.net/sample"
-         }
-      },
-      "effectStrategy": "launch",
-      "instanceId": "35cafee49b9741a5ae5b2f7799ecc815",
-      "type": "normal",
-      "version": "1013"
-   }, {
-      "appId": "3779f16f2b7145cd8baa5253579828b3",
-      "appName": "growth_engine",
-      "data": {
-         "remote_upsell_config": {
-            "upsell_list": [ {
-               "id": 1,
-               "is_full_screen": true,
-               "max_version": 128,
-               "min_version": 122,
-               "remote_upsell_page": "edgeRemoteUpsellDemo",
-               "target_user_profile": {
+            "target": {
+               "targetAppVersion": {
+                  "max": "140.0.0.0",
+                  "min": "128.0.0.0"
+               },
+               "targetChannel": [ "unknown" ],
+               "targetDatetime": {
+                  "max": "31 Sep 2024 13:00 GMT",
+                  "min": "1 Sep 2024 13:00 GMT"
+               },
+               "targetOS": [ "iOS", "Android" ],
+               "targetUserProfile": {
                   "growth_engine_debug_user": true
                }
-            } ]
-         }
+            },
+            "trigger": {
+               "type": "appStart"
+            }
+         }, {
+            "campaignId": 2,
+            "description": "Tampermonkey campaign",
+            "enabled": true,
+            "surface": {
+               "properties": {
+               },
+               "type": "nativeUpsell"
+            },
+            "target": {
+               "targetAppVersion": {
+                  "max": "145.0.0.0",
+                  "min": "130.0.0.0"
+               },
+               "targetChannel": [ "unknown", "canary", "stable" ],
+               "targetDatetime": {
+                  "max": "1 Sep 2025 13:00 GMT",
+                  "min": "1 Sep 2024 13:00 GMT"
+               },
+               "targetOS": [ "Android" ],
+               "targetUserProfile": {
+                  "extension_hub_shown": true,
+                  "extension_hub_shown_after_130": false
+               }
+            },
+            "trigger": {
+               "type": "appStart"
+            }
+         } ]
       },
       "effectStrategy": "launch",
-      "instanceId": "4a69a034b30744209270b9f63a1edeeb",
+      "instanceId": "1bc1928c024e49f4944d0b9ad549e46a",
       "type": "normal",
-      "version": "1003"
+      "version": "1002"
    } ],
-   "version": "202407240001"
+   "version": "202409270001"
 }

@@ -177,7 +177,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///C:/flutter/packages/flutter",
+      "rootUri": "file:///C:/flutter2/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -195,13 +195,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///C:/flutter/packages/flutter_test",
+      "rootUri": "file:///C:/flutter2/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///C:/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///C:/flutter2/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -465,7 +465,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///C:/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///C:/flutter2/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -519,9 +519,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.7.3",
+      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.7.2",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.2"
     },
     {
       "name": "timezone",
@@ -555,7 +555,7 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-14.2.4",
+      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-14.2.5",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -590,10 +590,10 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-09-17T05:53:22.052244Z",
+  "generated": "2024-09-24T07:23:28.571508Z",
   "generator": "pub",
-  "generatorVersion": "3.6.0-26.0.dev",
-  "flutterRoot": "file:///C:/flutter",
-  "flutterVersion": "3.24.0-1.0.pre.79",
+  "generatorVersion": "3.5.3",
+  "flutterRoot": "file:///C:/flutter2/flutter",
+  "flutterVersion": "3.24.3",
   "pubCache": "file:///C:/Users/royal/AppData/Local/Pub/Cache"
 }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/event.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_app/widgets/add_event_dialog.dart';
 import 'dart:convert';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_app/widgets/event_details_dialog.dart';
 import 'package:flutter_app/utils/custom_route.dart';
+import 'package:flutter_app/model/appointment_data_source.dart';
+import 'package:flutter_app/provider/event_provider.dart';
+import 'package:provider/provider.dart';
 
 class LightingSchedulePage extends StatefulWidget {
   const LightingSchedulePage({super.key});
@@ -83,13 +86,16 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
           recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval;COUNT=$count';
           break;
         case 'Weekly':
-          recurrenceRule = 'FREQ=WEEKLY;BYDAY=${_getDayOfWeek(startDate)};INTERVAL=$interval;COUNT=$count';
+          recurrenceRule =
+              'FREQ=WEEKLY;BYDAY=${_getDayOfWeek(startDate)};INTERVAL=$interval;COUNT=$count';
           break;
         case 'Monthly':
-          recurrenceRule = 'FREQ=MONTHLY;BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
+          recurrenceRule =
+              'FREQ=MONTHLY;BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
           break;
         case 'Yearly':
-          recurrenceRule = 'FREQ=YEARLY;BYMONTH=${startDate.month};BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
+          recurrenceRule =
+              'FREQ=YEARLY;BYMONTH=${startDate.month};BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
           break;
       }
     }
@@ -128,6 +134,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appointments = Provider.of<AppointmentProvider>(context).appointments;
     return Scaffold(
       body: SfCalendar(
         view: _calendarView,
@@ -138,7 +145,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
           backgroundColor: Colors.blue,
         ),
         firstDayOfWeek: 1,
-        dataSource: AdvertiseDataSource(_appointments),
+        dataSource: AdvertiseDataSource(appointments),
         allowDragAndDrop: true,
         showNavigationArrow: false,
         showDatePickerButton: true,
@@ -155,9 +162,8 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurpleAccent,
         shape: const CircleBorder(),
-        onPressed: () => Navigator.of(context).push(
-          AddEventPageRuote(page: AddEventPage())
-        ),
+        onPressed: () =>
+            Navigator.of(context).push(AddEventPageRuote(page: AddEventPage())),
         child: const Icon(
           Icons.add,
           color: Colors.white,
@@ -177,11 +183,11 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
   //         child: AddEventPage(),
   //       );
 
-
   void handleCalendarTap(CalendarTapDetails details) {
     if (details.targetElement == CalendarElement.appointment) {
       final Appointment appointment = details.appointments!.first;
-      EventDetailsDialog.show(context, appointment, (Appointment appointmentToDelete) {
+      EventDetailsDialog.show(context, appointment,
+          (Appointment appointmentToDelete) {
         setState(() {
           _appointments.remove(appointmentToDelete);
         });
@@ -193,7 +199,6 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       }
     }
   }
-
 
   Widget _buildDetailRow(IconData icon, String label, String value) {
     return Row(
@@ -241,7 +246,9 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
 }
 
 class AdvertiseDataSource extends CalendarDataSource {
-  AdvertiseDataSource(List<Appointment> source) {
-    appointments = source;
+  AdvertiseDataSource(List<Appointment> appointments) {
+    this.appointments = appointments;
   }
+
+  Appointment getAppointment(int index) => appointments![index];
 }
