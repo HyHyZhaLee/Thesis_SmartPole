@@ -223,23 +223,23 @@ class AI_dectection:
 
 if __name__ == '__main__':
     ai = AI_dectection()
-    #ai.run()
-    thread2 = threading.Thread(target=ai.run, name="Thread-2")
-    thread2.daemon = True
-    print('Thread 2 name: ', thread2.name)
-    thread2.start()
-
-    thread1 = threading.Thread(target=ai.debounce_thread, name="Thread-1")
-    thread1.daemon = True
-    thread1.start()
-    print('Thread 1 name: ', thread1.name)
-
-    while True:
-        if ai.Person_detected is not None:
-            if ai.Person_detected:
-                print("HAVE PERSON!!")
-            else:
-                print("NO PERSON!!")
-        time.sleep(1)
+    ai.run()
+    # thread2 = threading.Thread(target=ai.run, name="Thread-2")
+    # thread2.daemon = True
+    # print('Thread 2 name: ', thread2.name)
+    # thread2.start()
+    #
+    # thread1 = threading.Thread(target=ai.debounce_thread, name="Thread-1")
+    # thread1.daemon = True
+    # thread1.start()
+    # print('Thread 1 name: ', thread1.name)
+    #
+    # while True:
+    #     if ai.Person_detected is not None:
+    #         if ai.Person_detected:
+    #             print("HAVE PERSON!!")
+    #         else:
+    #             print("NO PERSON!!")
+    #     time.sleep(1)
 
 
