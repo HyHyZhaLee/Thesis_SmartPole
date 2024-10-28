@@ -9,10 +9,10 @@ class EventDetailsDialog {
     Appointment appointment,
     Function(Appointment) onDelete,
     ) async {
-    final double bodyFontSize = 20;
+    const double bodyFontSize = 20;
     const double headerFontSize = 20;
     const double subjectFontSize = 36;
-    final double iconSize = 36;
+    const double iconSize = 36;
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -44,7 +44,7 @@ class EventDetailsDialog {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Container(
+                  SizedBox(
                     width: 310,
                     child: IntrinsicHeight(
                       child: Row(
@@ -52,19 +52,19 @@ class EventDetailsDialog {
                         children: [
                           Container(
                             color: Colors.white,
-                            child: Icon(
+                            child: const Icon(
                               Icons.access_time,
                               color: Colors.blue,
                               size: iconSize,
                             ),
                           ),
-                          SizedBox(width: 15),
+                          const SizedBox(width: 15),
                           Container(
                             alignment: Alignment.centerLeft,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Start Date:',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -74,20 +74,20 @@ class EventDetailsDialog {
                                 Text(
                                   GetEventsDetails.formatDate(
                                       appointment.startTime),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: bodyFontSize,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           Container(
                             alignment: Alignment.centerLeft,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Text(
+                                const Text(
                                   'End Date:',
                                   style: TextStyle(
                                     fontSize: headerFontSize,
@@ -96,7 +96,7 @@ class EventDetailsDialog {
                                 ),
                                 Text(
                                   GetEventsDetails.formatDate(appointment.endTime),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: bodyFontSize,
                                   ),
                                 ),
@@ -107,7 +107,7 @@ class EventDetailsDialog {
                       ),
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     height: 10,
                     thickness: 2,
                     color: Colors.grey,
@@ -118,19 +118,19 @@ class EventDetailsDialog {
                       children: [
                         Container(
                           color: Colors.white,
-                          child: Icon(
+                          child: const Icon(
                             Icons.access_time_outlined,
                             color: Colors.blue,
                             size: iconSize,
                           ),
                         ),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                         Container(
                           alignment: Alignment.centerLeft,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'Start Time:',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -139,20 +139,20 @@ class EventDetailsDialog {
                               ),
                               Text(
                                 GetEventsDetails.formatTime(appointment.startTime),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: bodyFontSize,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Container(
                           alignment: Alignment.centerLeft,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text(
+                              const Text(
                                 'End Time:',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -161,7 +161,7 @@ class EventDetailsDialog {
                               ),
                               Text(
                                 GetEventsDetails.formatTime(appointment.endTime),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: bodyFontSize,
                                 ),
                               ),
@@ -171,7 +171,7 @@ class EventDetailsDialog {
                       ],
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     height: 10,
                     thickness: 2,
                     color: Colors.grey,
@@ -182,13 +182,13 @@ class EventDetailsDialog {
                       children: [
                         Container(
                           color: Colors.white,
-                          child: Icon(
+                          child: const Icon(
                             Icons.repeat,
                             color: Colors.blue,
                             size: 36,
                           ),
                         ),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                         Expanded(
                           child: IntrinsicWidth(
                             child: Column(
@@ -199,7 +199,7 @@ class EventDetailsDialog {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Recurrence Rule:',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -210,13 +210,13 @@ class EventDetailsDialog {
                                       GetEventsDetails.recurrenceRuleParser(
                                           appointment.recurrenceRule),
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: bodyFontSize,
                                       ),
                                     )
                                   ],
                                 ),
-                                Divider(
+                                const Divider(
                                   height: 10,
                                   thickness: 2,
                                 ),
@@ -231,7 +231,7 @@ class EventDetailsDialog {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            Text(
+                                            const Text(
                                               'Interval:',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
@@ -255,20 +255,20 @@ class EventDetailsDialog {
                                                           appointment
                                                               .recurrenceRule)
                                                       .toString(),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: bodyFontSize,
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      Spacer(),
+                                      const Spacer(),
                                       Container(
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            Text(
+                                            const Text(
                                               'Repeat Times:',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
@@ -290,7 +290,7 @@ class EventDetailsDialog {
                                                           .recurrenceRule)
                                                       .toString()
                                                   : 'Infinity',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: bodyFontSize,
                                               ),
                                             ),
@@ -307,7 +307,7 @@ class EventDetailsDialog {
                       ],
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     height: 10,
                     thickness: 2,
                     color: Colors.grey,
@@ -318,19 +318,19 @@ class EventDetailsDialog {
                       children: [
                         Container(
                           color: Colors.white,
-                          child: Icon(
+                          child: const Icon(
                             Icons.notes,
                             color: Colors.blue,
                             size: iconSize,
                           ),
                         ),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                         Container(
                           alignment: Alignment.centerLeft,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'Notes:',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -339,7 +339,7 @@ class EventDetailsDialog {
                               ),
                               Text(
                                 '${appointment.notes}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: bodyFontSize,
                                 ),
                               ),

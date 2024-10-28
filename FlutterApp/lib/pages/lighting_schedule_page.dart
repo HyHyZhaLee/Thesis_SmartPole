@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/event.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_app/widgets/add_event_dialog.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_app/widgets/event_details_dialog.dart';
 import 'package:flutter_app/utils/custom_route.dart';
-import 'package:flutter_app/model/appointment_data_source.dart';
 import 'package:flutter_app/provider/event_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -163,7 +161,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
         backgroundColor: Colors.deepPurpleAccent,
         shape: const CircleBorder(),
         onPressed: () =>
-            Navigator.of(context).push(AddEventPageRuote(page: AddEventPage())),
+            Navigator.of(context).push(AddEventPageRuote(page: const AddEventPage())),
         child: const Icon(
           Icons.add,
           color: Colors.white,

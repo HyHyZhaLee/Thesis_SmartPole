@@ -1,14 +1,12 @@
-import 'package:firebase_core_web/firebase_core_web.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/AppFunction/get_event_details.dart';
 import 'package:flutter_app/provider/event_provider.dart';
-import 'package:flutter_app/widgets/navigation_drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_app/utils/convertDateTime.dart';
 import 'package:flutter_app/model/recurrence_type.dart';
 import 'package:flutter_app/utils/convert_datetime_recurencerule.dart';
+import 'package:flutter_app/model/appointment_extension.dart';
 
 class TextSizes {
   static const double titleSize = 32.0;
@@ -25,9 +23,9 @@ class AddEventPage extends StatefulWidget {
   final Appointment? newAppoitment;
 
   const AddEventPage({
-    Key? key,
+    super.key,
     this.newAppoitment,
-  }) : super(key: key);
+  });
 
   @override
   _AddEventPageStage createState() => _AddEventPageStage();
@@ -37,7 +35,6 @@ class _AddEventPageStage extends State<AddEventPage> {
   final _formKey = GlobalKey<FormState>();
   final eventNameController = TextEditingController();
   final notesController = TextEditingController();
-  final intervalController = TextEditingController();
 
   final recurrenceIntervalController = TextEditingController(text: '1');
   final recurrenceCountController = TextEditingController(text: '1');
@@ -46,9 +43,7 @@ class _AddEventPageStage extends State<AddEventPage> {
   late DateTime endDate;
   late String recurrenceFlag;
   late String recurrenceType;
-  late String recurrenceCount;
   late bool isCheckedRecurrenceCount;
-  late String recurrenceRule;
 
   late bool isDropdownEnabled;
 
@@ -61,7 +56,6 @@ class _AddEventPageStage extends State<AddEventPage> {
 
       recurrenceFlag = 'Don\'t repeat';
       recurrenceType = 'Week';
-      recurrenceCount = '1';
       isCheckedRecurrenceCount = false;
 
       isDropdownEnabled = false;
@@ -72,7 +66,6 @@ class _AddEventPageStage extends State<AddEventPage> {
   void dispose() {
     eventNameController.dispose();
     notesController.dispose();
-    intervalController.dispose();
 
     recurrenceCountController.dispose();
     recurrenceIntervalController.dispose();
@@ -82,7 +75,7 @@ class _AddEventPageStage extends State<AddEventPage> {
 
   @override
   Widget build(BuildContext context) => Dialog(
-        insetPadding: EdgeInsets.all(4),
+        insetPadding: const EdgeInsets.all(4),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -92,7 +85,7 @@ class _AddEventPageStage extends State<AddEventPage> {
         child: Container(
           width: MediaQuery.of(context).size.width * 0.4,
           height: MediaQuery.of(context).size.height * 0.85,
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             border: Border.all(
               color: Colors.black,
@@ -359,8 +352,8 @@ class _AddEventPageStage extends State<AddEventPage> {
             elevation: 4,
             shadowColor: Colors.grey,
             backgroundColor: Colors.white,
-            padding: EdgeInsets.all(16),
-            side: BorderSide(
+            padding: const EdgeInsets.all(16),
+            side: const BorderSide(
               color: Colors.black,
               width: 1.0,
             ),
@@ -371,7 +364,7 @@ class _AddEventPageStage extends State<AddEventPage> {
             children: [
               Text(
                 text,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: TextSizes.bodyTextSize,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -558,7 +551,7 @@ class _AddEventPageStage extends State<AddEventPage> {
             borderRadius:
                 BorderRadius.circular(24), // Optional: Adjust border radius
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
         ),
         style: const TextStyle(
           fontSize: TextSizes.bodyTextSize,
@@ -803,12 +796,12 @@ class _AddEventPageStage extends State<AddEventPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
         ),
         onPressed: () {
           Navigator.of(context).pop();
         },
-        child: Text(
+        child: const Text(
           'Cancel',
           style: TextStyle(
             color: Colors.red,
@@ -826,9 +819,9 @@ class _AddEventPageStage extends State<AddEventPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
         ),
-        child: Text(
+        child: const Text(
           'Add',
           style: TextStyle(
             color: Colors.white,

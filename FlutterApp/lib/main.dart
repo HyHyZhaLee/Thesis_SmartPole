@@ -26,7 +26,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -59,13 +59,15 @@ class _MyAppState extends State<MyApp> {
           primaryColor: Colors.white,
           scaffoldBackgroundColor: Colors.white,
         ),
-        home: DashboardScreen(),
+        home: const DashboardScreen(),
       ),
     );
   }
 }
 
 class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({super.key});
+
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
 }
@@ -74,15 +76,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 1;
 
   static final List<Widget> _pages = <Widget>[
-    HomePage(),
-    HomePage(),
-    LightControlPage(),
-    LightingSchedulePage(),
-    SecurityCamerasPage(),
-    AdvertisementSchedulePage(),
-    EnvironmentalSensorsPage(),
-    HistoricalDataPage(),
-    HomePage()
+    const HomePage(),
+    const HomePage(),
+    const LightControlPage(),
+    const LightingSchedulePage(),
+    const SecurityCamerasPage(),
+    const AdvertisementSchedulePage(),
+    const EnvironmentalSensorsPage(),
+    const HistoricalDataPage(),
+    const HomePage()
   ];
 
   void _onItemTapped(int index) {
@@ -100,7 +102,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Flex(
               direction: Axis.vertical,
               children: <Widget>[
-                Expanded(
+                const Expanded(
                   flex: 126,
                   child: SizedBox(), // Replace this with your desired widget
                 ),
@@ -151,19 +153,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 IconButton(
                   //Icon settings white with black stroke
-                  icon: Icon(Icons.settings),
+                  icon: const Icon(Icons.settings),
                   onPressed: () {
                     // Add your settings page navigation here
                   },
                 ),
-                SizedBox(width: 23),
+                const SizedBox(width: 23),
                 IconButton(
-                  icon: Icon(Icons.notifications),
+                  icon: const Icon(Icons.notifications),
                   onPressed: () {
                     // Add your notifications page navigation here
                   },
                 ),
-                SizedBox(width: 23),
+                const SizedBox(width: 23),
                 // Logo with rounded border corner white background and black stroke total width of Container = 35
                 Container(
                   decoration: BoxDecoration(
@@ -171,19 +173,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     borderRadius: BorderRadius.circular(31),
                     border: Border.all(color: PRIMARY_BLACK_COLOR),
                   ),
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   child: Image.asset(
                       'lib/assets/icons/Logo-DH-Bach-Khoa-HCMUT.png',
                       height: 25),
                 ),
-                SizedBox(width: 23),
+                const SizedBox(width: 23),
                 Container(
                   // CSE, BOLD
-                  child: Text('CSE',
+                  child: const Text('CSE',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
-                SizedBox(width: 38)
+                const SizedBox(width: 38)
               ],
             ),
           ),
