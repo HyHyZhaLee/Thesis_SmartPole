@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'mqtt_helper.dart';
@@ -30,5 +29,5 @@ Color WHITE_COLOR_1 = const Color(0xFFF9F9F9);
 Color PRIMARY_WHITE_COLOR = WHITE_COLOR_1;
 Color PRIMARY_BLUE_COLOR = BLUE_COLOR_2;
 Color PRIMARY_BLACK_COLOR = Colors.black;
-Color PRIMARY_PAGE_BORDER_COLOR = Color(0xFFE6E5F2);
+Color PRIMARY_PAGE_BORDER_COLOR = const Color(0xFFE6E5F2);
 Color PRIMARY_PANEL_COLOR = const Color(0xFF7A40F2);
