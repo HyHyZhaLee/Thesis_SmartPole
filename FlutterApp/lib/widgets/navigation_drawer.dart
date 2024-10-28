@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 import 'package:flutter_app/AppFunction/global_variables.dart';
 
 const double space_between_icon = 30.0;
@@ -10,10 +9,10 @@ class CustomNavigationDrawer extends StatefulWidget {
 
 
   const CustomNavigationDrawer({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.onDestinationSelected,
-  }) : super(key: key);
+  });
 
   @override
   _CustomNavigationDrawerState createState() => _CustomNavigationDrawerState();
@@ -28,7 +27,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 50),
+      duration: const Duration(milliseconds: 50),
       vsync: this,
     );
     _widthAnimation = Tween<double>(begin: 103 - space, end: 349).animate(_animationController);
@@ -46,7 +45,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
-          margin: USE_BORDER_RADIUS? EdgeInsets.all(10): EdgeInsets.all(0),
+          margin: USE_BORDER_RADIUS? const EdgeInsets.all(10): const EdgeInsets.all(0),
           child: MouseRegion(
             onEnter: (_) => _handleMouseEnter(true),
             onExit: (_) => _handleMouseEnter(false),
@@ -63,7 +62,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
                         Expanded(
                           flex: 190,
                           child: Container(
-                            margin: EdgeInsets.only(top: 67),
+                            margin: const EdgeInsets.only(top: 67),
                             child: _buildDrawerItem(0, Icons.home, 'Home'),
                           ),
                         ),

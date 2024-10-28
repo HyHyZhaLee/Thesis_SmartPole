@@ -10,6 +10,7 @@
 
 #include <PubSubClient.h>
 #include <WiFi.h>
+#include <task.h>
 
 class MyMQTT {
 private:
@@ -35,5 +36,7 @@ private:
     void callback(char*, byte*, unsigned int); // Hàm dùng khi subscribe đến 1 feed nào đó sẽ tự tạo call back để nhận giá trị 
     void reConnect(); // Hàm bổ trợ cho hàm checkConnect trường hợp không có connect đến server
 };
+
+
 
 #endif
