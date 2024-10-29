@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_app/widgets/add_event_dialog.dart';
+import 'package:flutter_app/model/pole.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_app/widgets/event_details_dialog.dart';
 import 'package:flutter_app/utils/custom_route.dart';
 import 'package:flutter_app/provider/event_provider.dart';
+import 'package:flutter_app/provider/pole_provider.dart';
 import 'package:provider/provider.dart';
 
 class LightingSchedulePage extends StatefulWidget {
@@ -18,7 +20,7 @@ class LightingSchedulePage extends StatefulWidget {
 class _LightingSchedulePage extends State<LightingSchedulePage> {
   late List<Appointment> _appointments;
   CalendarView _calendarView = CalendarView.month;
-  late CalendarDataSource _calendarDataSource;
+  late AdvertiseDataSource _calendarDataSource;
 
   @override
   void initState() {
@@ -29,7 +31,8 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
   }
 
   Future<void> _loadAppointments() async {
-    final String response = await rootBundle.loadString('/jsonfile/data.json');
+    final String response =
+        await rootBundle.loadString('assets/jsonfile/data.json');
     final List<dynamic> jsonData = json.decode(response);
     for (var event in jsonData) {
       _addAppointmentFromJson(event);
@@ -39,11 +42,11 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
     });
   }
 
-  void _changeCalendarView(CalendarView view) {
-    setState(() {
-      _calendarView = view;
-    });
-  }
+  // void _changeCalendarView(CalendarView view) {
+  //   setState(() {
+  //     _calendarView = view;
+  //   });
+  // }
 
   void _addAppointmentFromJson(Map<String, dynamic> event) {
     final eventName = event['event_name'];
@@ -134,6 +137,18 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
   Widget build(BuildContext context) {
     final appointments = Provider.of<AppointmentProvider>(context).appointments;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Smart Pole Scheduler",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.deepPurpleAccent,
+        actions: [
+          choosePoleDropdownBuild(),
+        ],
+      ),
       body: SfCalendar(
         view: _calendarView,
         headerHeight: 50,
@@ -160,8 +175,8 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurpleAccent,
         shape: const CircleBorder(),
-        onPressed: () =>
-            Navigator.of(context).push(AddEventPageRuote(page: const AddEventPage())),
+        onPressed: () => Navigator.of(context)
+            .push(AddEventPageRuote(page: const AddEventPage())),
         child: const Icon(
           Icons.add,
           color: Colors.white,
@@ -169,6 +184,58 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       ),
     );
   }
+
+  Widget choosePoleDropdownBuild() => Consumer<PoleProvider>(
+        builder: (context, poleProvider, child) => SizedBox(
+          width: 150, // Set the width
+          height: 60, // Set the height
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: poleProvider.selectedPole,
+              dropdownColor: Colors.white,
+              alignment: Alignment.center,
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  poleProvider.setSelectedPole(newValue);
+                }
+              },
+              // This controls the color and style of the selected item shown in the button
+              selectedItemBuilder: (BuildContext context) =>
+                  poles.map<Widget>((String value) {
+                return Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    value,
+                    style: const TextStyle(
+                      color: Colors.white, // Color of selected item in button
+                      fontSize: 16,
+                    ),
+                  ),
+                );
+              }).toList(),
+              focusColor: Colors.transparent, // Color
+              items: poles
+                  .map<DropdownMenuItem<String>>(
+                    (String value) => DropdownMenuItem<String>(
+                      value: value,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          value,
+                          style: const TextStyle(
+                            color: Colors.black, // Dropdown item text color
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        ),
+      );
 
   // Widget addEventShowDialog() => Container(
   //         width: MediaQuery.of(context).size.width *0.5,

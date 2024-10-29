@@ -1,5 +1,5 @@
 {
-   "ArbitrationSignal": "(time_elapsed_since_last_notification)-3600^(notification_quick_dismiss_rate_lower_ci+notification_disable_rate+notification_snooze_rate)",
+   "ArbitrationSignal": "notification_nsat_upper_ci-0.7",
    "CustomSuppressionPolicies": {
       "8682d0fa-50b3-4ece-aa5b-e0b33f9919e2.f5b8c725-cb2e-4c12-accd-73e500d88d47.AutoOpen": {
          "notification_max_quick_dismiss_count": 3
@@ -9,7 +9,7 @@
       }
    },
    "DynamicSuppressionBypass": {
-      "ExperienceIDs": [  ],
+      "ExperienceIDs": [ "Nurturing.Global.OnRamp_RetriggerFREOnEdgeVersionUpgradeViaExplicitLaunch", "Nurturing.Global.OnRamp_RetriggerFREOnExplicitProtocolPDFLaunchForEdgePostDMA", "Nurturing.Global.Bing_DefaultBrowserBannerCloseBtn", "Nurturing.Global.Bing_DefaultBrowserBannerCloseBtnUpdate", "Nurturing.Global.Bing_MSStartYJCompete", "Nurturing.Global.Bing_NtpHomeStartpageUpsellFlyout", "Nurturing.Global.Bing_RecommendedSettingsExplicitLaunch", "Nurturing.Global.Bing_RecommendedSettingsWsbDialog", "Nurturing.Global.Fundamentals_DefaultBrowserMonitor", "Nurturing.Global.Fundamentals_DefaultBrowserMonitorOnStart", "Nurturing.Global.Fundamentals_DefaultBrowserMonitorVariant2", "Nurturing.Global.RecommendedSettingsChina", "Nurturing.Global.ContinuousImport_PasswordZeroStateV2", "Nurturing.Global.OnRamp_CIExplicitLaunchBannerUpsell", "Nurturing.Global.OnRamp_CIUpsell_ProtocolLaunch_Banner", "Nurturing.Global.EdgeGrowth_SitePinningCITopSites", "Nurturing.Global.EdgeGrowth_SitePinningWithWindowsConsent", "Nurturing.Global.EdgeGrowth_GlobalSitePinningOnCloseModal" ],
       "TeamIDs": [  ]
    },
    "ExperienceCohorts": {
@@ -174,5 +174,5 @@
    },
    "SuppressedExperiences": [ "E-tree.Bubble", "Nurturing.Global.Bing_BingGrowthToastNotification", "Nurturing.Global.EdgeEDU_BrowserFocusedTranslateNudge", "Nurturing.Global.EdgeMobile_MobileUpsell_ChatGpt_Flyout", "Nurturing.Global.EdgeVpn_VpnPublicWifiInBackground", "Nurturing.Global.Identity_ReauthNotification", "Nurturing.Global.Identity_ReauthNotification_2", "Nurturing.Global.Identity_ReauthNotification_3", "Nurturing.Global.OnRamp_RetriggerFRECodexCoPilotAutoAprd", "Nurturing.Global.OnRamp_ReTriggerOnWinUpgrade", "Outlook.Bubble", "ShorelinePrivilegedExperienceID", "Teams.Bubble" ],
    "TimeDelta": 5000000,
-   "configVersion": "18.0.1"
+   "configVersion": "18.0.2"
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_app/AppFunction/global_variables.dart';
 import 'package:flutter_app/provider/event_provider.dart';
+import 'package:flutter_app/provider/pole_provider.dart';
 import 'package:flutter_app/widgets/navigation_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -49,6 +50,9 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(
           create: (_) => AppointmentProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => PoleProvider(),
         ),
       ],
       child: MaterialApp(
