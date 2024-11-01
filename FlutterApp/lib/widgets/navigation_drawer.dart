@@ -3,8 +3,8 @@ import 'package:flutter_app/AppFunction/global_variables.dart';
 
 const double space_between_icon = 30.0;
 const double space = 10.0;
-const space_before_white_panel = 34.0;
-const space_before_icon = 22.0;
+const space_before_white_panel = 32.0;
+const space_before_icon = 24.0;
 const closed_width = 110.0;
 const opened_width = 349.0;
 class CustomNavigationDrawer extends StatefulWidget {
