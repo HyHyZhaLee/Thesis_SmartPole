@@ -16,7 +16,7 @@ import 'pages/security_cameras_page.dart';
 import 'pages/advertisement_schedule_page.dart';
 import 'pages/environmental_sensors_page.dart';
 import 'pages/historical_data_page.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -87,11 +87,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const HomePage()
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if(_selectedIndex == 0) _selectedIndex = 1;
-    });
+  void _onItemTapped(int index) async {
+    if (index == 8) {
+      final Uri url = Uri.parse('https://github.com/HyHyZhaLee/BK2023_Thesis_SmartPole');
+      if (await canLaunchUrl(url) ) launchUrl(url, mode: LaunchMode.externalNonBrowserApplication);
+      else throw Exception('Could not launch $url');
+    } else {
+      setState(() {
+        if (index == 0) {
+          _selectedIndex = 1;
+        } else {
+          _selectedIndex = index;
+        }
+      });
+    }
   }
 
   @override

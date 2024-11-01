@@ -3,7 +3,10 @@ import 'package:flutter_app/AppFunction/global_variables.dart';
 
 const double space_between_icon = 30.0;
 const double space = 10.0;
-
+const space_before_white_panel = 34.0;
+const space_before_icon = 22.0;
+const closed_width = 110.0;
+const opened_width = 349.0;
 class CustomNavigationDrawer extends StatefulWidget {
   final int selectedIndex;
   final Function(int) onDestinationSelected;
@@ -30,7 +33,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
       duration: const Duration(milliseconds: 40),
       vsync: this,
     );
-    _widthAnimation = Tween<double>(begin: 103 - space, end: 349).animate(_animationController);
+    _widthAnimation = Tween<double>(begin: closed_width - space, end: opened_width).animate(_animationController);
   }
 
   void _handleMouseEnter(bool isEntering) {
@@ -153,7 +156,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
     return Row(
       children: [
         Container(
-          width: 15,
+          width: space_before_white_panel - space,
           decoration: BoxDecoration(
             color: PRIMARY_PANEL_COLOR, // Màu nền cho box bên trái
           ),
@@ -162,20 +165,27 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
           child: Container(
             color: isSelected ? const Color(0xFFF9F9F9) : Colors.transparent, // Màu nền chỉ cho ListTile
             child: ListTile(
-              contentPadding: EdgeInsets.only(left: 9, right: 9), // Xóa khoảng trống mặc định bên trái
+              contentPadding: EdgeInsets.only(left: space_before_icon - space), // Căn trái cho ListTile
               selected: isSelected,
               selectedTileColor: Colors.transparent, // Xóa màu nền mặc định khi chọn
-              leading: clickedIconPath != null && unclickedIconPath != null
-                  ? Image.asset(
-                isSelected ? clickedIconPath : unclickedIconPath,
-                width: 35,
-                height: 35,
-              )
-                  : Icon(icon, color: isSelected ? Colors.black : Colors.white, size: 23),
+              leading: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (clickedIconPath != null && unclickedIconPath != null)
+                    Image.asset(
+                      isSelected ? clickedIconPath : unclickedIconPath,
+                      width: 26,
+                      height: 23,
+                    )
+                  else
+                    Icon(icon, color: isSelected ? Colors.black : Colors.white, size: 23),
+                  const SizedBox(width: 19), // Khoảng trống giữa icon và text
+                ],
+              ),
               title: _isExpanded
                   ? Text(
                 title,
-                style: TextStyle(fontSize: 20, color: isSelected ? Colors.black : Colors.white),
+                style: TextStyle(fontSize: 20, color: isSelected ? Color(0xFF242424) : Colors.white),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               )
@@ -187,6 +197,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
       ],
     );
   }
+
 
 }
 
