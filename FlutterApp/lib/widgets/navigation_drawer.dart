@@ -185,7 +185,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
               title: _isExpanded
                   ? Text(
                 title,
-                style: TextStyle(fontSize: 20, color: isSelected ? Color(0xFF242424) : Colors.white),
+                style: TextStyle(fontSize: 20, color: isSelected ? PRIMARY_BLACK_COLOR : Colors.white),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               )

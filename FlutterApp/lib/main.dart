@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
             Theme.of(context).textTheme,
           ),
           primaryColor: Colors.white,
-          scaffoldBackgroundColor: Colors.white,
+          scaffoldBackgroundColor: Color(0xFFF9F9F9),
         ),
         home: const DashboardScreen(),
       ),
@@ -113,11 +113,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               direction: Axis.vertical,
               children: <Widget>[
                 const Expanded(
-                  flex: 126,
+                  // flex: 126,
+                  flex:100,
                   child: SizedBox(), // Replace this with your desired widget
                 ),
                 Expanded(
-                  flex: 889,
+                  // flex: 889,
+                  flex: 900,
                   child: Container(
                     // Margin = navigation drawer before expanding 103 + padding 20
                     margin: USE_BORDER_RADIUS
