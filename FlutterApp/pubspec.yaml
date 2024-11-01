@@ -90,6 +90,7 @@ flutter:
   assets:
     - lib/Assets/icons/  # Loads all icons in this folder and its subfolders
     - assets/jsonfile/data.json
+    - lib/assets/icons/page_icons/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
