@@ -27,7 +27,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 50),
+      duration: const Duration(milliseconds: 40),
       vsync: this,
     );
     _widthAnimation = Tween<double>(begin: 103 - space, end: 349).animate(_animationController);
@@ -62,7 +62,7 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
                         Expanded(
                           flex: 190,
                           child: Container(
-                            margin: const EdgeInsets.only(top: 67),
+                            margin: const EdgeInsets.only(top: 0),
                             child: _buildDrawerItem(0, Icons.home, 'Home',
                               clickedIconPath: 'lib/Assets/icons/page_icons/home_clicked.png',
                               unclickedIconPath: 'lib/Assets/icons/page_icons/home_unclicked.png',
@@ -149,28 +149,44 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer> with Si
 
   Widget _buildDrawerItem(int index, IconData? icon, String title, {String? clickedIconPath, String? unclickedIconPath}) {
     bool isSelected = widget.selectedIndex == index;
-    return ListTile(
-      selected: isSelected,
-      selectedTileColor: const Color(0xFFF9F9F9),
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8),
-        child: clickedIconPath != null && unclickedIconPath != null
-            ? Image.asset(
-          isSelected ? clickedIconPath : unclickedIconPath,
-          width: 35,
-          height: 35,
-        )
-            : Icon(icon, color: Colors.white, size: 23),
-      ),
-      title: _isExpanded
-          ? Text(
-        title,
-        style: TextStyle(fontSize: 20, color: isSelected ? Colors.black : Colors.white),
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-      )
-          : null,
-      onTap: () => widget.onDestinationSelected(index),
+
+    return Row(
+      children: [
+        Container(
+          width: 15,
+          decoration: BoxDecoration(
+            color: PRIMARY_PANEL_COLOR, // Màu nền cho box bên trái
+          ),
+        ),
+        Expanded(
+          child: Container(
+            color: isSelected ? const Color(0xFFF9F9F9) : Colors.transparent, // Màu nền chỉ cho ListTile
+            child: ListTile(
+              contentPadding: EdgeInsets.only(left: 9, right: 9), // Xóa khoảng trống mặc định bên trái
+              selected: isSelected,
+              selectedTileColor: Colors.transparent, // Xóa màu nền mặc định khi chọn
+              leading: clickedIconPath != null && unclickedIconPath != null
+                  ? Image.asset(
+                isSelected ? clickedIconPath : unclickedIconPath,
+                width: 35,
+                height: 35,
+              )
+                  : Icon(icon, color: isSelected ? Colors.black : Colors.white, size: 23),
+              title: _isExpanded
+                  ? Text(
+                title,
+                style: TextStyle(fontSize: 20, color: isSelected ? Colors.black : Colors.white),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              )
+                  : null,
+              onTap: () => widget.onDestinationSelected(index),
+            ),
+          ),
+        ),
+      ],
     );
   }
+
 }
+
