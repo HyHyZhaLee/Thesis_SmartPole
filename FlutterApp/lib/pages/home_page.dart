@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
               children: [
                 // Left part - Image with overlay labels
                 Expanded(
-                  flex: 1,
+                  flex: 45,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
                       ),
                       Positioned(
                         top: 0,
-                        right: 160,
+                        right: 110,
                         child: _buildButton("NEMA - ESP32"),
                       ),
                       Positioned(
@@ -57,17 +57,17 @@ class HomePage extends StatelessWidget {
                       ),
                       Positioned(
                         top: 130,
-                        right: 160,
+                        right: 110,
                         child: _buildButton("AIR SENSOR"),
                       ),
                       Positioned(
                         top: 335,
-                        right: 160,
+                        right: 110,
                         child: _buildButton("SCREEN"),
                       ),
                       Positioned(
-                        top: 480,
-                        right: 160,
+                        top: 500,
+                        right: 110,
                         child: _buildButton("CHARGER"),
                       ),
                     ],
@@ -75,7 +75,7 @@ class HomePage extends StatelessWidget {
                 ),
                 // Right part - Placeholder for additional UI
                 Expanded(
-                  flex: 1,
+                  flex: 55,
                   child: Container(
                     color: Colors.grey[200],
                     child: const Center(child: Text("Additional Controls")),
