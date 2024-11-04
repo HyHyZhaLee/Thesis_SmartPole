@@ -1,7 +1,7 @@
 #include <main.h>
 
 Wifi_esp32 atom_wifi(
-    "ACLAB",
+    "BK_SMART_POLE_STATION",
     "ACLAB2023"
 );
 
@@ -22,7 +22,6 @@ void setup()
   // digitalWrite(32, HIGH);
   WatchdogInit();
   atom_MQTT.publish(feedPole_01, OFF_Json());
-
 
   xTaskCreate(taskHandleControlFlag, "", 4096, NULL, 1, NULL);
   xTaskCreate(taskPublish2Server, "", 4096, NULL, 1, NULL);
