@@ -130,8 +130,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         borderRadius: USE_BORDER_RADIUS
                             ? BorderRadius.circular(31)
                             : BorderRadius.circular(0),
-                        border: Border.all(
-                            color: PRIMARY_PAGE_BORDER_COLOR, width: 2),
+                        // border: Border.all(
+                        //     color: PRIMARY_PAGE_BORDER_COLOR, width: 0),
                       ),
                       child: ClipRRect(
                         borderRadius: USE_BORDER_RADIUS
