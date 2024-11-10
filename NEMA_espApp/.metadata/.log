@@ -9422,3 +9422,137 @@ org.eclipse.swt.SWTException: Widget is disposed
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:588)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1459)
 	at org.eclipse.equinox.launcher.Main.main(Main.java:1432)
+!SESSION 2024-11-10 10:12:20.935 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=17.0.6
+java.vendor=Amazon.com Inc.
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY org.eclipse.egit.ui 2 0 2024-11-10 10:12:35.528
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Admin'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.launchbar.core 2 0 2024-11-10 10:12:35.529
+!MESSAGE Enablement expression is missing for descriptor type com.espressif.idf.debug.gdbjtag.openocd.descriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2024-11-10 10:12:35.536
+!MESSAGE Enablement expression is missing for config provider for com.espressif.idf.debug.gdbjtag.openocd.descriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2024-11-10 10:12:35.537
+!MESSAGE Enablement expression is missing for config provider for com.espressif.idf.launch.serial.core.idf.descriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2024-11-10 10:12:35.539
+!MESSAGE Enablement expression is missing for descriptor type com.espressif.idf.launch.serial.core.idf.descriptorType
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:12:35.675
+!MESSAGE Eclipse Install location::file:/C:/Espressif/tools/espressif-ide/2.12.0/
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:12:35.692
+!MESSAGE Ignoring esp_idf.json settings as it was configured earilier and idf_path is similar.
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:12:38.013
+!MESSAGE Initializing toolchain...
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:12:38.013
+!MESSAGE idf_tools.py path: C:/Espressif/frameworks/esp-idf-v5.1.2//tools/idf_tools.py
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:12:38.016
+!MESSAGE [C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe, C:/Espressif/frameworks/esp-idf-v5.1.2//tools/idf_tools.py, export, --format=key-value]
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:12:41.528
+!MESSAGE idf_tools.py export output: Not using an unsupported version of tool cmake found in PATH: 3.20.2. To use it, run 'C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf_tools.py export --prefer-system'
+OPENOCD_SCRIPTS=C:\Espressif\tools\openocd-esp32\v0.12.0-esp32-20230921\openocd-esp32\share\openocd\scripts
+IDF_CCACHE_ENABLE=1
+ESP_ROM_ELF_DIR=C:\Espressif\tools\esp-rom-elfs\20230320\
+IDF_PYTHON_ENV_PATH=C:\Espressif\python_env\idf5.1_py3.11_env
+ESP_IDF_VERSION=5.1
+PATH=C:\Espressif\tools\xtensa-esp-elf-gdb\12.1_20221002\xtensa-esp-elf-gdb\bin;C:\Espressif\tools\riscv32-esp-elf-gdb\12.1_20221002\riscv32-esp-elf-gdb\bin;C:\Espressif\tools\xtensa-esp32-elf\esp-12.2.0_20230208\xtensa-esp32-elf\bin;C:\Espressif\tools\xtensa-esp32s2-elf\esp-12.2.0_20230208\xtensa-esp32s2-elf\bin;C:\Espressif\tools\xtensa-esp32s3-elf\esp-12.2.0_20230208\xtensa-esp32s3-elf\bin;C:\Espressif\tools\esp-clang\15.0.0-23786128ae\esp-clang\bin;C:\Espressif\tools\riscv32-esp-elf\esp-12.2.0_20230208\riscv32-esp-elf\bin;C:\Espressif\tools\esp32ulp-elf\2.35_20220830\esp32ulp-elf\bin;C:\Espressif\tools\cmake\3.24.0\bin;C:\Espressif\tools\openocd-esp32\v0.12.0-esp32-20230921\openocd-esp32\bin;C:\Espressif\tools\ninja\1.10.2\;C:\Espressif\tools\idf-exe\1.0.3\;C:\Espressif\tools\ccache\4.8\ccache-4.8-windows-x86_64;C:\Espressif\tools\dfu-util\0.11\dfu-util-0.11-win64;C:\Espressif\python_env\idf5.1_py3.11_env\Scripts;C:\Espressif\frameworks\esp-idf-v5.1.2\tools;%PATH%
+IDF_DEACTIVATE_FILE_PATH=C:\Users\Admin\AppData\Local\Temp\tmpwmdjk6t_idf_6520
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:12:41.529
+!MESSAGE PATH: C:\Espressif\tools\xtensa-esp-elf-gdb\12.1_20221002\xtensa-esp-elf-gdb\bin;C:\Espressif\tools\riscv32-esp-elf-gdb\12.1_20221002\riscv32-esp-elf-gdb\bin;C:\Espressif\tools\xtensa-esp32-elf\esp-12.2.0_20230208\xtensa-esp32-elf\bin;C:\Espressif\tools\xtensa-esp32s2-elf\esp-12.2.0_20230208\xtensa-esp32s2-elf\bin;C:\Espressif\tools\xtensa-esp32s3-elf\esp-12.2.0_20230208\xtensa-esp32s3-elf\bin;C:\Espressif\tools\esp-clang\15.0.0-23786128ae\esp-clang\bin;C:\Espressif\tools\riscv32-esp-elf\esp-12.2.0_20230208\riscv32-esp-elf\bin;C:\Espressif\tools\esp32ulp-elf\2.35_20220830\esp32ulp-elf\bin;C:\Espressif\tools\cmake\3.24.0\bin;C:\Espressif\tools\openocd-esp32\v0.12.0-esp32-20230921\openocd-esp32\bin;C:\Espressif\tools\ninja\1.10.2\;C:\Espressif\tools\idf-exe\1.0.3\;C:\Espressif\tools\ccache\4.8\ccache-4.8-windows-x86_64;C:\Espressif\tools\dfu-util\0.11\dfu-util-0.11-win64;C:\Espressif\python_env\idf5.1_py3.11_env\Scripts;C:\Espressif\frameworks\esp-idf-v5.1.2\tools;%PATH%
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:12:41.529
+!MESSAGE [C:\Espressif\tools\xtensa-esp-elf-gdb\12.1_20221002\xtensa-esp-elf-gdb\bin;C:\Espressif\tools\riscv32-esp-elf-gdb\12.1_20221002\riscv32-esp-elf-gdb\bin;C:\Espressif\tools\xtensa-esp32-elf\esp-12.2.0_20230208\xtensa-esp32-elf\bin;C:\Espressif\tools\xtensa-esp32s2-elf\esp-12.2.0_20230208\xtensa-esp32s2-elf\bin;C:\Espressif\tools\xtensa-esp32s3-elf\esp-12.2.0_20230208\xtensa-esp32s3-elf\bin;C:\Espressif\tools\esp-clang\15.0.0-23786128ae\esp-clang\bin;C:\Espressif\tools\riscv32-esp-elf\esp-12.2.0_20230208\riscv32-esp-elf\bin;C:\Espressif\tools\esp32ulp-elf\2.35_20220830\esp32ulp-elf\bin;C:\Espressif\tools\cmake\3.24.0\bin;C:\Espressif\tools\openocd-esp32\v0.12.0-esp32-20230921\openocd-esp32\bin;C:\Espressif\tools\ninja\1.10.2\;C:\Espressif\tools\idf-exe\1.0.3\;C:\Espressif\tools\ccache\4.8\ccache-4.8-windows-x86_64;C:\Espressif\tools\dfu-util\0.11\dfu-util-0.11-win64;C:\Espressif\python_env\idf5.1_py3.11_env\Scripts;C:\Espressif\frameworks\esp-idf-v5.1.2\tools;%PATH%]
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:12:41.750
+!MESSAGE Project Name:: NBIOT-main
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:12:41.751
+!MESSAGE Project:: P/NBIOT-main
+
+!ENTRY org.eclipse.cdt.core 1 0 2024-11-10 10:12:55.028
+!MESSAGE Indexed 'NBIOT-main' (827 sources, 187 headers) in 12.6 sec: 52,999 declarations; 185,389 references; 5,382 unresolved inclusions; 1,339 syntax errors; 72,765 unresolved names (23%)
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:18.793
+!MESSAGE D:\Documents\Github\Thesis_SmartPole\NEMA_espApp
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.227
+!MESSAGE SOFTWARE\Python\PythonCore\2.7\InstallPath
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.229
+!MESSAGE 
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.232
+!MESSAGE SOFTWARE\Python\PythonCore\3.11\InstallPath
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.234
+!MESSAGE C:\Users\Admin\AppData\Local\Programs\Python\Python311\python.exe
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.238
+!MESSAGE SOFTWARE\Python\PythonCore\2.7\InstallPath
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.240
+!MESSAGE 
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.242
+!MESSAGE SOFTWARE\Python\PythonCore\3.11\InstallPath
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.243
+!MESSAGE 
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.251
+!MESSAGE IDF_PATH :C:/Espressif/frameworks/esp-idf-v5.1.2/
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.253
+!MESSAGE SOFTWARE\Python\PythonCore\2.7\InstallPath
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.255
+!MESSAGE 
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.258
+!MESSAGE SOFTWARE\Python\PythonCore\3.11\InstallPath
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.260
+!MESSAGE C:\Users\Admin\AppData\Local\Programs\Python\Python311\python.exe
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.263
+!MESSAGE SOFTWARE\Python\PythonCore\2.7\InstallPath
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.265
+!MESSAGE 
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.267
+!MESSAGE SOFTWARE\Python\PythonCore\3.11\InstallPath
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.269
+!MESSAGE 
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.271
+!MESSAGE Python Path :C:\Users\Admin\AppData\Local\Programs\Python\Python311\python.exe
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.351
+!MESSAGE Executing C:\Users\Admin\AppData\Local\Programs\Python\Python311\python.exe C:\Espressif\frameworks\esp-idf-v5.1.2\tools\idf_tools.py list
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:21.353
+!MESSAGE {USERDOMAIN_ROAMINGPROFILE=LAPTOP_HUYBU_SA, PROCESSOR_LEVEL=6, ALLUSERSPROFILE=C:\ProgramData, INTEL_DEV_REDIST=C:\Program Files (x86)\Common Files\Intel\Shared Libraries\, PROCESSOR_ARCHITECTURE=AMD64, <JDK installation directory>\lib\tools.jar;=C:\Program Files\Java\jdk-16.0.2\lib, MIC_LD_LIBRARY_PATH=C:\Program Files (x86)\Common Files\Intel\Shared Libraries\compiler\lib\mic, PSModulePath=%ProgramFiles%\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules, SystemDrive=C:, PT8HOME=C:\Program Files\Cisco Packet Tracer 8.2.1, MOZ_PLUGIN_PATH=C:\Program Files (x86)\Foxit Software\Foxit Reader\plugins\, ACSvcPort=17532, USERNAME=Admin, ProgramFiles(x86)=C:\Program Files (x86), ACSetupSvcPort=23210, FPS_BROWSER_USER_PROFILE_STRING=Default, PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW, DriverData=C:\Windows\System32\Drivers\DriverData, IntelliJ IDEA Community Edition=C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2021.2\bin;, CLion=C:\Users\Admin\AppData\Local\JetBrains\CLion 2023.1.1\bin;, PyCharm Community Edition=C:\Program Files\JetBrains\PyCharm Community Edition 2022.3.3\bin;, ProgramData=C:\ProgramData, ProgramW6432=C:\Program Files, COCOS_CONSOLE_ROOT=D:\cocos2d-x-4.0\tools\cocos2d-console\bin, HOMEPATH=\Users\Admin, SOPC_KIT_NIOS2=C:\intelFPGA_lite\16.1\nios2eds, PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 165 Stepping 2, GenuineIntel, ProgramFiles=C:\Program Files, PUBLIC=C:\Users\Public, windir=C:\WINDOWS, ZES_ENABLE_SYSMAN=1, LOCALAPPDATA=C:\Users\Admin\AppData\Local, ChocolateyLastPathUpdate=133304361462421651, USERDOMAIN=LAPTOP_HUYBU_SA, FPS_BROWSER_APP_PROFILE_STRING=Internet Explorer, LOGONSERVER=\\LAPTOP_HUYBU_SA, COCOS_X_ROOT=D:\, JAVA_HOME=C:\Program Files\Java\jdk-16.0.2, RlsSvcPort=22112, IDF_TOOLS_PATH=C:\Espressif, Cmake=C:\Program Files\CMake\bin, COCOS_TEMPLATES_ROOT=D:\cocos2d-x-4.0\templates, OneDrive=C:\Users\Admin\OneDrive, APPDATA=C:\Users\Admin\AppData\Roaming, <JDK installation directory>\bin;%PATH%;=C:\Program Files\Java\jdk-16.0.2\bin, ChocolateyInstall=C:\ProgramData\chocolatey, VBOX_MSI_INSTALL_PATH=C:\Program Files\Oracle\VirtualBox\, CommonProgramFiles=C:\Program Files\Common Files, Path=C:\Program Files\Java\jdk-16.0.2\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Python27\Tools\Scripts;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\ProgramData\chocolatey\bin;C:\Program Files\Intel\Intel(R) Memory and Storage Tool\;C:\Program Files\Git\cmd;C:\MinGW\bin;C:\Program Files\usbipd-win\;C:\Users\Admin\AppData\Local\Pub\Cache\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Users\Admin\AppData\Local\Programs\Python\Python311\Scripts\;C:\Users\Admin\AppData\Local\Programs\Python\Python311\;C:\Ruby31-x64\bin;D:\cocos2d-x-4.0\templates;D:\cocos2d-x-4.0\tools\cocos2d-console\bin;\cocos2d-x-4.0\templates;C:\Users\Admin\AppData\Local\Microsoft\WindowsApps;C:\intelFPGA\16.1\modelsim_ase\win32aloem;C:\Program Files\CMake\bin;C:\Python27;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2021.2\bin;C:\Users\Admin\AppData\Local\GitHubDesktop\bin;C:\Program Files\JetBrains\PyCharm Community Edition 2022.3.3\bin;C:\Users\Admin\AppData\Local\JetBrains\CLion 2023.1.1\bin;C:\openssl-master;C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\heroku\bin;C:\flutter\bin;C:\Users\Admin\AppData\Roaming\npm, OS=Windows_NT, COMPUTERNAME=LAPTOP_HUYBU_SA, PROCESSOR_REVISION=a502, CommonProgramW6432=C:\Program Files\Common Files, ComSpec=C:\WINDOWS\system32\cmd.exe, SystemRoot=C:\WINDOWS, TEMP=C:\Users\Admin\AppData\Local\Temp, HOMEDRIVE=C:, USERPROFILE=C:\Users\Admin, TMP=C:\Users\Admin\AppData\Local\Temp, CDS_HOME=C:\cds_spb_home, CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files, QSYS_ROOTDIR=C:\intelFPGA_lite\16.1\quartus\sopc_builder\bin, NUMBER_OF_PROCESSORS=12, QUARTUS_ROOTDIR=C:\intelFPGA_lite\16.1\quartus}
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:26.357
+!MESSAGE ESP-IDF v5.1.2-dirty
+
+!ENTRY com.espressif.idf.core 1 0 2024-11-10 10:13:26.403
+!MESSAGE Python 3.11.2

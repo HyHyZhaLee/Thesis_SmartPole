@@ -17,6 +17,8 @@ import 'pages/advertisement_schedule_page.dart';
 import 'pages/environmental_sensors_page.dart';
 import 'pages/historical_data_page.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'provider/page_controller_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -47,9 +49,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => AppointmentProvider(),
-        ),
+        ChangeNotifierProvider(create: (_) => AppointmentProvider()),
+        ChangeNotifierProvider(create: (_) => PageControllerProvider()), // Thêm dòng này
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -73,7 +74,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int _selectedIndex = 1;
+  // int _selectedIndex = 1;
 
   static final List<Widget> _pages = <Widget>[
     const HomePage(),
@@ -90,18 +91,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _onItemTapped(int index) async {
     if (index == 8) {
       final Uri url = Uri.parse('https://github.com/HyHyZhaLee/BK2023_Thesis_SmartPole');
-      if (await canLaunchUrl(url) ) launchUrl(url, mode: LaunchMode.externalNonBrowserApplication);
+      if (await canLaunchUrl(url)) launchUrl(url, mode: LaunchMode.externalNonBrowserApplication);
       else throw Exception('Could not launch $url');
     } else {
-      setState(() {
-        if (index == 0) {
-          _selectedIndex = 1;
-        } else {
-          _selectedIndex = index;
-        }
-      });
+      context.read<PageControllerProvider>().setSelectedIndex(index == 0 ? 1 : index);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +137,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         borderRadius: USE_BORDER_RADIUS
                             ? BorderRadius.circular(31)
                             : BorderRadius.circular(0),
-                        child: _pages.elementAt(_selectedIndex),
+                        child: _pages.elementAt(context.watch<PageControllerProvider>().selectedIndex),
                       ),
                     ),
                   ),
@@ -154,8 +150,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             left: 0,
             bottom: 0,
             child: CustomNavigationDrawer(
-              selectedIndex: _selectedIndex,
-              onDestinationSelected: _onItemTapped,
+            selectedIndex: context.watch<PageControllerProvider>().selectedIndex,
+            onDestinationSelected: _onItemTapped,
             ),
           ),
           Positioned(

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/AppFunction/global_variables.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/page_controller_provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -43,32 +46,32 @@ class HomePage extends StatelessWidget {
                       Positioned(
                         top: 00,
                         left: 70,
-                        child: _buildButton("NEMA - 01"),
+                        child: _buildButton("NEMA - 01", context),
                       ),
                       Positioned(
                         top: 0,
                         right: 110,
-                        child: _buildButton("NEMA - ESP32"),
+                        child: _buildButton("NEMA - ESP32", context, pageIndex: 2),
                       ),
                       Positioned(
                         top: 130,
                         left: 70,
-                        child: _buildButton("CAMERA"),
+                        child: _buildButton("CAMERA", context, pageIndex: 4), // 4 là chỉ số của SecurityCamerasPage
                       ),
                       Positioned(
                         top: 130,
                         right: 110,
-                        child: _buildButton("AIR SENSOR"),
+                        child: _buildButton("AIR SENSOR", context, pageIndex: 6),
                       ),
                       Positioned(
                         top: 335,
                         right: 110,
-                        child: _buildButton("SCREEN"),
+                        child: _buildButton("SCREEN", context, pageIndex: 5),
                       ),
                       Positioned(
                         top: 500,
                         right: 110,
-                        child: _buildButton("CHARGER"),
+                        child: _buildButton("CHARGER", context, pageIndex: 7),
                       ),
                     ],
                   ),
@@ -77,10 +80,36 @@ class HomePage extends StatelessWidget {
                 Expanded(
                   flex: 55,
                   child: Container(
-                    color: Colors.grey[200],
-                    child: const Center(child: Text("Additional Controls")),
+                      child: Column(
+                        children:[
+                          Expanded(
+                            flex: 3,
+                            child: Stack(
+                              children: [
+                                // Màu nền xanh cho phần flex 3
+                                Container(
+                                  color: Colors.blue,
+                                ),
+                                // Các thành phần khác trong phần này có thể thêm vào đây
+                              ],
+                            )
+                          ),
+                           Expanded(
+                            flex: 7,
+                            child: Stack(
+                              children: [
+                                // Màu nền xanh cho phần flex 3
+                                Container(
+                                  color: Colors.red,
+                                ),
+                                // Các thành phần khác trong phần này có thể thêm vào đây
+                              ],
+                            )
+                          )
+                        ]
+                      )
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -90,18 +119,18 @@ class HomePage extends StatelessWidget {
   }
 
   // Method to create button widget
-  Widget _buildButton(String label) {
+  Widget _buildButton(String label, BuildContext context,{int pageIndex = 1}) {
     return SizedBox(
       width: 201,
       height: 53,
       child: ElevatedButton(
         onPressed: () {
-          // Handle button press here
+          context.read<PageControllerProvider>().setSelectedIndex(pageIndex);
           print('$label button pressed');
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFD9D9D9), // Màu nền xám cho nút
-          elevation: 0, // Bỏ hiệu ứng đổ bóng
+          backgroundColor: const Color(0xFFD9D9D9),
+          elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(0),
           ),
@@ -117,5 +146,6 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+
 
 }
