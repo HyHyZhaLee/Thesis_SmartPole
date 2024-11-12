@@ -49,10 +49,10 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => AppointmentProvider(),
+          create: (_) => PoleProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => PoleProvider(),
+          create: (_) => CustomAppointmentProvider(),
         ),
       ],
       child: MaterialApp(

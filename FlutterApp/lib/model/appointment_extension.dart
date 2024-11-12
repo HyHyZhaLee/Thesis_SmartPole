@@ -1,6 +1,82 @@
 import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'dart:html' as html;
+import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class CustomAppointment extends Appointment {
+  final String firebaseKey;
+
+  CustomAppointment({
+    required super.subject,
+    required super.startTime,
+    required super.endTime,
+    this.firebaseKey = '',
+    String notes = '',
+    super.color = Colors.blue,
+  }) : super(
+          notes: notes,
+        );
+
+  Map<String, dynamic> toJson() {
+    return {
+      'station_id': "SmartPole_0002",
+      'station_name': "Smart Pole 0002",
+      'action': "schedule light",
+      'data': [
+        {
+          'firebaseKey': firebaseKey,
+          'startTime':
+              "${DateFormat("dd-MM-yyyy HH:mm:ss").format(startTime)} GMT+0700",
+          'endTime':
+              "${DateFormat("dd-MM-yyyy HH:mm:ss").format(endTime)} GMT+0700",
+          'subject': subject,
+          'description': notes,
+          'color': color.value,
+        }
+      ],
+    };
+  }
+
+  // Factory constructor to create a CustomAppointment from JSON
+  factory CustomAppointment.fromJson(Map<String, dynamic> json) {
+    // Parse the date using the known format
+    DateTime parseDate(String date) {
+      return DateFormat("dd-MM-yyyy HH:mm:ss").parse(date.split(" GMT")[0]);
+    }
+
+    return CustomAppointment(
+      firebaseKey: json['data'][0]['firebaseKey'] as String,
+      startTime: parseDate(json['data'][0]['startTime']),
+      endTime: DateTime.parse(json['data'][0]['endTime'] as String),
+      subject: json['data'][0]['subject'] as String? ?? '',
+      notes: json['data'][0]['description'] as String? ?? '',
+      color: Color(json['data'][0]['color'] as int),
+    );
+  }
+}
+
+class CustomAppointmentDataSource extends CalendarDataSource {
+  CustomAppointmentDataSource(List<CustomAppointment> appointments) {
+    this.appointments = appointments;
+  }
+
+  CustomAppointment getAppointment(int index) =>
+      appointments![index] as CustomAppointment;
+
+  @override
+  DateTime getStartTime(int index) => getAppointment(index).startTime;
+
+  @override
+  DateTime getEndTime(int index) => getAppointment(index).endTime;
+
+  @override
+  String getSubject(int index) => getAppointment(index).subject;
+
+  @override
+  Color getColor(int index) => getAppointment(index).color;
+}
 
 extension AppointmentJson on Appointment {
   String toString2(DateTime date) {

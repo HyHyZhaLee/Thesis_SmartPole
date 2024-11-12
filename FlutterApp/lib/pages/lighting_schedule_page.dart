@@ -8,6 +8,7 @@ import 'package:flutter_app/utils/custom_route.dart';
 import 'package:flutter_app/provider/event_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_app/widgets/app_bar_custom.dart';
+import 'package:flutter_app/model/appointment_extension.dart';
 
 class LightingSchedulePage extends StatefulWidget {
   const LightingSchedulePage({super.key});
@@ -17,29 +18,50 @@ class LightingSchedulePage extends StatefulWidget {
 }
 
 class _LightingSchedulePage extends State<LightingSchedulePage> {
-  late List<Appointment> _appointments;
+  late List<CustomAppointment> _appointments;
   CalendarView _calendarView = CalendarView.month;
-  late AdvertiseDataSource _calendarDataSource;
+  late CustomAppointmentDataSource _calendarDataSource;
 
   @override
   void initState() {
     super.initState();
-    _appointments = getAppointments();
-    _calendarDataSource = AdvertiseDataSource(_appointments);
-    _loadAppointments();
+    // Set up listener to update appointments from provider
+    final provider =
+        Provider.of<CustomAppointmentProvider>(context, listen: false);
+    _appointments = provider.appointments;
+    _calendarDataSource = CustomAppointmentDataSource(_appointments);
+
+    // Add a listener to provider changes
+    provider.addListener(updateAppointments);
   }
 
-  Future<void> _loadAppointments() async {
-    final String response =
-        await rootBundle.loadString('assets/jsonfile/data.json');
-    final List<dynamic> jsonData = json.decode(response);
-    for (var event in jsonData) {
-      _addAppointmentFromJson(event);
-    }
+  void updateAppointments() {
+    final provider =
+        Provider.of<CustomAppointmentProvider>(context, listen: false);
     setState(() {
-      _calendarDataSource = AdvertiseDataSource(_appointments);
+      _appointments = provider.appointments;
+      _calendarDataSource = CustomAppointmentDataSource(_appointments);
     });
   }
+
+  @override
+  void dispose() {
+    Provider.of<CustomAppointmentProvider>(context, listen: false)
+        .removeListener(updateAppointments);
+    super.dispose();
+  }
+
+  // Future<void> _loadAppointments() async {
+  //   final String response =
+  //       await rootBundle.loadString('assets/jsonfile/data.json');
+  //   final List<dynamic> jsonData = json.decode(response);
+  //   for (var event in jsonData) {
+  //     _addAppointmentFromJson(event);
+  //   }
+  //   setState(() {
+  //     _calendarDataSource = AdvertiseDataSource(_appointments);
+  //   });
+  // }
 
   // void _changeCalendarView(CalendarView view) {
   //   setState(() {
@@ -47,69 +69,69 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
   //   });
   // }
 
-  void _addAppointmentFromJson(Map<String, dynamic> event) {
-    final eventName = event['event_name'];
-    final startDate = DateTime.parse(event['start_date']);
-    final endDate = DateTime.parse(event['end_date']);
-    final startTime = TimeOfDay(
-      hour: int.parse(event['start_time'].split(':')[0]),
-      minute: int.parse(event['start_time'].split(':')[1]),
-    );
-    final endTime = TimeOfDay(
-      hour: int.parse(event['end_time'].split(':')[0]),
-      minute: int.parse(event['end_time'].split(':')[1]),
-    );
-    final recurrenceType = event['recurrence_type'];
-    final interval = event['interval'];
-    final count = event['count'];
-    final note = event['note'];
+  // void _addAppointmentFromJson(Map<String, dynamic> event) {
+  //   final eventName = event['event_name'];
+  //   final startDate = DateTime.parse(event['start_date']);
+  //   final endDate = DateTime.parse(event['end_date']);
+  //   final startTime = TimeOfDay(
+  //     hour: int.parse(event['start_time'].split(':')[0]),
+  //     minute: int.parse(event['start_time'].split(':')[1]),
+  //   );
+  //   final endTime = TimeOfDay(
+  //     hour: int.parse(event['end_time'].split(':')[0]),
+  //     minute: int.parse(event['end_time'].split(':')[1]),
+  //   );
+  //   final recurrenceType = event['recurrence_type'];
+  //   final interval = event['interval'];
+  //   final count = event['count'];
+  //   final note = event['note'];
 
-    final startDateTime = DateTime(
-      startDate.year,
-      startDate.month,
-      startDate.day,
-      startTime.hour,
-      startTime.minute,
-    );
-    final endDateTime = DateTime(
-      endDate.year,
-      endDate.month,
-      endDate.day,
-      endTime.hour,
-      endTime.minute,
-    );
+  //   final startDateTime = DateTime(
+  //     startDate.year,
+  //     startDate.month,
+  //     startDate.day,
+  //     startTime.hour,
+  //     startTime.minute,
+  //   );
+  //   final endDateTime = DateTime(
+  //     endDate.year,
+  //     endDate.month,
+  //     endDate.day,
+  //     endTime.hour,
+  //     endTime.minute,
+  //   );
 
-    String recurrenceRule = '';
-    if (recurrenceType != 'None') {
-      switch (recurrenceType) {
-        case 'Daily':
-          recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval;COUNT=$count';
-          break;
-        case 'Weekly':
-          recurrenceRule =
-              'FREQ=WEEKLY;BYDAY=${_getDayOfWeek(startDate)};INTERVAL=$interval;COUNT=$count';
-          break;
-        case 'Monthly':
-          recurrenceRule =
-              'FREQ=MONTHLY;BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
-          break;
-        case 'Yearly':
-          recurrenceRule =
-              'FREQ=YEARLY;BYMONTH=${startDate.month};BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
-          break;
-      }
-    }
+  //   String recurrenceRule = '';
+  //   if (recurrenceType != 'None') {
+  //     switch (recurrenceType) {
+  //       case 'Daily':
+  //         recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval;COUNT=$count';
+  //         break;
+  //       case 'Weekly':
+  //         recurrenceRule =
+  //             'FREQ=WEEKLY;BYDAY=${_getDayOfWeek(startDate)};INTERVAL=$interval;COUNT=$count';
+  //         break;
+  //       case 'Monthly':
+  //         recurrenceRule =
+  //             'FREQ=MONTHLY;BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
+  //         break;
+  //       case 'Yearly':
+  //         recurrenceRule =
+  //             'FREQ=YEARLY;BYMONTH=${startDate.month};BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
+  //         break;
+  //     }
+  //   }
 
-    final appointment = Appointment(
-      startTime: startDateTime,
-      endTime: endDateTime,
-      subject: eventName,
-      notes: note,
-      recurrenceRule: recurrenceRule,
-      color: Colors.blue,
-    );
-    _appointments.add(appointment);
-  }
+  //   final appointment = Appointment(
+  //     startTime: startDateTime,
+  //     endTime: endDateTime,
+  //     subject: eventName,
+  //     notes: note,
+  //     recurrenceRule: recurrenceRule,
+  //     color: Colors.blue,
+  //   );
+  //   _appointments.add(appointment);
+  // }
 
   String _getDayOfWeek(DateTime date) {
     switch (date.weekday) {
@@ -134,7 +156,6 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
 
   @override
   Widget build(BuildContext context) {
-    final appointments = Provider.of<AppointmentProvider>(context).appointments;
     return Scaffold(
       appBar: const SmartPoleAppBar(
         title: "Smart Pole Scheduler", // Custom text
@@ -153,7 +174,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
           backgroundColor: Colors.blue,
         ),
         firstDayOfWeek: 1,
-        dataSource: AdvertiseDataSource(appointments),
+        dataSource: _calendarDataSource,
         allowDragAndDrop: true,
         showNavigationArrow: false,
         showDatePickerButton: true,
@@ -162,10 +183,10 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
         showCurrentTimeIndicator: true,
         allowAppointmentResize: true,
         cellBorderColor: Colors.transparent,
-        onTap: handleCalendarTap,
+        // onTap: handleCalendarTap,
         monthViewSettings: const MonthViewSettings(
-          appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-        ),
+            showAgenda: true,
+            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurpleAccent,
@@ -193,7 +214,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
 
   void handleCalendarTap(CalendarTapDetails details) {
     if (details.targetElement == CalendarElement.appointment) {
-      final Appointment appointment = details.appointments!.first;
+      final CustomAppointment appointment = details.appointments!.first;
       EventDetailsDialog.show(context, appointment,
           (Appointment appointmentToDelete) {
         setState(() {
@@ -242,21 +263,13 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
     );
   }
 
-  List<Appointment> getAppointments() {
-    List<Appointment> meetings = <Appointment>[];
-    final DateTime today = DateTime.now();
-    final DateTime startTime =
-        DateTime(today.year, today.month, today.day, 9, 0, 0);
-    final DateTime endTime = startTime.add(const Duration(hours: 2));
+  // List<CustomAppointment> getAppointments() {
+  //   List<CustomAppointment> meetings = <CustomAppointment>[];
+  //   final DateTime today = DateTime.now();
+  //   final DateTime startTime =
+  //       DateTime(today.year, today.month, today.day, 9, 0, 0);
+  //   final DateTime endTime = startTime.add(const Duration(hours: 2));
 
-    return meetings;
-  }
-}
-
-class AdvertiseDataSource extends CalendarDataSource {
-  AdvertiseDataSource(List<Appointment> appointments) {
-    this.appointments = appointments;
-  }
-
-  Appointment getAppointment(int index) => appointments![index];
+  //   return meetings;
+  // }
 }

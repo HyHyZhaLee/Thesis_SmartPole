@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/appointment_extension.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
 import 'package:flutter_app/AppFunction/get_event_details.dart'; // Import the file where GetEventsDetails is defined
 
 class EventDetailsDialog {
   static Future<void> show(
-    BuildContext context, 
-    Appointment appointment,
+    BuildContext context,
+    CustomAppointment appointment,
     Function(Appointment) onDelete,
-    ) async {
+  ) async {
     const double bodyFontSize = 20;
     const double headerFontSize = 20;
     const double subjectFontSize = 36;
@@ -95,7 +95,8 @@ class EventDetailsDialog {
                                   ),
                                 ),
                                 Text(
-                                  GetEventsDetails.formatDate(appointment.endTime),
+                                  GetEventsDetails.formatDate(
+                                      appointment.endTime),
                                   style: const TextStyle(
                                     fontSize: bodyFontSize,
                                   ),
@@ -138,7 +139,8 @@ class EventDetailsDialog {
                                 ),
                               ),
                               Text(
-                                GetEventsDetails.formatTime(appointment.startTime),
+                                GetEventsDetails.formatTime(
+                                    appointment.startTime),
                                 style: const TextStyle(
                                   fontSize: bodyFontSize,
                                 ),
@@ -160,7 +162,8 @@ class EventDetailsDialog {
                                 ),
                               ),
                               Text(
-                                GetEventsDetails.formatTime(appointment.endTime),
+                                GetEventsDetails.formatTime(
+                                    appointment.endTime),
                                 style: const TextStyle(
                                   fontSize: bodyFontSize,
                                 ),
@@ -239,10 +242,9 @@ class EventDetailsDialog {
                                               ),
                                             ),
                                             Text(
-                                              (GetEventsDetails
-                                                              .recurrenceInterval(
-                                                                  appointment
-                                                                      .recurrenceRule) !=
+                                              (GetEventsDetails.recurrenceInterval(
+                                                              appointment
+                                                                  .recurrenceRule) !=
                                                           null &&
                                                       GetEventsDetails
                                                               .recurrenceInterval(
@@ -251,9 +253,9 @@ class EventDetailsDialog {
                                                           0)
                                                   ? '1'
                                                   : GetEventsDetails
-                                                      .recurrenceInterval(
-                                                          appointment
-                                                              .recurrenceRule)
+                                                          .recurrenceInterval(
+                                                              appointment
+                                                                  .recurrenceRule)
                                                       .toString(),
                                               style: const TextStyle(
                                                 fontSize: bodyFontSize,
@@ -286,8 +288,9 @@ class EventDetailsDialog {
                                                                       .recurrenceRule)! >
                                                           0)
                                                   ? GetEventsDetails
-                                                      .recurrenceCount(appointment
-                                                          .recurrenceRule)
+                                                          .recurrenceCount(
+                                                              appointment
+                                                                  .recurrenceRule)
                                                       .toString()
                                                   : 'Infinity',
                                               style: const TextStyle(

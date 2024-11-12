@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/event.dart';
+import 'package:flutter_app/model/appointment_extension.dart';
+
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-class EventProvider extends ChangeNotifier {
-  final List<Event> _events = [];
+class CustomAppointmentProvider extends ChangeNotifier {
+  final List<CustomAppointment> _appointments = [];
 
-  List<Event> get events => _events;
+  List<CustomAppointment> get appointments => _appointments;
 
   DateTime _selectedDate = DateTime.now();
 
@@ -13,11 +14,11 @@ class EventProvider extends ChangeNotifier {
 
   void setDate(DateTime date) => _selectedDate = date;
 
-  void addEvent(Event event) {
-    _events.add(event);
-
+  void addAppointment(CustomAppointment event) {
+    _appointments.add(event);
+    print("add Triggfered");
     notifyListeners();
-  } 
+  }
 }
 
 class AppointmentProvider extends ChangeNotifier {
