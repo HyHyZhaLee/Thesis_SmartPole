@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_app/widgets/add_event_dialog.dart';
@@ -206,19 +208,31 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
   //       );
 
   void handleCalendarTap(CalendarTapDetails details) {
-    if (details.targetElement == CalendarElement.appointment) {
+    if (details.targetElement == CalendarElement.appointment &&
+        details.appointments != null &&
+        details.appointments!.isNotEmpty) {
       final CustomAppointment appointment = details.appointments!.first;
-      EventDetailsDialog.show(context, appointment,
-          (Appointment appointmentToDelete) {
-        setState(() {
-          _appointments.remove(appointmentToDelete);
-        });
-      });
-      if (_calendarView == CalendarView.month) {
-        setState(() {
-          _calendarView = CalendarView.day;
-        });
+      EventDetailsDialog.show(
+        context,
+        appointment,
+      );
+    } else if (details.targetElement == CalendarElement.calendarCell &&
+        details.date != null &&
+        (details.appointments == null || details.appointments!.isEmpty)) {
+      if (kDebugMode) {
+        print("Tapped on Date: ${details.date}");
       }
+      // Here you can handle other actions like navigating to an add event page
+      navigateToAddEventPage(context, details.date);
+    }
+  }
+
+  void navigateToAddEventPage(BuildContext context, DateTime? selectedDate) {
+    if (selectedDate != null) {
+      Navigator.of(context).push(AddEventPageRuote(
+          page: AddEventPage(
+        date: selectedDate,
+      )));
     }
   }
 

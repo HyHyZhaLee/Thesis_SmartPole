@@ -1,15 +1,19 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/AppFunction/global_variables.dart';
 import 'package:flutter_app/model/appointment_extension.dart';
 import 'package:flutter_app/utils/custom_route.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_app/AppFunction/get_event_details.dart'; // Import the file where GetEventsDetails is defined
 import 'package:flutter_app/widgets/add_event_dialog.dart';
+import 'package:flutter_app/provider/event_provider.dart';
+import 'package:provider/provider.dart';
 
 class EventDetailsDialog {
   static Future<void> show(
     BuildContext context,
     CustomAppointment appointment,
-    Function(Appointment) onDelete,
   ) async {
     const double bodyFontSize = 20;
     const double headerFontSize = 20;
@@ -382,16 +386,15 @@ class EventDetailsDialog {
                 ),
               ),
               onPressed: () {
-                Navigator.of(context)
-                    .push(AddEventPageRuote(page: const AddEventPage()));
                 Navigator.of(context).pop();
+                Navigator.of(context).push(AddEventPageRuote(
+                    page: AddEventPage(appointment: appointment)));
               },
             ),
             TextButton(
               onPressed: () {
                 // Assuming you have access to _appointments and setState here
-                onDelete(appointment);
-                Navigator.of(context).pop();
+                deleteAppointment(context, appointment);
               },
               child: const Text(
                 'Delete',
@@ -406,5 +409,45 @@ class EventDetailsDialog {
         );
       },
     );
+  }
+
+  static void deleteAppointment(
+      BuildContext context, CustomAppointment appointment) {
+    // Assuming Firebase has been initialized in the main.dart or similar global scope
+    if (kDebugMode) {
+      print(appointment.firebaseKey);
+    }
+    DatabaseReference ref = global_databaseReference
+        .child("Schedule light")
+        .child("name_event: ${appointment.subject}")
+        .child("${appointment.firebaseKey}");
+
+    print("${appointment.firebaseKey}");
+    print("name_event: ${appointment.subject}");
+
+    ref.remove().then((_) {
+      if (kDebugMode) {
+        print("Deleted appointment from Firebase successfully");
+      }
+      // Now remove from the local list
+      // ignore: use_build_context_synchronously
+      Provider.of<CustomAppointmentProvider>(context, listen: false)
+          .deleteAppointment(appointment);
+
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pop(); // Close the dialog
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Appointment deleted successfully')),
+      );
+    }).catchError((error) {
+      if (kDebugMode) {
+        print("Failed to delete appointment from Firebase: $error");
+      }
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete appointment')),
+      );
+    });
   }
 }

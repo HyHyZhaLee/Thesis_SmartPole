@@ -12,10 +12,26 @@ class CustomAppointmentProvider extends ChangeNotifier {
 
   DateTime get selectedDate => _selectedDate;
 
-  void setDate(DateTime date) => _selectedDate = date;
+  void setDate(DateTime date) {
+    _selectedDate = date;
+    notifyListeners();
+  }
 
   void addAppointment(CustomAppointment event) {
     _appointments.add(event);
+
+    notifyListeners();
+  }
+
+  void deleteAppointment(CustomAppointment appointment) {
+    _appointments.remove(appointment);
+    notifyListeners();
+  }
+
+  void editAppointment(
+      CustomAppointment newAppointment, CustomAppointment oldAppointment) {
+    final index = _appointments.indexOf(oldAppointment);
+    _appointments[index] = newAppointment;
 
     notifyListeners();
   }

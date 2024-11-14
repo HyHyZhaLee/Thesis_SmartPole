@@ -1,5 +1,8 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/AppFunction/global_variables.dart';
 import 'package:flutter_app/provider/event_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -21,10 +24,12 @@ class TextSizes {
 
 class AddEventPage extends StatefulWidget {
   final CustomAppointment? appointment;
+  final DateTime? date;
 
   const AddEventPage({
     super.key,
     this.appointment,
+    this.date,
   });
 
   @override
@@ -36,20 +41,27 @@ class _AddEventPageStage extends State<AddEventPage> {
   late DateTime _startTime;
   late DateTime _endTime;
 
-  final TextEditingController _subjectController = TextEditingController();
-  final TextEditingController _notesController = TextEditingController();
+  TextEditingController _subjectController = TextEditingController();
+  TextEditingController _notesController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.appointment == null) {
+    if (widget.appointment == null && widget.date == null) {
       _startTime = DateTime.now();
       _endTime = _startTime.add(const Duration(hours: 2));
+    } else if (widget.appointment == null && widget.date != null) {
+      _startTime = widget.date!;
+      _endTime = widget.date!.add(const Duration(hours: 2));
     } else {
       final appointment = widget.appointment!;
-
-      _subjectController.text = appointment.subject;
+      if (kDebugMode) {
+        print("editing triggered");
+      }
+      _subjectController =
+          TextEditingController(text: widget.appointment!.subject);
+      _notesController = TextEditingController(text: widget.appointment!.notes);
       _startTime = appointment.startTime;
       _endTime = appointment.endTime;
     }
@@ -495,7 +507,7 @@ class _AddEventPageStage extends State<AddEventPage> {
           padding: const EdgeInsets.all(8),
         ),
         child: const Text(
-          'Add',
+          'Save',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -533,7 +545,7 @@ class _AddEventPageStage extends State<AddEventPage> {
     final isValid = _formKey.currentState!.validate();
 
     if (isValid) {
-      final CustomAppointment appointment = CustomAppointment(
+      CustomAppointment appointment = CustomAppointment(
         subject: _subjectController.text,
         notes: _notesController.text,
         startTime: _startTime,
@@ -541,11 +553,26 @@ class _AddEventPageStage extends State<AddEventPage> {
         color: Colors.blue,
         // recurrenceRule: _handleRecurrenceRule(),
       );
+      final isEditing = widget.appointment != null;
+      print(isEditing);
 
       final provider =
           Provider.of<CustomAppointmentProvider>(context, listen: false);
-      provider.addAppointment(appointment);
-      appointment.saveToFirebase();
+
+      if (isEditing) {
+        DatabaseReference ref = global_databaseReference
+            .child("Schedule light")
+            .child("name_event: ${widget.appointment!.subject}")
+            .child("${widget.appointment!.firebaseKey}");
+        ref.remove();
+
+        provider.editAppointment(appointment, widget.appointment!);
+
+        appointment.saveToFirebase();
+      } else {
+        provider.addAppointment(appointment);
+        appointment.saveToFirebase();
+      }
 
       Navigator.of(context).pop();
     }

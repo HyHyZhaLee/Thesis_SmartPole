@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_app/AppFunction/global_variables.dart';
 import 'package:intl/intl.dart';
 import 'dart:html' as html;
@@ -25,7 +26,6 @@ class CustomAppointment extends Appointment {
     return {
       'station_id': "SmartPole_0002",
       'station_name': "Smart Pole 0002",
-      'subject': subject,
       'device_id': "NEMA_0002",
       'data': {
         'startTime':
@@ -49,13 +49,22 @@ class CustomAppointment extends Appointment {
   }
 
   Future<void> saveToFirebase() async {
-    print("triggering firebase");
-    var pushRef = global_databaseReference.child('Schedule light').push();
+    if (kDebugMode) {
+      print("triggering firebase");
+    }
+    var pushRef = global_databaseReference
+        .child('Schedule light')
+        .child('name_event: $subject')
+        .push();
 
     await pushRef.set(toJson(DateTime.now())).then((_) {
-      print('Data successfully written with key ${pushRef.key}');
+      if (kDebugMode) {
+        print('Data successfully written with key ${pushRef.key}');
+      }
     }).catchError((error) {
-      print('Error writing data: $error');
+      if (kDebugMode) {
+        print('Error writing data: $error');
+      }
     });
 
     firebaseKey = pushRef
