@@ -157,14 +157,6 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SmartPoleAppBar(
-        title: "Smart Pole Scheduler", // Custom text
-        titleStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
       body: SfCalendar(
         view: _calendarView,
         headerHeight: 50,
@@ -175,7 +167,7 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
         ),
         firstDayOfWeek: 1,
         dataSource: _calendarDataSource,
-        allowDragAndDrop: true,
+        allowDragAndDrop: false,
         showNavigationArrow: false,
         showDatePickerButton: true,
         showTodayButton: true,
@@ -183,9 +175,10 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
         showCurrentTimeIndicator: true,
         allowAppointmentResize: true,
         cellBorderColor: Colors.transparent,
-        // onTap: handleCalendarTap,
+        onTap: handleCalendarTap,
         monthViewSettings: const MonthViewSettings(
             showAgenda: true,
+            agendaViewHeight: 200.0,
             appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
       ),
       floatingActionButton: FloatingActionButton(

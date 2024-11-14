@@ -20,8 +20,11 @@ class TextSizes {
 }
 
 class AddEventPage extends StatefulWidget {
+  final CustomAppointment? appointment;
+
   const AddEventPage({
     super.key,
+    this.appointment,
   });
 
   @override
@@ -30,7 +33,6 @@ class AddEventPage extends StatefulWidget {
 
 class _AddEventPageStage extends State<AddEventPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late DateTime _selectedDate;
   late DateTime _startTime;
   late DateTime _endTime;
 
@@ -40,10 +42,17 @@ class _AddEventPageStage extends State<AddEventPage> {
   @override
   void initState() {
     super.initState();
-    super.initState();
-    _selectedDate = DateTime.now();
-    _startTime = DateTime.now();
-    _endTime = _startTime.add(const Duration(hours: 2));
+
+    if (widget.appointment == null) {
+      _startTime = DateTime.now();
+      _endTime = _startTime.add(const Duration(hours: 2));
+    } else {
+      final appointment = widget.appointment!;
+
+      _subjectController.text = appointment.subject;
+      _startTime = appointment.startTime;
+      _endTime = appointment.endTime;
+    }
   }
 
   @override
@@ -409,49 +418,33 @@ class _AddEventPageStage extends State<AddEventPage> {
         child: child!,
       );
 
-  Widget buildNote() => Container(
-        width: MediaQuery.of(context).size.width * 0.6,
-        height: MediaQuery.of(context).size.height * 0.1,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.grey, // Shadow color with opacity
-              spreadRadius: 0, // How much the shadow spreads
-              blurRadius: 4, // The blurring effect of the shadow
-              offset: Offset(0, 2), // Offset in X and Y (horizontal, vertical)
+  Widget buildNote() => TextField(
+        controller: _notesController,
+        decoration: InputDecoration(
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.black, // Border color
+              width: 1.0, // Border width
             ),
-          ],
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: TextField(
-          controller: _notesController,
-          decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.black, // Border color
-                width: 1.0, // Border width
-              ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.black, // Border color when focused
-                width: 2.0, // Border width when focused
-              ),
-              borderRadius:
-                  BorderRadius.circular(12), // Optional: Adjust border radius
-            ),
-            labelStyle: const TextStyle(
-              fontSize: TextSizes.bodyTextSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            alignLabelWithHint: true,
+            borderRadius: BorderRadius.circular(12),
           ),
-          maxLines: 4,
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.black, // Border color when focused
+              width: 2.0, // Border width when focused
+            ),
+            borderRadius:
+                BorderRadius.circular(12), // Optional: Adjust border radius
+          ),
+          labelStyle: const TextStyle(
+            fontSize: TextSizes.bodyTextSize,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          alignLabelWithHint: true,
         ),
+        maxLines: 4,
       );
 
   Widget buildCancelSaveButton() => IntrinsicHeight(
@@ -548,12 +541,11 @@ class _AddEventPageStage extends State<AddEventPage> {
         color: Colors.blue,
         // recurrenceRule: _handleRecurrenceRule(),
       );
-      print(_startTime.toString());
-      print(_endTime.toString());
-      print("Save is pressed");
+
       final provider =
           Provider.of<CustomAppointmentProvider>(context, listen: false);
       provider.addAppointment(appointment);
+      appointment.saveToFirebase();
 
       Navigator.of(context).pop();
     }

@@ -1,12 +1,14 @@
 import 'dart:convert';
+import 'package:flutter_app/AppFunction/global_variables.dart';
 import 'package:intl/intl.dart';
 import 'dart:html' as html;
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CustomAppointment extends Appointment {
-  final String firebaseKey;
+  String? firebaseKey;
 
   CustomAppointment({
     required super.subject,
@@ -19,24 +21,45 @@ class CustomAppointment extends Appointment {
           notes: notes,
         );
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson(DateTime timeStamp) {
     return {
       'station_id': "SmartPole_0002",
       'station_name': "Smart Pole 0002",
-      'action': "schedule light",
-      'data': [
-        {
-          'firebaseKey': firebaseKey,
-          'startTime':
-              "${DateFormat("dd-MM-yyyy HH:mm:ss").format(startTime)} GMT+0700",
-          'endTime':
-              "${DateFormat("dd-MM-yyyy HH:mm:ss").format(endTime)} GMT+0700",
-          'subject': subject,
-          'description': notes,
-          'color': color.value,
-        }
-      ],
+      'subject': subject,
+      'device_id': "NEMA_0002",
+      'data': {
+        'startTime':
+            "${DateFormat("dd-MM-yyyy HH:mm:ss").format(startTime)} GMT+0700",
+        'endTime':
+            "${DateFormat("dd-MM-yyyy HH:mm:ss").format(endTime)} GMT+0700",
+        'description': notes,
+        'color': color.value,
+      },
+      'timestamp':
+          "${DateFormat("dd-MM-yyyy HH:mm:ss").format(DateTime.now())} GMT+0700"
     };
+  }
+
+  // Generate a random Firebase key
+  String generateFirebaseKey() {
+    var rng = Random();
+    var key = List.generate(20, (index) => rng.nextInt(100).toString()).join();
+    firebaseKey = key;
+    return key;
+  }
+
+  Future<void> saveToFirebase() async {
+    print("triggering firebase");
+    var pushRef = global_databaseReference.child('Schedule light').push();
+
+    await pushRef.set(toJson(DateTime.now())).then((_) {
+      print('Data successfully written with key ${pushRef.key}');
+    }).catchError((error) {
+      print('Error writing data: $error');
+    });
+
+    firebaseKey = pushRef
+        .key; // Save the generated Firebase key in your; // Save the generated Firebase key in your
   }
 
   // Factory constructor to create a CustomAppointment from JSON

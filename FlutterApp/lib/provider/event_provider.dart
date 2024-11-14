@@ -16,7 +16,7 @@ class CustomAppointmentProvider extends ChangeNotifier {
 
   void addAppointment(CustomAppointment event) {
     _appointments.add(event);
-    print("add Triggfered");
+
     notifyListeners();
   }
 }
