@@ -10,7 +10,7 @@ class MQTTClientHelper:
         self.username = username  # Username for broker authentication
         self.password = password  # Password for broker authentication
         self.client_id = client_id  # Unique ID for the MQTT client
-        self.client = mqtt.Client(client_id)  # Create the MQTT client
+        self.client = mqtt.Client(client_id, protocol=mqtt.MQTTv311) # Create the MQTT client
         self.client.username_pw_set(username, password)  # Set credentials
         self.client.on_connect = self.on_connect  # Assign connect event handler
         self.client.on_message = self.on_message  # Assign message event handler
