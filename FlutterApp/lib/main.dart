@@ -16,6 +16,8 @@ import 'pages/security_cameras_page.dart';
 import 'pages/advertisement_schedule_page.dart';
 import 'pages/environmental_sensors_page.dart';
 import 'pages/historical_data_page.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'provider/page_controller_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,9 +49,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => AppointmentProvider(),
-        ),
+        ChangeNotifierProvider(create: (_) => AppointmentProvider()),
+        ChangeNotifierProvider(create: (_) => PageControllerProvider()), // Thêm dòng này
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -57,7 +58,7 @@ class _MyAppState extends State<MyApp> {
             Theme.of(context).textTheme,
           ),
           primaryColor: Colors.white,
-          scaffoldBackgroundColor: Colors.white,
+          scaffoldBackgroundColor: Color(0xFFF9F9F9),
         ),
         home: const DashboardScreen(),
       ),
@@ -73,7 +74,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int _selectedIndex = 1;
+  // int _selectedIndex = 1;
 
   static final List<Widget> _pages = <Widget>[
     const HomePage(),
@@ -87,11 +88,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const HomePage()
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onItemTapped(int index) async {
+    if (index == 8) {
+      final Uri url = Uri.parse('https://github.com/HyHyZhaLee/BK2023_Thesis_SmartPole');
+      if (await canLaunchUrl(url)) launchUrl(url, mode: LaunchMode.externalNonBrowserApplication);
+      else throw Exception('Could not launch $url');
+    } else {
+      context.read<PageControllerProvider>().setSelectedIndex(index == 0 ? 1 : index);
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,11 +109,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               direction: Axis.vertical,
               children: <Widget>[
                 const Expanded(
-                  flex: 126,
+                  // flex: 126,
+                  flex:100,
                   child: SizedBox(), // Replace this with your desired widget
                 ),
                 Expanded(
-                  flex: 889,
+                  // flex: 889,
+                  flex: 900,
                   child: Container(
                     // Margin = navigation drawer before expanding 103 + padding 20
                     margin: USE_BORDER_RADIUS
@@ -122,14 +130,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         borderRadius: USE_BORDER_RADIUS
                             ? BorderRadius.circular(31)
                             : BorderRadius.circular(0),
-                        border: Border.all(
-                            color: PRIMARY_PAGE_BORDER_COLOR, width: 2),
+                        // border: Border.all(
+                        //     color: PRIMARY_PAGE_BORDER_COLOR, width: 0),
                       ),
                       child: ClipRRect(
                         borderRadius: USE_BORDER_RADIUS
                             ? BorderRadius.circular(31)
                             : BorderRadius.circular(0),
-                        child: _pages.elementAt(_selectedIndex),
+                        child: _pages.elementAt(context.watch<PageControllerProvider>().selectedIndex),
                       ),
                     ),
                   ),
@@ -142,8 +150,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             left: 0,
             bottom: 0,
             child: CustomNavigationDrawer(
-              selectedIndex: _selectedIndex,
-              onDestinationSelected: _onItemTapped,
+            selectedIndex: context.watch<PageControllerProvider>().selectedIndex,
+            onDestinationSelected: _onItemTapped,
             ),
           ),
           Positioned(
