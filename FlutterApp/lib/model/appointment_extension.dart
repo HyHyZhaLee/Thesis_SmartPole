@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/AppFunction/global_variables.dart';
 import 'package:intl/intl.dart';
@@ -52,23 +53,53 @@ class CustomAppointment extends Appointment {
     if (kDebugMode) {
       print("triggering firebase");
     }
-    var pushRef = global_databaseReference
-        .child('Schedule light')
-        .child('name_event: $subject')
-        .push();
 
-    await pushRef.set(toJson(DateTime.now())).then((_) {
-      if (kDebugMode) {
-        print('Data successfully written with key ${pushRef.key}');
-      }
-    }).catchError((error) {
-      if (kDebugMode) {
-        print('Error writing data: $error');
-      }
-    });
+    // Tham chiếu đến node "Schedule light"
+    var pushRef = global_databaseReference.child('NEMA_0002').child('Schedule light');
 
-    firebaseKey = pushRef
-        .key; // Save the generated Firebase key in your; // Save the generated Firebase key in your
+    try {
+      // Lấy dữ liệu của lịch mới nhất
+      DatabaseEvent newestScheduleEvent = await pushRef.once();
+
+      String newScheduleName;
+      if (newestScheduleEvent.snapshot.value != null && newestScheduleEvent.snapshot.value is Map) {
+        // Lấy danh sách các tên lịch (các key)
+        Map<String, dynamic> schedules = Map<String, dynamic>.from(newestScheduleEvent.snapshot.value as Map);
+        List<String> scheduleNames = schedules.keys.toList();
+
+        // Sắp xếp danh sách tên lịch theo thứ tự giảm dần
+        scheduleNames.sort((a, b) => b.compareTo(a));
+
+        // Tên lịch mới nhất
+        String newestScheduleName = scheduleNames.first;
+
+        // Cộng thêm 1 vào lịch mới nhất
+        int newestNumber = int.tryParse(newestScheduleName.replaceAll(RegExp(r'\D'), '')) ?? 0;
+        newScheduleName = 'Schedule ${newestNumber + 1}';
+      } else {
+        // Nếu chưa có lịch nào, đặt tên cho lịch đầu tiên
+        newScheduleName = 'Schedule 1';
+      }
+
+      // Ghi dữ liệu mới vào Firebase
+      var newScheduleRef = pushRef.child(newScheduleName);
+      await newScheduleRef.set(toJson(DateTime.now())).then((_) {
+        if (kDebugMode) {
+          print('Data successfully written with key ${newScheduleRef.key}');
+        }
+      }).catchError((error) {
+        if (kDebugMode) {
+          print('Error writing data: $error');
+        }
+      });
+
+      // Lưu lại key của lịch mới
+      firebaseKey = newScheduleRef.key;
+    } catch (error) {
+      if (kDebugMode) {
+        print('Error occurred: $error');
+      }
+    }
   }
 
   // Factory constructor to create a CustomAppointment from JSON
