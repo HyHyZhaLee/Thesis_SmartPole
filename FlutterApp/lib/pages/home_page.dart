@@ -1,29 +1,89 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/AppFunction/global_variables.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/services.dart'; // Để sử dụng SystemSound
+import 'package:provider/provider.dart'; // Để sử dụng Provider
+import 'dart:convert'; // Để encode dữ liệu JSON
+import '../AppFunction/global_variables.dart';
+import '../AppFunction/global_helper_function.dart'; // Để dùng getCurrentTimestamp()
 import '../widgets/dropdown_button_widget.dart';
 import '../provider/page_controller_provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  double _currentSliderValue = 0; // Giá trị ban đầu của slider
+  bool _isSwitched = false; // Trạng thái cho slider
+  String _deviceID = 'NEMA_02'; // ID của thiết bị
+  String _statusMessage = 'Disconnected'; // Trạng thái kết nối
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialBrightness(); // Load dữ liệu ban đầu từ Firebase
+  }
+
+  Future<void> _loadInitialBrightness() async {
+    try {
+      DatabaseEvent event = await global_databaseReference.child(_deviceID).child("Newest data").once();
+
+      if (event.snapshot.value != null && event.snapshot.value is Map) {
+        final data = event.snapshot.value as Map<dynamic, dynamic>;
+        setState(() {
+          _currentSliderValue = (data['brightness'] ?? 0).toDouble();
+        });
+        print('Initial brightness for $_deviceID: $_currentSliderValue');
+      }
+    } catch (e) {
+      print('Failed to load initial brightness: $e');
+    }
+  }
+
+  void _publishBrightness(double value, String deviceID) {
+    setState(() {
+      _currentSliderValue = value;
+    });
+
+    var message = jsonEncode({
+      "station_id": "SmartPole_0002",
+      "station_name": "Smart Pole 0002",
+      "timestamp": getCurrentTimestamp(),
+      "action": "control light",
+      "device_id": deviceID,
+      "data": value.round().toString()
+    });
+
+    // Gửi dữ liệu qua MQTT
+    global_mqttHelper.publish(MQTT_TOPIC, message);
+
+    // Cập nhật dữ liệu lên Firebase
+    global_databaseReference.child(deviceID).child("Newest data").set({
+      "brightness": value.round(),
+      "timestamp": getCurrentTimestamp(),
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 10, right:10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: Column(
         children: [
           Expanded(
             child: Row(
               children: [
-                // Left part - Image with overlay labels, wrapped with a white border
+                // Phần bên trái - Hình ảnh và slider
                 Expanded(
                   flex: 45,
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFFE6E5F2), width: 1), // Khung viền màu trắng
+                      border: Border.all(color: const Color(0xFFE6E5F2), width: 1),
                       borderRadius: BorderRadius.circular(28),
-                      color: Color(0xFFFFFFFF),
+                      color: const Color(0xFFFFFFFF),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +111,43 @@ class HomePage extends StatelessWidget {
                                   height: 747,
                                 ),
                               ),
-                              // Buttons
+                              // Slider
+                              Positioned(
+                                left: 70,
+                                top: 335,
+                                bottom: 0,
+                                child: RotatedBox(
+                                  quarterTurns: 3,
+                                  child: SliderTheme(
+                                    data: SliderTheme.of(context).copyWith(
+                                      activeTrackColor: Colors.blue,
+                                      inactiveTrackColor: const Color(0xFFF4EEF4),
+                                      trackShape: const RoundedRectSliderTrackShape(),
+                                      trackHeight: 45.0,
+                                      thumbShape: const RoundSliderThumbShape(
+                                          enabledThumbRadius: 25),
+                                      overlayColor: Colors.blue.withAlpha(10),
+                                      overlayShape: const RoundSliderOverlayShape(
+                                          overlayRadius: 60),
+                                    ),
+                                    child: Slider(
+                                      value: _currentSliderValue,
+                                      min: 0,
+                                      max: 100,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _currentSliderValue = value;
+                                          _isSwitched = _currentSliderValue > 0;
+                                        });
+                                      },
+                                      onChangeEnd: (value) {
+                                        _publishBrightness(value, _deviceID);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Các nút
                               Positioned(
                                 top: 0,
                                 left: 70,
@@ -89,153 +185,152 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Khoảng cách 20px giữa phần trái và phải
                 const SizedBox(width: 20),
                 // Right part - Placeholder for additional UI
                 Expanded(
-                  flex: 55,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                      borderRadius: BorderRadius.circular(28),
-                      color: Color(0xFFF5F5F5),
-                    ),
-                    padding: const EdgeInsets.only(left: 44, right: 31),
-                    child: Column(
-                      children: [
-                        Expanded(
-                            flex: 6,
-
-                            child: Row(
-                              children: [
-                                Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: const Text(
-                                      'Physical information',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600, // Đặt fontWeight bên trong TextStyle
-                                      ),
-                                    ),
-                                  )
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                    child: Container(
-                                      alignment: Alignment.centerRight,
-                                      child:
-                                      IconButton(
-                                          onPressed: (){
-                                            print('Refresh button pressed');
-                                            //TODO: Refresh button pressed
-                                          },
-                                          icon: Image.asset(
-                                            'lib/assets/icons/refresh_icon.png',
-                                            height: 30)),
-                                    )
-                                ),
-                                const SizedBox(width: 20),
-                              ],
-                            )
+                    flex: 55,
+                    child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Color(0xFFE6E5F2), width: 1),
+                          borderRadius: BorderRadius.circular(28),
+                          color: Color(0xFFF5F5F5),
                         ),
-                        Expanded(
-                            flex: 18,
-                            child: Container(
-                              child: Row(
-                                children: [
+                        padding: const EdgeInsets.only(left: 44, right: 31),
+                        child: Column(
+                          children: [
+                            Expanded(
+                                flex: 6,
 
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                                        borderRadius: BorderRadius.circular(28),
-                                        color: Color(0xFF3ACBE9),
-                                      ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          child: const Text(
+                                            'Physical information',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600, // Đặt fontWeight bên trong TextStyle
+                                            ),
+                                          ),
+                                        )
                                     ),
-                                  ),
-                                  const SizedBox(width: 20),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                                        borderRadius: BorderRadius.circular(28),
-                                        color: Color(0xFFF2946D),
-                                      ),
+                                    Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          alignment: Alignment.centerRight,
+                                          child:
+                                          IconButton(
+                                              onPressed: (){
+                                                print('Refresh button pressed');
+                                                //TODO: Refresh button pressed
+                                              },
+                                              icon: Image.asset(
+                                                  'lib/assets/icons/refresh_icon.png',
+                                                  height: 30)),
+                                        )
                                     ),
-                                  ),
-                                  const SizedBox(width: 20),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                                        borderRadius: BorderRadius.circular(28),
-                                        color: Color(0xFF6F5CEA),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            )
-                        ),
-                        const SizedBox(height: 20),
-                        Expanded(
-                            flex: 33,
-                            child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                                  borderRadius: BorderRadius.circular(28),
-                                  color: Color(0xFFFFFFFF),
-                                ),
-                              )
-                        ),Expanded(
-                            flex: 6,
+                                    const SizedBox(width: 20),
+                                  ],
+                                )
+                            ),
+                            Expanded(
+                                flex: 18,
+                                child: Container(
+                                    child: Row(
+                                      children: [
 
-                            child: Row(
-                              children: [
-                                Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: const Text(
-                                        'History graph',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600, // Đặt fontWeight bên trong TextStyle
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(color: Color(0xFFE6E5F2), width: 1),
+                                              borderRadius: BorderRadius.circular(28),
+                                              color: Color(0xFF3ACBE9),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        const SizedBox(width: 20),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(color: Color(0xFFE6E5F2), width: 1),
+                                              borderRadius: BorderRadius.circular(28),
+                                              color: Color(0xFFF2946D),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 20),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(color: Color(0xFFE6E5F2), width: 1),
+                                              borderRadius: BorderRadius.circular(28),
+                                              color: Color(0xFF6F5CEA),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     )
-                                ),
-                                Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      alignment: Alignment.centerRight,
-                                      child: DropdownButtonWidget(label: "temperature"),
+                                )
+                            ),
+                            const SizedBox(height: 20),
+                            Expanded(
+                                flex: 33,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Color(0xFFE6E5F2), width: 1),
+                                    borderRadius: BorderRadius.circular(28),
+                                    color: Color(0xFFFFFFFF),
+                                  ),
+                                )
+                            ),Expanded(
+                                flex: 6,
+
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          child: const Text(
+                                            'History graph',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600, // Đặt fontWeight bên trong TextStyle
+                                            ),
+                                          ),
+                                        )
                                     ),
-                                ),
-                                const SizedBox(width: 20),
-                              ],
-                            )
-                        ),
-                        Expanded(
-                            flex: 30,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                                borderRadius: BorderRadius.circular(28),
-                                color: Color(0xFFFFFFFF),
-                              ),
-                            )
-                        ),
-                        const SizedBox(height: 20),
-                      ],
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        alignment: Alignment.centerRight,
+                                        child: const DropdownButtonWidget(label: "temperature"),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 20),
+                                  ],
+                                )
+                            ),
+                            Expanded(
+                                flex: 30,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Color(0xFFE6E5F2), width: 1),
+                                    borderRadius: BorderRadius.circular(28),
+                                    color: Color(0xFFFFFFFF),
+                                  ),
+                                )
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                        )
                     )
-                    )
-                  ),
+                ),
               ],
             ),
           ),
@@ -245,9 +340,8 @@ class HomePage extends StatelessWidget {
   }
 
 
-
-  // Method to create button widget
-  Widget _buildButton(String label, BuildContext context,{int pageIndex = 1}) {
+  // Nút bấm
+  Widget _buildButton(String label, BuildContext context, {int pageIndex = 1}) {
     return SizedBox(
       width: 201,
       height: 53,
@@ -274,6 +368,4 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
-
 }

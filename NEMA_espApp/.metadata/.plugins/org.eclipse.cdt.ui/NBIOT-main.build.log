@@ -10,4 +10,4 @@ Used Flash size :  833635 bytes
          .rodata:  158812 bytes
 Total image size:  942653 bytes (.bin may be padded larger)
 C:\Espressif\python_env\idf5.1_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.1.2/\components\partition_table\gen_esp32part.py D:\Documents\Github\Thesis_SmartPole\NEMA_espApp\NBIOT-main\build\partition_table\partition-table.bin
-Total time taken to build the project: 679 ms
+Total time taken to build the project: 43,986 ms
