@@ -1,5 +1,22 @@
 #include "light_control.h"
 
+// Constructor function for LightControl
+LightControl::LightControl(DynamicJsonDocument &document)
+{
+  station_id = document["station_id"].as<String>();
+  station_name = document["station_name"].as<String>();
+  action = document["action"].as<String>();
+  device_id = document["device_id"].as<String>();
+
+  if (document.containsKey("data") && document["data"].is<JsonObject()>())
+  {
+    JsonObject data = document["data"].as<JsonObject>();
+    from = data["from"].as<String>();
+    to = data["to"].as<String>();
+    dimming = data["dimming"].as<String>();
+  }
+}
+
 String LightControl :: createMQTTLightControlTopic(){
   DynamicJsonDocument doc(1024);
 
@@ -27,5 +44,10 @@ void LightControl :: publish(String feedName){
   String message = createMQTTLightControlTopic();
 
   publishData(feedName, message);
+}
+
+void LightControl :: controlLight()
+{
+  
 }
 

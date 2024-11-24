@@ -1,18 +1,24 @@
-#include <Arduino.h>
+#include "globals.h"
 
-// put function declarations here:
-int myFunction(int, int);
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(115200);
+  if (_IS_DEBUG_MODE_)
+  {
+    lora.Init(&Serial2, 9600, SERIAL_8N1, UART_LORA_RXD_DEBUG_PIN, UART_LORA_TXD_DEBUG_PIN);
+  }
+  else
+  {
+    lora.Init(&Serial1, 9600, SERIAL_8N1, UART_LORA_TXD_PIN, UART_LORA_RXD_PIN);
+  }
+
+  delay(1000);
+
+
+  task_init();
+  connect_init();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
 }

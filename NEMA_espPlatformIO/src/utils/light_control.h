@@ -15,7 +15,7 @@ class LightControl{
 
   public:
     LightControl(){};
-    LightControl(DynamicJsonDocument& json);
+    LightControl(DynamicJsonDocument& doc);
     ~LightControl(){};
     LightControl(
       String station_id, 
@@ -48,8 +48,7 @@ class LightControl{
     String getDimming(){ return dimming; }
     String createMQTTLightControlTopic() ;
     void publish(String feedName);
-    void fromJson(const DynamicJsonDocument &document);
-
+    void controlLight();
   };
 
   #endif

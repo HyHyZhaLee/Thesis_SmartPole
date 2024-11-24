@@ -5,10 +5,17 @@
 
 
 // DEFINE PIN
+#define POLE_LED_PIN                5
 
+// DEFINE SETUP FOR PWM LEDC POLE LED
+#define LEDC_CHANEL                 0
+#define FREQ_HZ                     5000
+#define RESOLUTION                  13
+#define INIT_DUTY_PWM               0
+#define MAX_DUTY_PWM                (1 << 13) -1 // 2^13 -1
 
 // DEFINE LED
-#define INBUILD_LED_PIN  2
+#define INBUILD_LED_PIN  2  
 #define LED_ON           HIGH
 #define LED_OFF          LOW
 
@@ -29,7 +36,7 @@
 #define MQTT_PASSWORD   " "
 
 #define MQTT_FEED_NOTHING           ""
-#define MQTT_FEED_01                "BK_SmartPole/feeds/V20"
+#define MQTT_FEED_POLE_02                "BK_SmartPole/feeds/V20"
 #define MQTT_FEED_TEST_LORA         "BK_SmartPole/feeds/V5"
 #define MQTT_FEED_TEST_LORA_SEND    "BK_SmartPole/feeds/V4"
 #define MQTT_FEED_TEST_MQTT         "BK_SmartPole/feeds/V3"
@@ -58,6 +65,7 @@
 #define delay_led_blink                 1000
 #define delay_rev_lora_process          1
 #define delay_send_lora_process         10*1000
+#define delay_handle_mqtt_buffer        100
 
 // DEFINE RELAY
 #define RELAY_PIN   18

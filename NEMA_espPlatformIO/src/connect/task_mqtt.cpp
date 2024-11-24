@@ -18,6 +18,9 @@ void callback(char *topic, byte *payload, unsigned int length)
     pload += (char)payload[i];
   }
   printData(MQTT_FEED_NOTHING, pload);
+
+  // STORE BUFFER
+  mqttBuffer.push_back(pload);
 }
 
 bool publishData(String feedName, String message)
@@ -48,7 +51,9 @@ void reconnectMQTT()
     if (client.connect(clientId.c_str(), user.c_str(), password.c_str()))
     { 
       printlnData(MQTT_FEED_NOTHING, "MQTT Connected");
+      
       // Subscribe to topic put in here
+      client.subscribe(MQTT_FEED_POLE_02);
 
       // client.subscribe((String(IO_USERNAME) + "/feeds/relay").c_str());
       // client.subscribe((String(IO_USERNAME) + "/feeds/schedule").c_str());

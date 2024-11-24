@@ -7,6 +7,7 @@
 #include <ArduinoJson.h>
 #include <M5_LoRa_E220_JP.h>
 #include <Preferences.h>
+#include <vector>
 
 // include common files
 #include "../src/common/defines.h"
