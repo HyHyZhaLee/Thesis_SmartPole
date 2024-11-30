@@ -15,8 +15,8 @@ class LightControl{
 
   public:
     LightControl(){};
+    LightControl(String strJson);
     LightControl(DynamicJsonDocument& doc);
-    ~LightControl(){};
     LightControl(
       String station_id, 
       String station_name, 
@@ -32,6 +32,7 @@ class LightControl{
         from(from), 
         to(to), 
         dimming(dimming)  {}
+    ~LightControl(){};
     String getStationId(){ return station_id; }
     void setStationId(String station_id){ this->station_id = station_id; }
     String getStationName(){ return station_name; }
@@ -46,9 +47,8 @@ class LightControl{
     String getTo(){ return to; }
     void setDimming(String dimming){ this->dimming = dimming; }
     String getDimming(){ return dimming; }
-    String createMQTTLightControlTopic() ;
+    String genStringFromJson();
     void publish(String feedName);
-    void controlLight();
   };
 
-  #endif
+#endif

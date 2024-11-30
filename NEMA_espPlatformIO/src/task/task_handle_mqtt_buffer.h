@@ -6,5 +6,6 @@
 extern std :: vector<String> mqttBuffer;
 
 void bufferInit();
+void taskHandleMqttBuffer(void *pvParameter);
 
 #endif

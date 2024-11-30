@@ -15,6 +15,9 @@
 // include connect 
 #include "../src/connect/connect_init.h"
 
+// include device
+#include "../src/device/device_init.h"
+
 // include task
 #include "../src/task/task_init.h"
 

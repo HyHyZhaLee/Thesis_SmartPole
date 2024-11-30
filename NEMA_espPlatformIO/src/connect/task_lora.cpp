@@ -10,13 +10,24 @@ String message;
 String textBuffer;
 bool isConfgured = false;
 
-void taskLora(void *pvParameters)
+void loraSend(String message)
+{
+  if (lora.SendFrame(config, (uint8_t *)(message.c_str()), message.length()) == 0) {
+    printlnData(MQTT_FEED_TEST_LORA_SEND, "Send successfully: " + message);
+  } 
+  else 
+  {
+    printlnData(MQTT_FEED_TEST_LORA_SEND, "Send failed");
+  }
+}
+
+void taskLoraInit(void *pvParameters)
 {
   // Initialize Serial communication
   lora.SetDefaultConfigValue(config);
 
   // Set initial configuration values
-  config.own_address              = 0x0001;
+  config.own_address              = 0x0002;
   config.baud_rate                = BAUD_9600;
   config.air_data_rate            = BW125K_SF9;
   config.subpacket_size           = SUBPACKET_200_BYTE;
@@ -43,20 +54,16 @@ void taskLora(void *pvParameters)
     printlnData(MQTT_FEED_TEST_LORA, "Lora init failed! ");
     while (lora.InitLoRaSetting(config)!= 0)
     {
-      vTaskDelay(pdMS_TO_TICKS(delay_lora_configure));
+      vTaskDelay(delay_lora_configure);
     }
   }
   printlnData(MQTT_FEED_TEST_LORA, "Lora init success! ");
-  while (true) 
-  {
-    vTaskDelay(pdMS_TO_TICKS(delay_lora_configure));
-  }
+  vTaskDelete(NULL);
 }
 
 void taskLoraRecv (void* pvParameters)
 {
-  vTaskDelay(pdMS_TO_TICKS(delay_for_initialization));
-
+  vTaskDelay(delay_for_initialization);
   while (true)
   {
     if (lora.RecieveFrame(&data) == 0)
@@ -65,30 +72,20 @@ void taskLoraRecv (void* pvParameters)
       for (int i = 0; i < data.recv_data_len; i++) {
         textBuffer += (char)data.recv_data[i];
       }
-      printlnData(MQTT_FEED_TEST_LORA_RECV,"Recv message: " + textBuffer);
+      lora_buffer.push_back(textBuffer);
     }
-    vTaskDelay(pdMS_TO_TICKS(delay_rev_lora_process));
+    vTaskDelay(delay_rev_lora_process);
   }
 }
 
 void taskLoraSend(void* pvParameters)
 {
-  vTaskDelay(pdMS_TO_TICKS(delay_for_initialization));
+  vTaskDelay(delay_for_initialization);
   String msg = "Hello, world!";
-
-  while (1) {
-    // ESP32 đọc từ bảng điều khiển
-    // ReadDataFromConsole(msg, (sizeof(msg) / sizeof(msg[0])));
-    if (lora.SendFrame(config, (uint8_t *)(msg.c_str()), msg.length()) == 0) {
-      printlnData(MQTT_FEED_TEST_LORA_SEND, "Send successfully");
-    } 
-    else 
-    {
-      printlnData(MQTT_FEED_TEST_LORA_SEND, "Send failed");
-    }
-
-
-    vTaskDelay(pdMS_TO_TICKS(delay_send_lora_process));
+  while (true)
+  {
+    loraSend(msg);
+    vTaskDelay(delay_lora_configure);
   }
 }
 
@@ -96,5 +93,5 @@ void taskLoraSend(void* pvParameters)
 
 void loraInit(void *pvParameters)
 {
-  xTaskCreate(taskLora, "Recv_Lora", 4096, NULL,1, NULL);
+  xTaskCreate(taskLoraInit, "Recv_Lora", 4096, NULL,1, NULL);
 }

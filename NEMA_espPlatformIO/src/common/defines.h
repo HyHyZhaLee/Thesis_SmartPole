@@ -1,8 +1,23 @@
 // DEFINE DEBUG MODE
-#define _DEBUG_MODE_
-#define _IS_DEBUG_MODE_ true
-// #define _IS_DEBUG_MODE_ false
+// #define _DEBUG_MODE_
+// #define _IS_DEBUG_MODE_ true
+#define _IS_DEBUG_MODE_ false
 
+// DEFINE POLE INFORMATION
+// #define _ESP_NUMBER_ONE_
+#define _ESP_NUMBER_TWO_
+
+#ifdef _ESP_NUMBER_ONE_
+  #define DEVICE_ID                  "NEMA_0002"
+  #define STATION_ID                 "NEMA_0002"
+  #define STATION_NAME               "NEMA_0002"
+#endif
+
+#ifdef _ESP_NUMBER_TWO_
+  #define DEVICE_ID                  "NEMA_0003"
+  #define STATION_ID                 "NEMA_0003"
+  #define STATION_NAME               "NEMA_0003"
+#endif
 
 // DEFINE PIN
 #define POLE_LED_PIN                5
@@ -36,7 +51,7 @@
 #define MQTT_PASSWORD   " "
 
 #define MQTT_FEED_NOTHING           ""
-#define MQTT_FEED_POLE_02                "BK_SmartPole/feeds/V20"
+#define MQTT_FEED_POLE_02           "BK_SmartPole/feeds/V20"
 #define MQTT_FEED_TEST_LORA         "BK_SmartPole/feeds/V5"
 #define MQTT_FEED_TEST_LORA_SEND    "BK_SmartPole/feeds/V4"
 #define MQTT_FEED_TEST_MQTT         "BK_SmartPole/feeds/V3"
@@ -55,17 +70,19 @@
 #define PWM_PIN           5
 
 // DEFINE DELAY
-#define delay_for_initialization        10*1000
-#define delay_test_dimming              1000
-#define delay_wifi                      3600*1000
-#define delay_connect                   100
-#define delay_mqtt                      7000
-#define delay_send_message              60003
-#define delay_lora_configure            10*1000
-#define delay_led_blink                 1000
-#define delay_rev_lora_process          1
-#define delay_send_lora_process         10*1000
-#define delay_handle_mqtt_buffer        100
+#define delay_for_initialization        (10*1000)
+#define delay_test_dimming              (1000)
+#define delay_wifi                      (3600*1000)
+#define delay_connect                   (100)
+#define delay_mqtt                      (7000)
+#define delay_send_message              (60 * 1000)
+#define delay_lora_configure            (60*1000)
+#define delay_led_blink                 (1000)
+#define delay_rev_lora_process          (1)
+#define delay_send_lora_process         (10*1000)
+#define delay_lora_dummy_send           (60*1000+13)
+#define delay_handle_mqtt_buffer        (100)
+#define delay_handle_lora_buffer        (100)
 
 // DEFINE RELAY
 #define RELAY_PIN   18

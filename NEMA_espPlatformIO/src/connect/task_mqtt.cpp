@@ -17,7 +17,7 @@ void callback(char *topic, byte *payload, unsigned int length)
   {
     pload += (char)payload[i];
   }
-  printData(MQTT_FEED_NOTHING, pload);
+  printlnData(MQTT_FEED_NOTHING, pload);
 
   // STORE BUFFER
   mqttBuffer.push_back(pload);
@@ -30,14 +30,14 @@ bool publishData(String feedName, String message)
     String topic = user + "/feeds/" + feedName;
   #endif
   printData(MQTT_FEED_NOTHING, "Publishing to topic: ");
-  printlnData(MQTT_FEED_NOTHING, feedName);
+  printData(MQTT_FEED_NOTHING, feedName + " ");
   printData(MQTT_FEED_NOTHING, "Status: ");
 
   if(client.publish(topic.c_str(), message.c_str(),1)){
-    printlnData(MQTT_FEED_NOTHING, "Success!");
+    printlnData(MQTT_FEED_NOTHING, "Success!: " + message);
     return 1;
   }
-  printlnData(MQTT_FEED_NOTHING, "Failed!");
+  printlnData(MQTT_FEED_NOTHING, "Failed!: " + message);
   return 0;
 }
 
@@ -53,8 +53,9 @@ void reconnectMQTT()
       printlnData(MQTT_FEED_NOTHING, "MQTT Connected");
       
       // Subscribe to topic put in here
-      client.subscribe(MQTT_FEED_POLE_02);
-
+      #ifdef _ESP_NUMBER_ONE_
+        client.subscribe(MQTT_FEED_POLE_02);
+      #endif
       // client.subscribe((String(IO_USERNAME) + "/feeds/relay").c_str());
       // client.subscribe((String(IO_USERNAME) + "/feeds/schedule").c_str());
 
@@ -67,15 +68,13 @@ void reconnectMQTT()
     {
       printData(MQTT_FEED_NOTHING, "MQTT connection failed, rc=");
       printlnData(MQTT_FEED_NOTHING, String(client.state()));
-
-      vTaskDelay(5000 / portTICK_PERIOD_MS);
     }
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
   }
 }
 
 void taskMQTT(void *pvParameters)
 {
-
   while (WiFi.status() != WL_CONNECTED)
   {
     vTaskDelay(delay_connect / portTICK_PERIOD_MS);
@@ -88,7 +87,7 @@ void taskMQTT(void *pvParameters)
   {
     if (!client.connected())
     {
-        reconnectMQTT();
+      reconnectMQTT();
     }
 
     client.loop();
@@ -98,5 +97,5 @@ void taskMQTT(void *pvParameters)
 
 void mqtt_init()
 {
-    xTaskCreate(taskMQTT, "TaskMQTT", 4096, NULL, 1, NULL);
+  xTaskCreate(taskMQTT, "TaskMQTT", 4096, NULL, 1, NULL);
 }

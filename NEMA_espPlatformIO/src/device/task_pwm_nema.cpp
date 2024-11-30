@@ -1,4 +1,4 @@
-#include "task_pwm_light_control.h"
+#include "task_pwm_nema.h"
 
 void pwm_init()
 {
@@ -18,14 +18,13 @@ void pwm_set_duty(int dutyPercent)
 
   ledcWrite(LEDC_CHANEL, dutyPercent);
   ledcWriteTone(LEDC_CHANEL, duty);
+
+  printData(MQTT_FEED_NOTHING, "PWM set duty " + duty);
 }
 
-void task_pwm_light_control(void* pvParameters)
+void task_pwm_light_control_init(void* pvParameters)
 {
   pwm_init();
 
-  while(true)
-  {
-    vTaskDelay(pdMS_TO_TICKS(5001));
-  }
+  vTaskDelete(NULL);
 }
