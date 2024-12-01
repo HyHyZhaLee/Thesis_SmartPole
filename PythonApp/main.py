@@ -6,7 +6,7 @@ import firebase_admin
 from firebase_admin import credentials, db
 
 # Firebase Initialization
-cred = credentials.Certificate("nema-nbiot-controller-firebase.json")
+cred = credentials.Certificate("../../nema-nbiot-controller-firebase.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://nema-nbiot-controller-default-rtdb.asia-southeast1.firebasedatabase.app'
 })
@@ -48,7 +48,7 @@ def upload_to_firebase(device_id, sensor_name, value):
     """
     try:
         now = datetime.datetime.now()
-        date = now.strftime("%d-%m-%Y")
+        date = now.strftime("%Y-%m-%d")  # Định dạng YYYY-MM-DD để sắp xếp đúng
         time = now.strftime("%H:%M:%S")
 
         # Sanitize the sensor name
