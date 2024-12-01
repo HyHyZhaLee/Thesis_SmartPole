@@ -6,7 +6,7 @@ import firebase_admin
 from firebase_admin import credentials, db
 
 # Firebase Initialization
-cred = credentials.Certificate("../../nema-nbiot-controller-firebase.json")
+cred = credentials.Certificate("/home/aclabnuc/Desktop/hdaproject/nema-nbiot-controller-firebase.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://nema-nbiot-controller-default-rtdb.asia-southeast1.firebasedatabase.app'
 })
