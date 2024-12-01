@@ -5,6 +5,7 @@ import 'package:provider/provider.dart'; // Để sử dụng Provider
 import 'dart:convert'; // Để encode dữ liệu JSON
 import '../AppFunction/global_variables.dart';
 import '../AppFunction/global_helper_function.dart'; // Để dùng getCurrentTimestamp()
+import '../widgets/Physical_Sensor_card.dart';
 import '../widgets/dropdown_button_widget.dart';
 import '../provider/page_controller_provider.dart';
 
@@ -208,7 +209,7 @@ class _HomePageState extends State<HomePage> {
                                         child: Container(
                                           alignment: Alignment.centerLeft,
                                           child: const Text(
-                                            'Physical information',
+                                            'Physical devices parameter',
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w600, // Đặt fontWeight bên trong TextStyle
@@ -244,6 +245,7 @@ class _HomePageState extends State<HomePage> {
                                         Expanded(
                                           flex: 1,
                                           child: Container(
+
                                             decoration: BoxDecoration(
                                               border: Border.all(color: Color(0xFFE6E5F2), width: 1),
                                               borderRadius: BorderRadius.circular(28),
@@ -266,11 +268,24 @@ class _HomePageState extends State<HomePage> {
                                         Expanded(
                                           flex: 1,
                                           child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                                              borderRadius: BorderRadius.circular(28),
-                                              color: Color(0xFF6F5CEA),
-                                            ),
+                                              child: InfoCard(
+                                                iconPath: 'lib/assets/icons/humidity_icon.png', // Replace with your icon path
+                                                // iconSize: 25.0, // Adjust the size of the icon
+                                                dataName: 'Humidity',
+                                                // Height and width of the card = Container height and width
+                                                cardHeight: double.infinity,
+                                                cardWidth: double.infinity,
+                                                value: '80%',
+                                                cardColor: Color(0xFF6F5CEA),
+                                                onUpdate: () {
+                                                  print('Updating humidity...');
+                                                },
+                                              )
+                                            // decoration: BoxDecoration(
+                                            //   border: Border.all(color: Color(0xFFE6E5F2), width: 1),
+                                            //   borderRadius: BorderRadius.circular(28),
+                                            //   color: Color(0xFF6F5CEA),
+                                            // ),
                                           ),
                                         ),
                                       ],
