@@ -14,9 +14,16 @@ void pwm_init()
 
 void pwm_set_duty(int dutyPercent)
 {
+  if (dutyPercent > 100)
+  {
+    dutyPercent = 100;
+  }
+  else if (dutyPercent < 0)
+  {
+    dutyPercent = 0;
+  }
   int pwmDuty = map(dutyPercent, 0, 100, 0, pow(2, PWM_RESOLUTION) - 1);
   ledcWrite(PWM_CHANNEL, pwmDuty);
-  
 }
 
 void task_pwm_light_control_init(void* pvParameters)

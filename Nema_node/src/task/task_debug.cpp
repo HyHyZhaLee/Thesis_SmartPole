@@ -10,44 +10,40 @@ LightControl lightControl(
   "30"
 );
 
-int counter = 100;
-int relay_status = RELAY_ON;
+int counter = 0;
+bool counterState = COUNT_UP;
 
-void taskDummySendMqtt(void *pvParameter)
-{
-  while (true)
-  {
-    publishData(MQTT_FEED_POLE_02, lightControl.genStringFromJson());
-
-    vTaskDelay(pdMS_TO_TICKS(delay_lora_dummy_send));
-  }
-}
 
 void taskDimmingDebug(void *pvParameter)
 {
-  pinMode (RELAY_PIN, OUTPUT);
-  relay_status = RELAY_ON;
-  digitalWrite(RELAY_PIN, HIGH);
-
   while (true)
   {
-    if (counter == 0)
+    if (counter < 0)
+    {
+      counter = 0;
+      counterState = COUNT_UP;
+      setRelayOn();
+    }
+    else if (counter > 100)
     {
       counter = 100;
-      if (relay_status == RELAY_ON)
+      counterState = COUNT_DOWN;
+      setRelayOff();
+    }
+    else 
+    {
+      if (counterState == COUNT_UP)
       {
-        digitalWrite(RELAY_PIN, RELAY_OFF);
-        relay_status = RELAY_OFF;
+        counter ++;
       }
       else
       {
-        digitalWrite(RELAY_PIN, RELAY_ON);
-        relay_status = RELAY_ON;
+        counter --;
       }
     }
-    pwm_set_duty(counter);
-    counter --;
+    printlnData(MQTT_FEED_NOTHING, String(counter));
 
+    pwm_set_duty(counter);
     vTaskDelay(100);
   }
 }

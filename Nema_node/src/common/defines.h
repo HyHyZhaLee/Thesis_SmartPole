@@ -1,7 +1,7 @@
 // DEFINE DEBUG MODE
-// #define _DEBUG_MODE_
-// #define _IS_DEBUG_MODE_ true
-#define _IS_DEBUG_MODE_ false
+#define _DEBUG_MODE_
+#define _IS_DEBUG_MODE_ true
+// #define _IS_DEBUG_MODE_ false
 
 // DEFINE POLE INFORMATION
 // #define _ESP_NUMBER_ONE_
@@ -18,6 +18,10 @@
   #define STATION_ID                 "NEMA_0003"
   #define STATION_NAME               "NEMA_0003"
 #endif
+
+// DEFINE COUNTER STATE
+#define COUNT_UP                    true
+#define COUNT_DOWN                  false
 
 // DEFINE PIN
 #define POLE_LED_PIN                5

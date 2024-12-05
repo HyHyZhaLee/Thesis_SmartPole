@@ -48,7 +48,6 @@ class LightControl{
     void setDimming(String dimming){ this->dimming = dimming; }
     String getDimming(){ return dimming; }
     String genStringFromJson();
-    void publish(String feedName);
   };
 
 #endif

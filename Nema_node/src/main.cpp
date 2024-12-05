@@ -13,8 +13,6 @@ void setup() {
     lora.Init(&Serial1, 9600, SERIAL_8N1, UART_LORA_TXD_PIN, UART_LORA_RXD_PIN);
   }
 
-
-  delay(delay_for_initialization);
   connect_init();
   device_init();
   task_init();

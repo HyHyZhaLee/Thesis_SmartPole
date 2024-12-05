@@ -67,10 +67,10 @@ String LightControl :: genStringFromJson(){
   return jsonString;
 }
 
-void LightControl :: publish(String feedName){
-  String message = genStringFromJson();
+// void LightControl :: publish(String feedName){
+//   String message = genStringFromJson();
 
-  publishData(feedName, message);
-}
+//   publishData(feedName, message);
+// }
 
 
