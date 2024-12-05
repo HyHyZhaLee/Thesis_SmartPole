@@ -11,7 +11,6 @@ void bufferInit()
 void taskHandleMqttBuffer(void *pvParameter)
 {
   bufferInit();
-  printlnData(MQTT_FEED_NOTHING, "INIT ONE TIME");
   
   while (true)
   {
@@ -30,22 +29,21 @@ void taskHandleMqttBuffer(void *pvParameter)
 
           if (dutyPercent == 0)
           {
-            digitalWrite(RELAY_PIN, RELAY_OFF);
+            setRelayOff(); 
             printlnData(MQTT_FEED_NOTHING, "Recv from mqtt turn off light");  
           }
           else
           {
-            digitalWrite(RELAY_PIN, RELAY_ON);
+            setRelayOn();
             printlnData(MQTT_FEED_NOTHING, "Recv from mqtt turn on light");
           }
 
           pwm_set_duty(dutyPercent);
         }
-        else
+        else // This part is for control other device
         {
           printlnData(MQTT_FEED_NOTHING, lightControl.getDeviceId());
           // This one is place for lora sending process
-
           process_ack_waitting process = 
           {
             LORA_TIMER_FACTOR_MSG_RESEND,
@@ -58,7 +56,6 @@ void taskHandleMqttBuffer(void *pvParameter)
           {
             lora_waiting_ack_list.push_back(process);
           }
-          printlnData(MQTT_FEED_NOTHING, "control light");
         }
       }
     }

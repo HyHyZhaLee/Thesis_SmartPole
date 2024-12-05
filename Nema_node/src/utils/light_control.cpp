@@ -57,12 +57,6 @@ String LightControl :: genStringFromJson(){
 
   String jsonString;
   serializeJson(doc, jsonString);
-  #ifdef _DEBUG_MODE_
-    Serial.println("Data to pub:");
-    // serializeJsonPretty(doc, Serial);
-    
-    Serial.println();
-  #endif
   doc.clear();
   return jsonString;
 }

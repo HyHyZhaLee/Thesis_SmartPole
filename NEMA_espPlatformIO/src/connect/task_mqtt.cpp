@@ -10,7 +10,7 @@ void callback(char *topic, byte *payload, unsigned int length)
 {
   printData(MQTT_FEED_NOTHING, "Message arrived [");
   printData(MQTT_FEED_NOTHING, topic);
-  printData(MQTT_FEED_NOTHING, "[ ");
+  printData(MQTT_FEED_NOTHING, "] ");
   printlnData(MQTT_FEED_NOTHING, " ");
   String pload = "";
   for (int i = 0; i < length; i++) 
@@ -82,6 +82,9 @@ void taskMQTT(void *pvParameters)
 
   client.setServer(MQTT_SERVER, MQTT_PORT);
   client.setCallback(callback);
+  #ifdef _ESP_NUMBER_ONE_
+    client.subscribe(MQTT_FEED_POLE_02);
+  #endif
 
   while (true)
   {

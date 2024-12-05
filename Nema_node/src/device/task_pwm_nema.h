@@ -5,6 +5,7 @@
 
 void pwm_init();
 void pwm_set_duty(int dutyPercent);
+void task_pwm_light_control_update(void *pvParameter);
 void task_pwm_light_control_init(void* pvParameters);
 
 #endif

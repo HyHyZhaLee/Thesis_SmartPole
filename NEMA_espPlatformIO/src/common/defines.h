@@ -1,11 +1,11 @@
 // DEFINE DEBUG MODE
-// #define _DEBUG_MODE_
-// #define _IS_DEBUG_MODE_ true
-#define _IS_DEBUG_MODE_ false
+#define _DEBUG_MODE_
+#define _IS_DEBUG_MODE_ true
+// #define _IS_DEBUG_MODE_ false
 
 // DEFINE POLE INFORMATION
-// #define _ESP_NUMBER_ONE_
-#define _ESP_NUMBER_TWO_
+#define _ESP_NUMBER_ONE_
+// #define _ESP_NUMBER_TWO_
 
 #ifdef _ESP_NUMBER_ONE_
   #define DEVICE_ID                  "NEMA_0002"
@@ -18,6 +18,10 @@
   #define STATION_ID                 "NEMA_0003"
   #define STATION_NAME               "NEMA_0003"
 #endif
+
+// DEFINE RELAY STATE
+#define COUNT_UP                  true
+#define COUNT_DOWN                false
 
 // DEFINE PIN
 #define POLE_LED_PIN                5
@@ -87,7 +91,8 @@
 #define delay_led_blink                 (1000)
 #define delay_rev_lora_process          (1)
 #define delay_send_lora_process         (10*1000)
-#define delay_lora_dummy_send           (60*1000+13)
+#define delay_lora_dummy_send           (30*1000+13)
+#define delay_lora_waiting_ack          (60*1000+13)
 #define delay_handle_mqtt_buffer        (100)
 #define delay_handle_lora_buffer        (100)
 

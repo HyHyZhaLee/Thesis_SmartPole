@@ -61,6 +61,7 @@ void taskLoraInit(void *pvParameters)
     }
   }
   printlnData(MQTT_FEED_TEST_LORA, "Lora init success! ");
+  
   vTaskDelete(NULL);
 }
 

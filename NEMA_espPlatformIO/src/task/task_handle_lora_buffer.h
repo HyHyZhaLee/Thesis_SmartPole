@@ -7,6 +7,7 @@ struct process_ack_waitting
 {
   int timer_factor = LORA_TIMER_FACTOR_MSG_RESEND;
   int counter_resend = LORA_MAX_TIMES_RESEND;
+  // bool recved_ack = false;
   String deviceId;
   String deviceDimming;
 

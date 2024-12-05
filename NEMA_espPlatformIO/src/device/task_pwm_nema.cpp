@@ -1,5 +1,7 @@
 #include "task_pwm_nema.h"
 
+int dutyPercentManually = 0;
+
 void pwm_init()
 {
   // Configure LEDC Timer
@@ -14,9 +16,25 @@ void pwm_init()
 
 void pwm_set_duty(int dutyPercent)
 {
-  int pwmDuty = map(dutyPercent, 0, 100, 0, pow(2, PWM_RESOLUTION) - 1);
-  ledcWrite(PWM_CHANNEL, pwmDuty);
-  
+  if (dutyPercent > 100)
+  {
+    dutyPercent = 100;
+  }
+  else if (dutyPercent < 0)
+  {
+    dutyPercent = 0;
+  }
+  dutyPercentManually = map(dutyPercent, 0, 100, 0, pow(2, PWM_RESOLUTION) - 1);
+  ledcWrite(PWM_CHANNEL, dutyPercentManually);
+}
+
+void task_pwm_light_control_update(void *pvParameter)
+{
+  while (true)
+  {
+    ledcWrite(PWM_CHANNEL, dutyPercentManually);
+    vTaskDelay(119);
+  }
 }
 
 void task_pwm_light_control_init(void* pvParameters)

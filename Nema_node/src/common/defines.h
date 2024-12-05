@@ -1,7 +1,7 @@
 // DEFINE DEBUG MODE
-#define _DEBUG_MODE_
-#define _IS_DEBUG_MODE_ true
-// #define _IS_DEBUG_MODE_ false
+// #define _DEBUG_MODE_
+// #define _IS_DEBUG_MODE_ true
+#define _IS_DEBUG_MODE_ false
 
 // DEFINE POLE INFORMATION
 // #define _ESP_NUMBER_ONE_

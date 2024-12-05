@@ -15,8 +15,8 @@ void setup() {
   semaphoreLora = xSemaphoreCreateMutex();
 
 
-  delay(delay_for_initialization);
   connect_init();
+  delay(delay_for_initialization);
   device_init();
   task_init();
 }

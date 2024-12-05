@@ -22,13 +22,15 @@ void taskHandleLoraBuffer(void *pvParameter)
       {
         LightControl light_control(stringJson);
 
-        if (light_control.getDeviceId().compareTo(DEVICE_ID) == 0
-            && light_control.getAction().compareTo("light control") == 0)
+        if (light_control.getTo().compareTo(DEVICE_ID) == 0
+            && light_control.getAction().compareTo("control light") == 0)
         {
+          printlnData(MQTT_FEED_NOTHING, "recv mess " + stringJson);
+            
           LightControl light_control_ack(
             STATION_ID,
             STATION_NAME,
-            "ack: light control",
+            "ack: control light",
             DEVICE_ID,
             DEVICE_ID,
             light_control.getFrom(),
@@ -48,6 +50,10 @@ void taskHandleLoraBuffer(void *pvParameter)
             pwm_set_duty(light_control.getDimming().toInt());
           }
         }
+      }
+      else
+      {
+        printlnData(MQTT_FEED_NOTHING, "recv mess " + stringJson);
       }
     }
     vTaskDelay(delay_handle_lora_buffer);
