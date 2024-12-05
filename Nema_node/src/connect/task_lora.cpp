@@ -10,19 +10,16 @@ String message;
 String textBuffer;
 bool isConfgured = false;
 
-bool loraSend(String message)
+void loraSend(String message)
 {
   if (lora.SendFrame(config, (uint8_t *)(message.c_str()), message.length()) == 0) {
     printlnData(MQTT_FEED_TEST_LORA_SEND, "Send successfully: " + message);
-    return true;
   } 
   else 
   {
     printlnData(MQTT_FEED_TEST_LORA_SEND, "Send failed");
-    return false;
   }
 }
-
 
 void taskLoraInit(void *pvParameters)
 {

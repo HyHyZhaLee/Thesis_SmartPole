@@ -24,24 +24,40 @@ void taskHandleMqttBuffer(void *pvParameter)
 
       if (lightControl.getAction().compareTo("control light") == 0)
       { // This part is for control this device
-        if (lightControl.getDeviceId().compareTo(DEVICE_ID) == 0)
+        if (lightControl.getTo().compareTo(DEVICE_ID) == 0)
         {
-          if (lightControl.getDimming().compareTo("0") == 0)
+          int dutyPercent = lightControl.getDimming().toInt();
+
+          if (dutyPercent == 0)
           {
+            digitalWrite(RELAY_PIN, RELAY_OFF);
             printlnData(MQTT_FEED_NOTHING, "Recv from mqtt turn off light");  
           }
           else
           {
+            digitalWrite(RELAY_PIN, RELAY_ON);
             printlnData(MQTT_FEED_NOTHING, "Recv from mqtt turn on light");
           }
 
-          int dutyPercent = lightControl.getDimming().toInt();
           pwm_set_duty(dutyPercent);
         }
         else
         {
           printlnData(MQTT_FEED_NOTHING, lightControl.getDeviceId());
-          loraSend(lightControl.genStringFromJson()); 
+          // This one is place for lora sending process
+
+          process_ack_waitting process = 
+          {
+            LORA_TIMER_FACTOR_MSG_RESEND,
+            LORA_MAX_TIMES_RESEND,
+            lightControl.getTo(),
+            lightControl.getDimming()
+          };
+
+          if (loraSend(lightControl.genStringFromJson()))
+          {
+            lora_waiting_ack_list.push_back(process);
+          }
           printlnData(MQTT_FEED_NOTHING, "control light");
         }
       }

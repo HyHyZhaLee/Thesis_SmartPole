@@ -8,7 +8,7 @@ extern LoRa_E220_JP lora;
 void taskLoraInit(void *pvParameters);
 void taskLoraRecv(void *pvParameters);
 void taskLoraSend(void *pvParameters);
-bool loraSend(String message);
+void loraSend(String message);
 
 
 #endif
