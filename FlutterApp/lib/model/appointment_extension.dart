@@ -7,7 +7,6 @@ import 'dart:html' as html;
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CustomAppointment extends Appointment {
   String? firebaseKey;
@@ -55,16 +54,19 @@ class CustomAppointment extends Appointment {
     }
 
     // Tham chiếu đến node "Schedule light"
-    var pushRef = global_databaseReference.child('NEMA_0002').child('Schedule light');
+    var pushRef =
+        global_databaseReference.child('NEMA_0002').child('Schedule light');
 
     try {
       // Lấy dữ liệu của lịch mới nhất
       DatabaseEvent newestScheduleEvent = await pushRef.once();
 
       String newScheduleName;
-      if (newestScheduleEvent.snapshot.value != null && newestScheduleEvent.snapshot.value is Map) {
+      if (newestScheduleEvent.snapshot.value != null &&
+          newestScheduleEvent.snapshot.value is Map) {
         // Lấy danh sách các tên lịch (các key)
-        Map<String, dynamic> schedules = Map<String, dynamic>.from(newestScheduleEvent.snapshot.value as Map);
+        Map<String, dynamic> schedules = Map<String, dynamic>.from(
+            newestScheduleEvent.snapshot.value as Map);
         List<String> scheduleNames = schedules.keys.toList();
 
         // Sắp xếp danh sách tên lịch theo thứ tự giảm dần
@@ -74,7 +76,8 @@ class CustomAppointment extends Appointment {
         String newestScheduleName = scheduleNames.first;
 
         // Cộng thêm 1 vào lịch mới nhất
-        int newestNumber = int.tryParse(newestScheduleName.replaceAll(RegExp(r'\D'), '')) ?? 0;
+        int newestNumber =
+            int.tryParse(newestScheduleName.replaceAll(RegExp(r'\D'), '')) ?? 0;
         newScheduleName = 'Schedule ${newestNumber + 1}';
       } else {
         // Nếu chưa có lịch nào, đặt tên cho lịch đầu tiên

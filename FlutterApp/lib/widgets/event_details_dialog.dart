@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/AppFunction/global_variables.dart';
 import 'package:flutter_app/model/appointment_extension.dart';
 import 'package:flutter_app/utils/custom_route.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_app/AppFunction/get_event_details.dart'; // Import the file where GetEventsDetails is defined
 import 'package:flutter_app/widgets/add_event_dialog.dart';
 import 'package:flutter_app/provider/event_provider.dart';
@@ -185,142 +184,6 @@ class EventDetailsDialog {
                     thickness: 2,
                     color: Colors.grey,
                   ),
-                  // IntrinsicHeight(
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.stretch,
-                  //     children: [
-                  //       Container(
-                  //         color: Colors.white,
-                  //         child: const Icon(
-                  //           Icons.repeat,
-                  //           color: Colors.blue,
-                  //           size: 36,
-                  //         ),
-                  //       ),
-                  //       const SizedBox(width: 15),
-                  //       Expanded(
-                  //         child: IntrinsicWidth(
-                  //           child: Column(
-                  //             crossAxisAlignment: CrossAxisAlignment.stretch,
-                  //             mainAxisAlignment: MainAxisAlignment.center,
-                  //             children: [
-                  //               Column(
-                  //                 crossAxisAlignment: CrossAxisAlignment.center,
-                  //                 mainAxisAlignment: MainAxisAlignment.center,
-                  //                 children: [
-                  //                   const Text(
-                  //                     'Recurrence Rule:',
-                  //                     style: TextStyle(
-                  //                       fontWeight: FontWeight.bold,
-                  //                       fontSize: headerFontSize,
-                  //                     ),
-                  //                   ),
-                  //                   Text(
-                  //                     GetEventsDetails.recurrenceRuleParser(
-                  //                         appointment.recurrenceRule),
-                  //                     textAlign: TextAlign.center,
-                  //                     style: const TextStyle(
-                  //                       fontSize: bodyFontSize,
-                  //                     ),
-                  //                   )
-                  //                 ],
-                  //               ),
-                  //               const Divider(
-                  //                 height: 10,
-                  //                 thickness: 2,
-                  //               ),
-                  //               IntrinsicHeight(
-                  //                 child: Row(
-                  //                   crossAxisAlignment:
-                  //                       CrossAxisAlignment.stretch,
-                  //                   mainAxisAlignment: MainAxisAlignment.center,
-                  //                   children: [
-                  //                     Container(
-                  //                       child: Column(
-                  //                         crossAxisAlignment:
-                  //                             CrossAxisAlignment.center,
-                  //                         children: [
-                  //                           const Text(
-                  //                             'Interval:',
-                  //                             style: TextStyle(
-                  //                               fontWeight: FontWeight.bold,
-                  //                               fontSize: headerFontSize,
-                  //                             ),
-                  //                           ),
-                  //                           Text(
-                  //                             (GetEventsDetails.recurrenceInterval(
-                  //                                             appointment
-                  //                                                 .recurrenceRule) !=
-                  //                                         null &&
-                  //                                     GetEventsDetails
-                  //                                             .recurrenceInterval(
-                  //                                                 appointment
-                  //                                                     .recurrenceRule)! >
-                  //                                         0)
-                  //                                 ? '1'
-                  //                                 : GetEventsDetails
-                  //                                         .recurrenceInterval(
-                  //                                             appointment
-                  //                                                 .recurrenceRule)
-                  //                                     .toString(),
-                  //                             style: const TextStyle(
-                  //                               fontSize: bodyFontSize,
-                  //                             ),
-                  //                           ),
-                  //                         ],
-                  //                       ),
-                  //                     ),
-                  //                     const Spacer(),
-                  //                     Container(
-                  //                       child: Column(
-                  //                         crossAxisAlignment:
-                  //                             CrossAxisAlignment.center,
-                  //                         children: [
-                  //                           const Text(
-                  //                             'Repeat Times:',
-                  //                             style: TextStyle(
-                  //                               fontWeight: FontWeight.bold,
-                  //                               fontSize: headerFontSize,
-                  //                             ),
-                  //                           ),
-                  //                           Text(
-                  //                             (GetEventsDetails.recurrenceCount(
-                  //                                             appointment
-                  //                                                 .recurrenceRule) !=
-                  //                                         null &&
-                  //                                     GetEventsDetails
-                  //                                             .recurrenceCount(
-                  //                                                 appointment
-                  //                                                     .recurrenceRule)! >
-                  //                                         0)
-                  //                                 ? GetEventsDetails
-                  //                                         .recurrenceCount(
-                  //                                             appointment
-                  //                                                 .recurrenceRule)
-                  //                                     .toString()
-                  //                                 : 'Infinity',
-                  //                             style: const TextStyle(
-                  //                               fontSize: bodyFontSize,
-                  //                             ),
-                  //                           ),
-                  //                         ],
-                  //                       ),
-                  //                     ),
-                  //                   ],
-                  //                 ),
-                  //               ),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // const Divider(
-                  //   height: 10,
-                  //   thickness: 2,
-                  //   color: Colors.grey,
-                  // ),
                   IntrinsicHeight(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -394,7 +257,16 @@ class EventDetailsDialog {
             TextButton(
               onPressed: () {
                 // Assuming you have access to _appointments and setState here
-                deleteAppointment(context, appointment);
+                Provider.of<CustomAppointmentProvider>(context, listen: false)
+                    .deleteAppointment(appointment);
+
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop(); // Close the dialog
+                // ignore: use_build_context_synchronously
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Appointment deleted successfully')),
+                );
               },
               child: const Text(
                 'Delete',

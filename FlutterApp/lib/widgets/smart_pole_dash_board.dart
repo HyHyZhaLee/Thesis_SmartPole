@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SmartPoleDashBoard extends StatefulWidget {
+  const SmartPoleDashBoard({super.key});
+
   @override
   _SmartPoleDashBoardState createState() => _SmartPoleDashBoardState();
 }
@@ -33,7 +35,7 @@ class _SmartPoleDashBoardState extends State<SmartPoleDashBoard> {
     final imageHeight = screenHeight * 0.8; // 80% of screen height
 
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Row(
         children: [
           // Left side (Smart Pole Image and Part Labels with lines)
@@ -60,9 +62,9 @@ class _SmartPoleDashBoardState extends State<SmartPoleDashBoard> {
                   child: GestureDetector(
                     onTap: () => selectPart('NEMA - ESP32'),
                     child: Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       color: Colors.grey.withOpacity(0.8),
-                      child: Text('NEMA - ESP32'),
+                      child: const Text('NEMA - ESP32'),
                     ),
                   ),
                 ),
@@ -72,9 +74,9 @@ class _SmartPoleDashBoardState extends State<SmartPoleDashBoard> {
                   child: GestureDetector(
                     onTap: () => selectPart('Air Sensor'),
                     child: Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       color: Colors.grey.withOpacity(0.8),
-                      child: Text('Air Sensor'),
+                      child: const Text('Air Sensor'),
                     ),
                   ),
                 ),
@@ -84,9 +86,9 @@ class _SmartPoleDashBoardState extends State<SmartPoleDashBoard> {
                   child: GestureDetector(
                     onTap: () => selectPart('Camera'),
                     child: Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       color: Colors.grey.withOpacity(0.8),
-                      child: Text('Camera'),
+                      child: const Text('Camera'),
                     ),
                   ),
                 ),
@@ -96,9 +98,9 @@ class _SmartPoleDashBoardState extends State<SmartPoleDashBoard> {
                   child: GestureDetector(
                     onTap: () => selectPart('Screen'),
                     child: Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       color: Colors.grey.withOpacity(0.8),
-                      child: Text('Screen'),
+                      child: const Text('Screen'),
                     ),
                   ),
                 ),
@@ -108,9 +110,9 @@ class _SmartPoleDashBoardState extends State<SmartPoleDashBoard> {
                   child: GestureDetector(
                     onTap: () => selectPart('Charger'),
                     child: Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       color: Colors.grey.withOpacity(0.8),
-                      child: Text('Charger'),
+                      child: const Text('Charger'),
                     ),
                   ),
                 ),
@@ -122,25 +124,25 @@ class _SmartPoleDashBoardState extends State<SmartPoleDashBoard> {
           Expanded(
             flex: 1,
             child: Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               color: Colors.grey.withOpacity(0.1),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     selectedPart.isNotEmpty ? selectedPart : 'Select a part',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     selectedPart.isNotEmpty
                         ? partInformation[selectedPart] ??
                             'No information available'
                         : 'Click on a part to see details.',
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ],
               ),

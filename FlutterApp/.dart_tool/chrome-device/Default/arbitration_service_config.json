@@ -161,6 +161,7 @@
       }
    },
    "FunctionalCohort": [ "EdgeDownloadChromeInterceptFunctionalDialog", "8682d0fa-50b3-4ece-aa5b-e0b33f9919e2.AutoOpen.Functional", "8682d0fa-50b3-4ece-aa5b-e0b33f9919e2.f5b8c725-cb2e-4c12-accd-73e500d88d47.AutoOpen.Functional", "bc25fcef-8964-4e72-8287-23e2b496c128.AutoOpen.Functional", "bc25fcef-8964-4e72-8287-23e2b496c128.68b8a884-6e08-46e6-8a3b-7e06ffe48ecf.AutoOpen.Functional", "WPOFunctionalEvent.AutofillAccountChooser.Bubble", "WPOFunctionalEvent.AutofillAutoSignin.Bubble", "WPOFunctionalEvent.AutofillPassword.Bubble", "SHOPPING_AUTO_SHOW_BING_SEARCH", "SHOPPING_AUTO_SHOW_REBATES_CONFIRMATION", "SHOPPING_AUTO_SHOW_REBATES_DEACTIVATED", "SHOPPING_AUTO_SHOW_REBATES_BING", "SHOPPING_AUTO_SHOW_PERSONALIZED_CASHBACK", "SHOPPING_AUTO_SHOW_PERSONALIZED_CASHBACK_CONFIRMATION", "SHOPPING_AUTO_SHOW_URL_PARAM_REBATES", "SHOPPING_AUTO_SHOW_URL_PARAM_PRICE_COMPARISON", "SHOPPING_AUTO_SHOW_URL_PARAM_PRICE_HISTORY", "SHOPPING_AUTO_SHOW_REBATES_ACTIVATION_FAILED", "SHOPPING_AUTO_SHOW_REBATES_SWITCHED_TO_MSA", "SHOPPING_AUTO_SHOW_ITEM_ADDED_TO_CART_FROM_OTHER_SELLER", "SHOPPING_AUTO_SHOW_VIRTUAL_CARD", "SHOPPING_AUTO_SHOW_BING_CAMPAIGN", "SHOPPING_OPEN_FLYOUT_FROM_EDGE_DRIVER", "SHOPPING_AUTO_SHOW_SUSTAINABILITY_PURCHASE", "SHOPPING_AUTO_SHOW_REWARDS_ACTIVATION_FAILED", "SHOPPING_AUTO_SHOW_REWARDS_SWITCHED_TO_MSA", "SHOPPING_AUTO_SHOW_SHOPRUNNER_CONFIRMATION", "SHOPPING_AUTO_SHOW_ENROLL_TO_CASHBACK_CONFIRMATION_NOTIFICATION", "SHOPPING_AUTO_SHOW_POST_PURCHASE_REWARDS_NOTIFICATION", "694efa4f-a304-4214-aaf7-90444bc887f5.c1c025d9-a620-4f6b-bebb-eff0cf19a671.AutoOpen.Functional" ],
+   "GlobalSuppressedExperiences": [ "Teams.Bubble", "Nurturing.Global.EdgeVpn_VpnFre", "Nurturing.Global.Rewards_RedemptionCoachmark_2", "Nurturing.Global.Rewards_RedemptionCoachmark_25", "Nurturing.Global.EdgeCBUD_SanPersonalizationConsentWave1Variant0", "Nurturing.Global.Bing_NewBingChatFlyout" ],
    "IgnoredFunctionalNotifications": [ "Nurturing.Functional.NTP_CourtesyEngineCampaign", "Nurturing.Functional.NTP_FunctionalCampaign", "Nurturing.Functional.NTP_SettingsCampaign", "Nurturing.Functional.NTP_UpsellCampaign", "Nurturing.Functional.FN_SmartSwitchFeatureInfoView" ],
    "ModelInfo": {
       "segment_id": 515,
@@ -174,5 +175,6 @@
    },
    "SuppressedExperiences": [ "E-tree.Bubble", "Nurturing.Global.Bing_BingGrowthToastNotification", "Nurturing.Global.EdgeEDU_BrowserFocusedTranslateNudge", "Nurturing.Global.EdgeMobile_MobileUpsell_ChatGpt_Flyout", "Nurturing.Global.EdgeVpn_VpnPublicWifiInBackground", "Nurturing.Global.Identity_ReauthNotification", "Nurturing.Global.Identity_ReauthNotification_2", "Nurturing.Global.Identity_ReauthNotification_3", "Nurturing.Global.OnRamp_RetriggerFRECodexCoPilotAutoAprd", "Nurturing.Global.OnRamp_ReTriggerOnWinUpgrade", "Outlook.Bubble", "ShorelinePrivilegedExperienceID", "Teams.Bubble", "Nurturing.Global.PWA_SidebarSearchPromotion" ],
    "TimeDelta": 5000000,
-   "configVersion": "18.0.4"
+   "baseConfigVersion": "21.1.3",
+   "configVersion": "21.1.3"
 }

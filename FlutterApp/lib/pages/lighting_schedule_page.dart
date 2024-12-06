@@ -21,7 +21,7 @@ class LightingSchedulePage extends StatefulWidget {
 
 class _LightingSchedulePage extends State<LightingSchedulePage> {
   late List<CustomAppointment> _appointments;
-  CalendarView _calendarView = CalendarView.month;
+  final CalendarView _calendarView = CalendarView.month;
   late CustomAppointmentDataSource _calendarDataSource;
 
   @override
@@ -30,6 +30,9 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
     // Set up listener to update appointments from provider
     final provider =
         Provider.of<CustomAppointmentProvider>(context, listen: false);
+
+    provider.listenForRealtimeUpdates();
+
     _appointments = provider.appointments;
     _calendarDataSource = CustomAppointmentDataSource(_appointments);
 
@@ -52,88 +55,6 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
         .removeListener(updateAppointments);
     super.dispose();
   }
-
-  // Future<void> _loadAppointments() async {
-  //   final String response =
-  //       await rootBundle.loadString('assets/jsonfile/data.json');
-  //   final List<dynamic> jsonData = json.decode(response);
-  //   for (var event in jsonData) {
-  //     _addAppointmentFromJson(event);
-  //   }
-  //   setState(() {
-  //     _calendarDataSource = AdvertiseDataSource(_appointments);
-  //   });
-  // }
-
-  // void _changeCalendarView(CalendarView view) {
-  //   setState(() {
-  //     _calendarView = view;
-  //   });
-  // }
-
-  // void _addAppointmentFromJson(Map<String, dynamic> event) {
-  //   final eventName = event['event_name'];
-  //   final startDate = DateTime.parse(event['start_date']);
-  //   final endDate = DateTime.parse(event['end_date']);
-  //   final startTime = TimeOfDay(
-  //     hour: int.parse(event['start_time'].split(':')[0]),
-  //     minute: int.parse(event['start_time'].split(':')[1]),
-  //   );
-  //   final endTime = TimeOfDay(
-  //     hour: int.parse(event['end_time'].split(':')[0]),
-  //     minute: int.parse(event['end_time'].split(':')[1]),
-  //   );
-  //   final recurrenceType = event['recurrence_type'];
-  //   final interval = event['interval'];
-  //   final count = event['count'];
-  //   final note = event['note'];
-
-  //   final startDateTime = DateTime(
-  //     startDate.year,
-  //     startDate.month,
-  //     startDate.day,
-  //     startTime.hour,
-  //     startTime.minute,
-  //   );
-  //   final endDateTime = DateTime(
-  //     endDate.year,
-  //     endDate.month,
-  //     endDate.day,
-  //     endTime.hour,
-  //     endTime.minute,
-  //   );
-
-  //   String recurrenceRule = '';
-  //   if (recurrenceType != 'None') {
-  //     switch (recurrenceType) {
-  //       case 'Daily':
-  //         recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval;COUNT=$count';
-  //         break;
-  //       case 'Weekly':
-  //         recurrenceRule =
-  //             'FREQ=WEEKLY;BYDAY=${_getDayOfWeek(startDate)};INTERVAL=$interval;COUNT=$count';
-  //         break;
-  //       case 'Monthly':
-  //         recurrenceRule =
-  //             'FREQ=MONTHLY;BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
-  //         break;
-  //       case 'Yearly':
-  //         recurrenceRule =
-  //             'FREQ=YEARLY;BYMONTH=${startDate.month};BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
-  //         break;
-  //     }
-  //   }
-
-  //   final appointment = Appointment(
-  //     startTime: startDateTime,
-  //     endTime: endDateTime,
-  //     subject: eventName,
-  //     notes: note,
-  //     recurrenceRule: recurrenceRule,
-  //     color: Colors.blue,
-  //   );
-  //   _appointments.add(appointment);
-  // }
 
   String _getDayOfWeek(DateTime date) {
     switch (date.weekday) {
@@ -195,17 +116,6 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       ),
     );
   }
-
-  // Widget addEventShowDialog() => Container(
-  //         width: MediaQuery.of(context).size.width *0.5,
-  //         height: MediaQuery.of(context).size.height *0.5,
-  //         padding: const EdgeInsets.all(4),
-  //         decoration:  BoxDecoration(
-  //           color: Colors.blue,  // Content background is still white
-  //           borderRadius: BorderRadius.circular(16),
-  //         ),
-  //         child: AddEventPage(),
-  //       );
 
   void handleCalendarTap(CalendarTapDetails details) {
     if (details.targetElement == CalendarElement.appointment &&
@@ -269,14 +179,4 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       ],
     );
   }
-
-  // List<CustomAppointment> getAppointments() {
-  //   List<CustomAppointment> meetings = <CustomAppointment>[];
-  //   final DateTime today = DateTime.now();
-  //   final DateTime startTime =
-  //       DateTime(today.year, today.month, today.day, 9, 0, 0);
-  //   final DateTime endTime = startTime.add(const Duration(hours: 2));
-
-  //   return meetings;
-  // }
 }

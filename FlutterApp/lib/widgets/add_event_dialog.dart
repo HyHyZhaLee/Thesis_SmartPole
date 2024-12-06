@@ -1,14 +1,10 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_app/AppFunction/global_variables.dart';
 import 'package:flutter_app/provider/event_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_app/utils/convertDateTime.dart';
-import 'package:flutter_app/model/recurrence_type.dart';
-import 'package:flutter_app/utils/convert_datetime_recurencerule.dart';
 import 'package:flutter_app/model/appointment_extension.dart';
 
 class TextSizes {

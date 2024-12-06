@@ -12,11 +12,10 @@ class SmartPoleAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TextStyle? titleStyle;
 
   const SmartPoleAppBar({
-    Key? key,
+    super.key,
     required this.title,
     required this.titleStyle,
-  })  : preferredSize = const Size.fromHeight(kToolbarHeight),
-        super(key: key);
+  }) : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
