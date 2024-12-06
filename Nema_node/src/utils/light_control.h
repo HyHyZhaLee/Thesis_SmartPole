@@ -16,7 +16,7 @@ class LightControl{
   public:
     LightControl(){};
     LightControl(String strJson);
-    LightControl(DynamicJsonDocument& doc);
+    LightControl(JsonDocument& doc);
     LightControl(
       String station_id, 
       String station_name, 

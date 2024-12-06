@@ -9,7 +9,7 @@ LightControl :: LightControl(String strJson)
     printData(MQTT_FEED_NOTHING , "Initial Light Control invalid");
     return;
   }
-  DynamicJsonDocument document(1024);
+  JsonDocument document;
   deserializeJson(document, strJson);
   station_id = document["station_id"].as<String>();
   station_name = document["station_name"].as<String>();
@@ -25,7 +25,7 @@ LightControl :: LightControl(String strJson)
 
   document.clear();
 }
-LightControl :: LightControl(DynamicJsonDocument &document)
+LightControl :: LightControl(JsonDocument &document)
 {
   station_id = document["station_id"].as<String>();
   station_name = document["station_name"].as<String>();
@@ -41,7 +41,7 @@ LightControl :: LightControl(DynamicJsonDocument &document)
 }
 
 String LightControl :: genStringFromJson(){
-  DynamicJsonDocument doc(1024);
+  JsonDocument doc;
 
   doc["station_id"] = station_id;
   doc["station_name"] = station_name;

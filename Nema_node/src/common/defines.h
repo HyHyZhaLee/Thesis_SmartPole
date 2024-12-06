@@ -71,8 +71,8 @@
 #define MQTT_FEED_TEST_DIMMING      "BK_SmartPole/Feeds/V1"
 
 // DEFINE WIFI AP
-#define WIFI_SSID         "RD-SEAI_2.4G"
-#define WIFI_PASS         ""
+#define WIFI_SSID         "BK_SMART_POLE_STATION"
+#define WIFI_PASS         "ACLAB2023"
 
 // DEFINE DIMMING PWM
 #define PWM_CHANNEL       0
