@@ -7,6 +7,7 @@ import '../AppFunction/global_variables.dart';
 import '../AppFunction/global_helper_function.dart'; // Để dùng getCurrentTimestamp()
 import '../widgets/dropdown_button_widget.dart';
 import '../provider/page_controller_provider.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,10 +18,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   double _currentSliderValue = 0; // Giá trị ban đầu của slider
-  bool _isSwitched = false; // Trạng thái cho slider
+  bool _isSwitched = false; // Trạng thái cho switch bên phải
   String _deviceID = 'NEMA_02'; // ID của thiết bị
   String _statusMessage = 'Disconnected'; // Trạng thái kết nối
-
+  String _humidityValue = '80'; // Thông tin độ ẩm
+  String _temperatureValue = '20'; // Thông tin nhiệt độ
   @override
   void initState() {
     super.initState();
@@ -29,7 +31,10 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _loadInitialBrightness() async {
     try {
-      DatabaseEvent event = await global_databaseReference.child(_deviceID).child("Newest data").once();
+      DatabaseEvent event = await global_databaseReference
+          .child(_deviceID)
+          .child("Newest data")
+          .once();
 
       if (event.snapshot.value != null && event.snapshot.value is Map) {
         final data = event.snapshot.value as Map<dynamic, dynamic>;
@@ -81,7 +86,8 @@ class _HomePageState extends State<HomePage> {
                   flex: 45,
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFFE6E5F2), width: 1),
+                      border:
+                          Border.all(color: const Color(0xFFE6E5F2), width: 1),
                       borderRadius: BorderRadius.circular(28),
                       color: const Color(0xFFFFFFFF),
                     ),
@@ -121,14 +127,17 @@ class _HomePageState extends State<HomePage> {
                                   child: SliderTheme(
                                     data: SliderTheme.of(context).copyWith(
                                       activeTrackColor: Colors.blue,
-                                      inactiveTrackColor: const Color(0xFFF4EEF4),
-                                      trackShape: const RoundedRectSliderTrackShape(),
+                                      inactiveTrackColor:
+                                          const Color(0xFFF4EEF4),
+                                      trackShape:
+                                          const RoundedRectSliderTrackShape(),
                                       trackHeight: 45.0,
                                       thumbShape: const RoundSliderThumbShape(
                                           enabledThumbRadius: 25),
                                       overlayColor: Colors.blue.withAlpha(10),
-                                      overlayShape: const RoundSliderOverlayShape(
-                                          overlayRadius: 60),
+                                      overlayShape:
+                                          const RoundSliderOverlayShape(
+                                              overlayRadius: 60),
                                     ),
                                     child: Slider(
                                       value: _currentSliderValue,
@@ -156,27 +165,32 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 top: 0,
                                 right: 110,
-                                child: _buildButton("NEMA - ESP32", context, pageIndex: 2),
+                                child: _buildButton("NEMA - ESP32", context,
+                                    pageIndex: 2),
                               ),
                               Positioned(
                                 top: 130,
                                 left: 70,
-                                child: _buildButton("CAMERA", context, pageIndex: 4),
+                                child: _buildButton("CAMERA", context,
+                                    pageIndex: 4),
                               ),
                               Positioned(
                                 top: 130,
                                 right: 110,
-                                child: _buildButton("AIR SENSOR", context, pageIndex: 6),
+                                child: _buildButton("AIR SENSOR", context,
+                                    pageIndex: 6),
                               ),
                               Positioned(
                                 top: 335,
                                 right: 110,
-                                child: _buildButton("SCREEN", context, pageIndex: 5),
+                                child: _buildButton("SCREEN", context,
+                                    pageIndex: 5),
                               ),
                               Positioned(
                                 top: 500,
                                 right: 110,
-                                child: _buildButton("CHARGER", context, pageIndex: 7),
+                                child: _buildButton("CHARGER", context,
+                                    pageIndex: 7),
                               ),
                             ],
                           ),
@@ -188,148 +202,229 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(width: 20),
                 // Right part - Placeholder for additional UI
                 Expanded(
-                    flex: 55,
-                    child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                          borderRadius: BorderRadius.circular(28),
-                          color: Color(0xFFF5F5F5),
+                  flex: 55,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xFFE6E5F2), width: 1),
+                      borderRadius: BorderRadius.circular(28),
+                      color: Color(0xFFF5F5F5),
+                    ),
+                    padding: const EdgeInsets.only(left: 44, right: 31),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          flex: 6,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: const Text(
+                                    'Physical information',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight
+                                          .w600, // Đặt fontWeight bên trong TextStyle
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      print('Refresh button pressed');
+                                      //TODO: Refresh button pressed
+                                    },
+                                    icon: Image.asset(
+                                        'lib/assets/icons/refresh_icon.png',
+                                        height: 30),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                            ],
+                          ),
                         ),
-                        padding: const EdgeInsets.only(left: 44, right: 31),
-                        child: Column(
-                          children: [
-                            Expanded(
-                                flex: 6,
-
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          alignment: Alignment.centerLeft,
-                                          child: const Text(
-                                            'Physical information',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600, // Đặt fontWeight bên trong TextStyle
-                                            ),
-                                          ),
-                                        )
+                        Expanded(
+                          flex: 18,
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Color(0xFFE6E5F2), width: 1),
+                                      borderRadius: BorderRadius.circular(28),
+                                      color: Color(0xFF3ACBE9),
                                     ),
-                                    Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          alignment: Alignment.centerRight,
-                                          child:
-                                          IconButton(
-                                              onPressed: (){
-                                                print('Refresh button pressed');
-                                                //TODO: Refresh button pressed
-                                              },
-                                              icon: Image.asset(
-                                                  'lib/assets/icons/refresh_icon.png',
-                                                  height: 30)),
-                                        )
+                                    child: buildSwitchPoleWidget(
+                                      isOn: _isSwitched, // Initial state
+                                      onToggle: (bool value) {
+                                        // Handle the toggle logic here
+                                        setState(() {
+                                          _isSwitched = value;
+                                        });
+                                        print("Streetlight toggled: $value");
+                                      },
                                     ),
-                                    const SizedBox(width: 20),
-                                  ],
-                                )
-                            ),
-                            Expanded(
-                                flex: 18,
-                                child: Container(
-                                    child: Row(
-                                      children: [
-
-                                        Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                                              borderRadius: BorderRadius.circular(28),
-                                              color: Color(0xFF3ACBE9),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 20),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                                              borderRadius: BorderRadius.circular(28),
-                                              color: Color(0xFFF2946D),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 20),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                                              borderRadius: BorderRadius.circular(28),
-                                              color: Color(0xFF6F5CEA),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                )
-                            ),
-                            const SizedBox(height: 20),
-                            Expanded(
-                                flex: 33,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                                    borderRadius: BorderRadius.circular(28),
-                                    color: Color(0xFFFFFFFF),
                                   ),
-                                )
-                            ),Expanded(
-                                flex: 6,
-
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          alignment: Alignment.centerLeft,
-                                          child: const Text(
-                                            'History graph',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600, // Đặt fontWeight bên trong TextStyle
-                                            ),
-                                          ),
-                                        )
+                                ),
+                                const SizedBox(width: 20),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Color(0xFFE6E5F2), width: 1),
+                                      borderRadius: BorderRadius.circular(28),
+                                      color: Color(0xFFF2946D),
                                     ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        alignment: Alignment.centerRight,
-                                        child: const DropdownButtonWidget(label: "temperature"),
+                                    child: buildEnvShowWidget(
+                                      label: "Temperature",
+                                      value: _temperatureValue,
+                                      icon: Icons.thermostat,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Color(0xFFE6E5F2), width: 1),
+                                      borderRadius: BorderRadius.circular(28),
+                                      color: Color(0xFF6F5CEA),
+                                    ),
+                                    child: buildEnvShowWidget(
+                                      label: "Humidity",
+                                      value: _humidityValue,
+                                      icon: Icons.opacity,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Expanded(
+                          flex: 33,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: const Color(0xFFE6E5F2), width: 1),
+                              borderRadius: BorderRadius.circular(28),
+                              color: const Color(0xFFFFFFFF),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  'Air quality',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Divider(height: 20, thickness: 2),
+                                IntrinsicHeight(
+                                  child: Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Column(
+                                          children: [
+                                            AirQualityInfo(
+                                                'lib/assets/svg/air-pressure.svg',
+                                                '100.52 Pa',
+                                                'Air pressure'),
+                                            AirQualityInfo(
+                                                'lib/assets/svg/brightness.svg',
+                                                '100.52 lux',
+                                                'Luminous'),
+                                            AirQualityInfo(
+                                                'lib/assets/svg/sound.svg',
+                                                '100.52 dB',
+                                                'Noise'),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 20),
-                                  ],
-                                )
-                            ),
-                            Expanded(
-                                flex: 30,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Color(0xFFE6E5F2), width: 1),
-                                    borderRadius: BorderRadius.circular(28),
-                                    color: Color(0xFFFFFFFF),
+                                      VerticalDivider(width: 20, thickness: 2),
+                                      // Expanded(
+                                      //   child: Column(
+                                      //     children: [
+                                      //       // AirQualityInfo(
+                                      //       //     'assets/icons/particles.svg',
+                                      //       //     '100.52 μg/m³',
+                                      //       //     'PM10'),
+                                      //       // AirQualityInfo(
+                                      //       //     'assets/icons/particles.svg',
+                                      //       //     '100.52 μg/m³',
+                                      //       //     'PM2.5'),
+                                      //       // AirQualityInfo(
+                                      //       //     'assets/icons/particles.svg',
+                                      //       //     '100.52 μg/m³',
+                                      //       //     'PM4.0'),
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                    ],
                                   ),
-                                )
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 20),
-                          ],
-                        )
-                    )
+                          ),
+                        ),
+                        Expanded(
+                          flex: 6,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: const Text(
+                                    'History graph',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight
+                                          .w600, // Đặt fontWeight bên trong TextStyle
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: const DropdownButtonWidget(
+                                      label: "temperature"),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 30,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Color(0xFFE6E5F2), width: 1),
+                              borderRadius: BorderRadius.circular(28),
+                              color: Color(0xFFFFFFFF),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -337,8 +432,142 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
+  } // Widget build
 
+  Widget buildSwitchPoleWidget({
+    required bool isOn,
+    required Function(bool) onToggle,
+  }) =>
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SvgPicture.asset(
+                  'lib/assets/svg/lamp.svg',
+                  width: 45,
+                  height: 45,
+                  // ignore: deprecated_member_use
+                  color: Colors.white,
+                ),
+                SizedBox(width: 20),
+                Text(
+                  isOn ? 'ON' : 'OFF',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Switch(
+                  value: isOn, // Pass the toggle state
+                  onChanged: onToggle, // Callback for switch toggling
+                  activeTrackColor: Colors.lightGreenAccent,
+                  activeColor: Colors.black54, // Color when ON
+                  inactiveThumbColor: Colors.white70, // Color when OFF
+                  inactiveTrackColor: Colors.grey, // Background when OFF
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Text(
+                'Street light',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget buildEnvShowWidget({
+    required String label,
+    required String value,
+    required IconData icon,
+  }) =>
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(
+                  icon,
+                  color: Colors.white,
+                  size: 45,
+                ),
+                SizedBox(
+                  width: 40,
+                ),
+                Text(
+                  '$value°C',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget AirQualityInfo(String iconPath, String value, String label) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SvgPicture.asset(
+              iconPath,
+              width: 45,
+              height: 45,
+              color: Colors.black,
+            ),
+            SizedBox(width: 10),
+            Text(
+              value,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(width: 10),
+            Text(
+              label,
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+          ],
+        ),
+      );
 
   // Nút bấm
   Widget _buildButton(String label, BuildContext context, {int pageIndex = 1}) {
@@ -367,5 +596,5 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }
+  } // build
 }
