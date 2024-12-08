@@ -5,7 +5,10 @@
 
 // DEFINE POLE INFORMATION
 // #define _ESP_NUMBER_ONE_
-#define _ESP_NUMBER_TWO_
+// #define _ESP_NUMBER_TWO_
+// #define _ESP_NUMBER_THREE_
+// #define _ESP_NUMBER_FOUR_
+#define _ESP_NUMBER_FIVE_
 
 #ifdef _ESP_NUMBER_ONE_
   #define DEVICE_ID                  "NEMA_0002"
@@ -17,6 +20,24 @@
   #define DEVICE_ID                  "NEMA_0003"
   #define STATION_ID                 "NEMA_0003"
   #define STATION_NAME               "NEMA_0003"
+#endif
+
+#ifdef _ESP_NUMBER_THREE_
+  #define DEVICE_ID                  "NEMA_0004"
+  #define STATION_ID                 "NEMA_0004"
+  #define STATION_NAME               "NEMA_0004"
+#endif
+
+#ifdef _ESP_NUMBER_FOUR_
+  #define DEVICE_ID                  "NEMA_0005"
+  #define STATION_ID                 "NEMA_0005"
+  #define STATION_NAME               "NEMA_0005"
+#endif
+
+#ifdef _ESP_NUMBER_FIVE_
+  #define DEVICE_ID                  "NEMA_0006"
+  #define STATION_ID                 "NEMA_0006"
+  #define STATION_NAME               "NEMA_0006"
 #endif
 
 // DEFINE COUNTER STATE

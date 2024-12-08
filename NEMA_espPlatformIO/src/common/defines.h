@@ -1,11 +1,14 @@
 // DEFINE DEBUG MODE
-#define _DEBUG_MODE_
-#define _IS_DEBUG_MODE_ true
-// #define _IS_DEBUG_MODE_ false
+// #define _DEBUG_MODE_
+// #define _IS_DEBUG_MODE_ true
+#define _IS_DEBUG_MODE_ false
 
 // DEFINE POLE INFORMATION
 #define _ESP_NUMBER_ONE_
 // #define _ESP_NUMBER_TWO_
+// #define _ESP_NUMBER_THREE_
+// #define _ESP_NUMBER_FOUR_
+// #define _ESP_NUMBER_FIVE_
 
 #ifdef _ESP_NUMBER_ONE_
   #define DEVICE_ID                  "NEMA_0002"
@@ -18,6 +21,25 @@
   #define STATION_ID                 "NEMA_0003"
   #define STATION_NAME               "NEMA_0003"
 #endif
+
+#ifdef _ESP_NUMBER_THREE_
+  #define DEVICE_ID                  "NEMA_0004"
+  #define STATION_ID                 "NEMA_0004"
+  #define STATION_NAME               "NEMA_0004"
+#endif
+
+#ifdef _ESP_NUMBER_FOUR_
+  #define DEVICE_ID                  "NEMA_0005"
+  #define STATION_ID                 "NEMA_0005"
+  #define STATION_NAME               "NEMA_0005"
+#endif
+
+#ifdef _ESP_NUMBER_FIVE_
+  #define DEVICE_ID                  "NEMA_0006"
+  #define STATION_ID                 "NEMA_0006"
+  #define STATION_NAME               "NEMA_0006"
+#endif
+
 
 // DEFINE RELAY STATE
 #define COUNT_UP                  true
@@ -71,18 +93,17 @@
 #define MQTT_FEED_TEST_DIMMING      "BK_SmartPole/Feeds/V1"
 
 // DEFINE WIFI AP
-#define WIFI_SSID         "BK_SMART_POLE_STATION"
-#define WIFI_PASS         "ACLAB2023"
+#define WIFI_SSID         "RD-SEAI_2.4G"
+#define WIFI_PASS         ""
 
 // DEFINE DIMMING PWM
-#define PWM_CHANNEL       0
+#define PWM_CHANNEL       1
 #define PWM_FREQ          5000  // PWM frequency in Hz
 #define PWM_RESOLUTION    13  // PWM resolution in bits
 #define PWM_PIN           5
 
 // DEFINE DELAY
 #define delay_for_initialization        (10*1000)
-#define delay_test_dimming              (1000)
 #define delay_wifi                      (3600*1000)
 #define delay_connect                   (100)
 #define delay_mqtt                      (7000)
@@ -93,8 +114,13 @@
 #define delay_send_lora_process         (10*1000)
 #define delay_lora_dummy_send           (30*1000+13)
 #define delay_lora_waiting_ack          (60*1000+13)
-#define delay_handle_mqtt_buffer        (100)
+#define delay_handle_mqtt_buffer        (47)
 #define delay_handle_lora_buffer        (100)
+#define delay_waiting_ack_process       (1000)
+#define delay_dimming_debug             (100)
+
+// DEFINE WATCH DOG
+#define RESET_WATCHDOG_TIME             (300)   // seconds
 
 // DEFINE RELAY
 #define RELAY_PIN   18

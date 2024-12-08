@@ -6,5 +6,5 @@ void task_init()
   xTaskCreate(taskHandleLoraBuffer, "taskHandleLoraBuffer",4096 , NULL, 1, NULL);
   xTaskCreate(taskWaitingAckProcess, "taskWaitingAckProcess",4096 , NULL, 1, NULL);
   // xTaskCreate(taskDimmingDebug, "taskDimmingDebug",4096 , NULL, 1, NULL);
-  xTaskCreate(taskDummySendMqtt, "taskDummySendMqtt",4096 , NULL, 1, NULL);
+  // xTaskCreate(taskDummySendMqtt, "taskDummySendMqtt",4096 , NULL, 1, NULL);
 }

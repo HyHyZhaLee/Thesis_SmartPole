@@ -4,10 +4,13 @@ int relay_status = RELAY_ON;
 
 void taskInitRelayControl(void *pvParameter)
 {
+  addTaskToWatchdog(NULL);
   pinMode(RELAY_PIN, OUTPUT);
   relay_status = RELAY_OFF;
   digitalWrite(RELAY_PIN, RELAY_OFF);
 
+  resetWatchdog();
+  removeTaskFromWatchdog(NULL);
   vTaskDelete(NULL); 
 }
 

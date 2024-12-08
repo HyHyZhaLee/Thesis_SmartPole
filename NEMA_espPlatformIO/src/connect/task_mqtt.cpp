@@ -82,6 +82,7 @@ void taskMQTT(void *pvParameters)
 
   client.setServer(MQTT_SERVER, MQTT_PORT);
   client.setCallback(callback);
+  
   #ifdef _ESP_NUMBER_ONE_
     client.subscribe(MQTT_FEED_POLE_02);
   #endif

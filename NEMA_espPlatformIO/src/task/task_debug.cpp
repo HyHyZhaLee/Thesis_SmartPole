@@ -55,6 +55,9 @@ int counterDummySendMqtt = 0;
 
 void taskDummySendMqtt(void *pvParameter)
 {
+  addTaskToWatchdog(NULL);
+  vTaskDelay(delay_for_initialization);
+
   while (true)
   {
     if (counterDummySendMqtt == 10)
@@ -100,8 +103,12 @@ void taskDummySendMqtt(void *pvParameter)
 
     printlnData(MQTT_FEED_NOTHING, String(counterDummySendMqtt));
 
+    resetWatchdog();
     vTaskDelay(pdMS_TO_TICKS(delay_lora_dummy_send));
   }
+
+  removeTaskFromWatchdog(NULL);
+  vTaskDelete(NULL);
 }
 
 int counter = 100;
@@ -109,6 +116,9 @@ bool counterState = COUNT_UP;
 
 void taskDimmingDebug(void *pvParameter)
 {
+  addTaskToWatchdog(NULL);
+  vTaskDelay(delay_for_initialization);
+
   while (true)
   {
     if (counter < 0)
@@ -137,6 +147,11 @@ void taskDimmingDebug(void *pvParameter)
     printlnData(MQTT_FEED_NOTHING, String(counter));
 
     pwm_set_duty(counter);
-    vTaskDelay(100);
+    
+    resetWatchdog();
+    vTaskDelay(delay_dimming_debug);
   }
+
+  removeTaskFromWatchdog(NULL);
+  vTaskDelete(NULL);
 }

@@ -7,7 +7,9 @@
 #include <ArduinoJson.h>
 #include <M5_LoRa_E220_JP.h>
 #include <Preferences.h>
+#include <esp_task_wdt.h>
 #include <vector>
+#include <esp32-hal-ledc.h>
 
 // include common files
 #include "../src/common/defines.h"
@@ -25,5 +27,8 @@
 #include "../src/utils/on_off_json.h"
 #include "../src/utils/serial_print.h"
 #include "../src/utils/light_control.h"
+
+// include hal file
+#include "../src/hal/watch_dog.h"
 
 #endif /* GLOBAL_H */

@@ -5,7 +5,7 @@ int ledState = LED_OFF;
 void taskLedBlink(void *pvParameters)
 {
   pinMode (INBUILD_LED_PIN, OUTPUT);
-
+  
   while (true)
   {
     if (ledState == LED_OFF)

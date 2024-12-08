@@ -14,6 +14,7 @@ void setup() {
   }
   semaphoreLora = xSemaphoreCreateMutex();
 
+  initWatchdogTimer(RESET_WATCHDOG_TIME);
 
   connect_init();
   delay(delay_for_initialization);

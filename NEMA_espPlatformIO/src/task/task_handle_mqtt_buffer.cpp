@@ -11,7 +11,9 @@ void bufferInit()
 void taskHandleMqttBuffer(void *pvParameter)
 {
   bufferInit();
-  
+  addTaskToWatchdog(NULL);
+  vTaskDelay(delay_for_initialization);
+
   while (true)
   {
     if (!mqttBuffer.empty())
@@ -59,7 +61,10 @@ void taskHandleMqttBuffer(void *pvParameter)
         }
       }
     }
-
-    vTaskDelay(delay_handle_mqtt_buffer);
+    resetWatchdog(); 
+    vTaskDelay(pdMS_TO_TICKS(delay_handle_mqtt_buffer));
   }
+
+  removeTaskFromWatchdog(NULL);
+  vTaskDelete(NULL);
 }

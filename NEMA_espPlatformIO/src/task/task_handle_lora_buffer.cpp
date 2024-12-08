@@ -13,6 +13,8 @@ void initLoreBuffer()
 void taskHandleLoraBuffer(void *pvParameter)
 {
   initLoreBuffer();
+  addTaskToWatchdog(NULL);
+  vTaskDelay(delay_for_initialization);
 
   while (true)
   {
@@ -63,8 +65,13 @@ void taskHandleLoraBuffer(void *pvParameter)
         printlnData(MQTT_FEED_NOTHING, "recv mess: " + stringJson);
       }
     }
+
+    resetWatchdog();
     vTaskDelay(delay_handle_lora_buffer);
   }
+
+  removeTaskFromWatchdog(NULL);
+  vTaskDelete(NULL);
 }
 
 
@@ -77,6 +84,8 @@ void init_waiting_ack_list()
 void taskWaitingAckProcess(void *pvParameter)
 {
   init_waiting_ack_list();
+  addTaskToWatchdog(NULL);
+  vTaskDelay(delay_for_initialization);
 
   while (true)
   {
@@ -132,7 +141,10 @@ void taskWaitingAckProcess(void *pvParameter)
         it++;
       }
     }
-    vTaskDelay(1000);
+    resetWatchdog();
+    vTaskDelay(delay_waiting_ack_process);
   }
+
+  removeTaskFromWatchdog(NULL);
   vTaskDelete(NULL);
 }

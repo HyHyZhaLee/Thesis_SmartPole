@@ -84,6 +84,7 @@ void taskLoraRecv (void* pvParameters)
 
 void taskLoraSend(void* pvParameters)
 {
+  
   vTaskDelay(delay_for_initialization);
   String msg = "Hello, world!";
   while (true)

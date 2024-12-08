@@ -1,6 +1,7 @@
 #include "task_wifi.h"
 void taskWifi(void *pvParameters)
 {
+    addTaskToWatchdog(NULL);
     WiFi.mode(WIFI_STA);
     String ssid = WIFI_SSID;
     String password = WIFI_PASS;
@@ -28,8 +29,12 @@ void taskWifi(void *pvParameters)
             }
             printlnData(MQTT_FEED_NOTHING, "Reconnected to WiFi...");
         }
+        resetWatchdog();
         vTaskDelay(delay_wifi / portTICK_PERIOD_MS);
     }
+    
+    removeTaskFromWatchdog(NULL);
+    vTaskDelete(NULL);
 }
 
 void wifi_init()

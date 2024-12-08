@@ -4,28 +4,31 @@
 
 LightControl :: LightControl(String strJson)
 {
-  if (strJson[0] != '{' && strJson.endsWith("}"))
+  if (strJson[0] != '{' || strJson.endsWith("}") != true)
   {
-    printData(MQTT_FEED_NOTHING , "Initial Light Control invalid");
+    printlnData(MQTT_FEED_NOTHING , "Initial Light Control invalid");
     return;
-  }
-  DynamicJsonDocument document(1024);
-  deserializeJson(document, strJson);
-  station_id = document["station_id"].as<String>();
-  station_name = document["station_name"].as<String>();
-  action = document["action"].as<String>();
-  device_id = document["device_id"].as<String>();
+  } 
+  else 
+  {
+    JsonDocument document;
+    deserializeJson(document, strJson);
+    station_id = document["station_id"].as<String>();
+    station_name = document["station_name"].as<String>();
+    action = document["action"].as<String>();
+    device_id = document["device_id"].as<String>();
 
-  if (document["data"].is<JsonObject>()) {
-    JsonObject data = document["data"].as<JsonObject>();
-    from = data["from"].as<String>();
-    to = data["to"].as<String>();
-    dimming = data["dimming"].as<String>();
-  }
+    if (document["data"].is<JsonObject>()) {
+      JsonObject data = document["data"].as<JsonObject>();
+      from = data["from"].as<String>();
+      to = data["to"].as<String>();
+      dimming = data["dimming"].as<String>();
+    }
 
-  document.clear();
+    document.clear();
+  }
 }
-LightControl :: LightControl(DynamicJsonDocument &document)
+LightControl :: LightControl(JsonDocument &document)
 {
   station_id = document["station_id"].as<String>();
   station_name = document["station_name"].as<String>();
@@ -41,7 +44,7 @@ LightControl :: LightControl(DynamicJsonDocument &document)
 }
 
 String LightControl :: genStringFromJson(){
-  DynamicJsonDocument doc(1024);
+  JsonDocument doc;
 
   doc["station_id"] = station_id;
   doc["station_name"] = station_name;
