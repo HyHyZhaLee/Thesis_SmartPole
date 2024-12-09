@@ -324,55 +324,87 @@ class _HomePageState extends State<HomePage> {
                               color: const Color(0xFFFFFFFF),
                             ),
                             child: Column(
-                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start, // Align text
+                              mainAxisAlignment: MainAxisAlignment
+                                  .center, // Align the column vertically
                               children: <Widget>[
-                                Text(
-                                  'Air quality',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(50, 0, 40, 0),
+                                  child: Text(
+                                    'Air quality',
+                                    style: TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                                Divider(height: 20, thickness: 2),
                                 IntrinsicHeight(
                                   child: Row(
                                     children: <Widget>[
                                       Expanded(
-                                        child: Column(
-                                          children: [
-                                            AirQualityInfo(
-                                                'lib/assets/svg/air-pressure.svg',
-                                                '100.52 Pa',
-                                                'Air pressure'),
-                                            AirQualityInfo(
-                                                'lib/assets/svg/brightness.svg',
-                                                '100.52 lux',
-                                                'Luminous'),
-                                            AirQualityInfo(
-                                                'lib/assets/svg/sound.svg',
-                                                '100.52 dB',
-                                                'Noise'),
-                                          ],
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 80),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment
+                                                    .center, // Align text
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .center, // Align the column vertically
+                                            children: [
+                                              buildEnvSensorInfo(
+                                                  'lib/assets/svg/air-pressure.svg',
+                                                  '100.52 Pa',
+                                                  'Air pressure'),
+                                              buildEnvSensorInfo(
+                                                  'lib/assets/svg/brightness.svg',
+                                                  '100.52 lux',
+                                                  'Luminous'),
+                                              buildEnvSensorInfo(
+                                                  'lib/assets/svg/sound.svg',
+                                                  '100.52 dB',
+                                                  'Noise'),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                      VerticalDivider(width: 20, thickness: 2),
-                                      // Expanded(
-                                      //   child: Column(
-                                      //     children: [
-                                      //       // AirQualityInfo(
-                                      //       //     'assets/icons/particles.svg',
-                                      //       //     '100.52 μg/m³',
-                                      //       //     'PM10'),
-                                      //       // AirQualityInfo(
-                                      //       //     'assets/icons/particles.svg',
-                                      //       //     '100.52 μg/m³',
-                                      //       //     'PM2.5'),
-                                      //       // AirQualityInfo(
-                                      //       //     'assets/icons/particles.svg',
-                                      //       //     '100.52 μg/m³',
-                                      //       //     'PM4.0'),
-                                      //     ],
-                                      //   ),
-                                      // ),
+                                      VerticalDivider(
+                                        width: 30,
+                                        thickness: 5,
+                                        color: Colors.black,
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 80),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment
+                                                    .center, // Align text
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .center, // Align the column vertically
+                                            children: [
+                                              buildAirQualityInfo(
+                                                'lib/assets/svg/pm1_0.svg',
+                                                '100.52 μg/m³',
+                                              ),
+                                              buildAirQualityInfo(
+                                                'lib/assets/svg/pm2_5.svg',
+                                                '100.52 μg/m³',
+                                              ),
+                                              buildAirQualityInfo(
+                                                'lib/assets/svg/pm4_0.svg',
+                                                '100.52 μg/m³',
+                                              ),
+                                              buildAirQualityInfo(
+                                                'lib/assets/svg/pm10.svg',
+                                                '100.52 μg/m³',
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -544,26 +576,76 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 
-  Widget AirQualityInfo(String iconPath, String value, String label) => Padding(
+  Widget buildEnvSensorInfo(
+    String iconPath,
+    String value,
+    String label,
+  ) =>
+      Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              width: 140,
+              alignment: Alignment.center,
+              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center, // Align text
+                mainAxisAlignment:
+                    MainAxisAlignment.center, // Align the column vertically
+                children: [
+                  SvgPicture.asset(
+                    iconPath,
+                    width: 40,
+                    height: 40,
+                    color: Colors.black,
+                  ),
+                  Text(
+                    label,
+                    style: TextStyle(fontSize: 14, color: Colors.black87),
+                  ),
+                ],
+              ), // Column
+            ), // Sized Box
+
+            Text(
+              '$value',
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ), // Row
+      );
+
+  Widget buildAirQualityInfo(
+    String svgPath,
+    String value,
+  ) =>
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             SvgPicture.asset(
-              iconPath,
-              width: 45,
-              height: 45,
-              color: Colors.black,
+              svgPath,
+              width: 40,
+              height: 40,
+              // color: Colors.black,
             ),
-            SizedBox(width: 10),
-            Text(
-              value,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            SizedBox(
+              width: 30,
             ),
-            SizedBox(width: 10),
             Text(
-              label,
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              '$value',
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),

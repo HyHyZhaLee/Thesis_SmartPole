@@ -134,6 +134,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "equatable",
+      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/equatable-2.0.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "event_bus",
       "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/event_bus-2.0.0",
       "packageUri": "lib/",
@@ -190,6 +196,12 @@
     {
       "name": "firebase_database_web",
       "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_database_web-0.2.5+11",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "fl_chart",
+      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/fl_chart-0.69.2",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -674,7 +686,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-12-08T17:59:00.109897Z",
+  "generated": "2024-12-09T12:57:19.843204Z",
   "generator": "pub",
   "generatorVersion": "3.5.3",
   "flutterRoot": "file:///C:/flutter2/flutter",

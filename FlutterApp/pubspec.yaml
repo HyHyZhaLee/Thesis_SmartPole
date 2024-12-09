@@ -54,6 +54,7 @@ dependencies:
   provider: ^6.1.2
   cloud_firestore: ^5.4.4
   shadcn_ui: ^0.16.0
+  fl_chart: ^0.69.2
 
 dev_dependencies:
   flutter_test:
