@@ -25,6 +25,7 @@ void taskWifi(void *pvParameters)
             while (WiFi.status() != WL_CONNECTED)
             {
                 printlnData(MQTT_FEED_NOTHING, "Reconnecting to WiFi...");
+                resetWatchdog();
                 vTaskDelay(delay_wifi / portTICK_PERIOD_MS);
             }
             printlnData(MQTT_FEED_NOTHING, "Reconnected to WiFi...");

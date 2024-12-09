@@ -29,19 +29,6 @@ void pwm_set_duty(int dutyPercent)
   
   ledcWrite(PWM_CHANNEL, dutyPercentManually);
 }
-
-void task_pwm_light_control_update(void *pvParameter)
-{
-  addTaskToWatchdog(NULL);
-  while (true)
-  {
-    ledcWrite(PWM_CHANNEL, dutyPercentManually);
-
-    resetWatchdog();
-    vTaskDelay(53);
-  }
-}
-
 void task_pwm_light_control_init(void* pvParameters)
 {
   pwm_init();
