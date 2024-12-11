@@ -9,6 +9,7 @@ import '../widgets/dropdown_button_widget.dart';
 import '../provider/page_controller_provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:flutter_app/widgets/line_chart_temp_homepage.dart';
+import 'package:flutter_app/widgets/temperature_line_chart.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -99,7 +100,6 @@ class _HomePageState extends State<HomePage> {
         .limitToLast(1)
         .onValue
         .listen((event) {
-      print(event.snapshot.value);
       if (event.snapshot.exists) {
         Map<dynamic, dynamic> dataValue =
             event.snapshot.value as Map<dynamic, dynamic>;
@@ -123,52 +123,6 @@ class _HomePageState extends State<HomePage> {
           } else {
             print("Wrong data name");
           }
-        });
-      }
-    });
-  }
-
-  void listenForLatestTemperature() {
-    global_databaseReference
-        .child(_deviceID)
-        .child(_stationID)
-        .child("temperature")
-        .child(today)
-        .orderByKey()
-        .limitToLast(1)
-        .onValue
-        .listen((event) {
-      print(event.snapshot.value);
-      if (event.snapshot.exists) {
-        Map<dynamic, dynamic> tempData =
-            event.snapshot.value as Map<dynamic, dynamic>;
-        String latestKey = tempData.keys.first;
-        double tempValue = tempData[latestKey];
-        setState(() {
-          _temperatureValue = "$tempValue°C";
-        });
-      }
-    });
-  }
-
-  void listenForLatestHumidity() {
-    global_databaseReference
-        .child(_deviceID)
-        .child(_stationID)
-        .child("humidity")
-        .child(today)
-        .orderByKey()
-        .limitToLast(1)
-        .onValue
-        .listen((event) {
-      print(event.snapshot.value);
-      if (event.snapshot.exists) {
-        Map<dynamic, dynamic> humiData =
-            event.snapshot.value as Map<dynamic, dynamic>;
-        String latestKey = humiData.keys.first;
-        double humiValue = humiData[latestKey];
-        setState(() {
-          _humidityValue = "$humiValue%";
         });
       }
     });
@@ -553,6 +507,10 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(28),
                               color: Color(0xFFFFFFFF),
                             ),
+                            child: LineChartWidget(
+                                deviceId: _deviceID,
+                                stationId: _stationID,
+                                sensorType: "temperature"),
                           ),
                         ),
                         const SizedBox(height: 20),

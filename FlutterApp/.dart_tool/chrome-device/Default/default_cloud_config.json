@@ -321,12 +321,12 @@
    }, {
       "appName": "UAShimmingiOS",
       "data": {
-         "chromelist": [ "identitypass.microsoft.com", "wallet.pnb.org" ],
+         "chromelist": [ "identitypass.microsoft.com", "wallet.pnb.org*" ],
          "safarilist": [  ]
       },
       "effectStrategy": "realtime",
       "type": "builtin",
-      "version": "1002"
+      "version": "1003"
    } ],
-   "version": "202412100001"
+   "version": "202412110001"
 }
