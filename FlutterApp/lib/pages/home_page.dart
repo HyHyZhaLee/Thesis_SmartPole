@@ -33,6 +33,9 @@ class _HomePageState extends State<HomePage> {
   String _ambientLight = "0";
   String _noise = "0";
 
+  String _selectedHistoryShow = "temperature";
+  String _unitDataShow = "℃";
+
   String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
   @override
   void initState() {
@@ -490,8 +493,11 @@ class _HomePageState extends State<HomePage> {
                                 flex: 1,
                                 child: Container(
                                   alignment: Alignment.centerRight,
-                                  child: const DropdownButtonWidget(
-                                      label: "temperature"),
+                                  child: DropdownButtonWidget(
+                                    label: "Temperature",
+                                    onOptionSelected:
+                                        handleHistoryChartSelection,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 20),
@@ -508,9 +514,13 @@ class _HomePageState extends State<HomePage> {
                               color: Color(0xFFFFFFFF),
                             ),
                             child: LineChartWidget(
-                                deviceId: _deviceID,
-                                stationId: _stationID,
-                                sensorType: "temperature"),
+                              key: ValueKey(_selectedHistoryShow),
+                              deviceId: _deviceID,
+                              stationId: _stationID,
+                              sensorType: _selectedHistoryShow,
+                              unitData: _unitDataShow,
+                              color: Colors.redAccent,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -710,6 +720,21 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       );
+
+  void handleHistoryChartSelection(String newSelection) {
+    setState(() {
+      if (newSelection == "Temperature") {
+        _selectedHistoryShow = "temperature";
+        _unitDataShow = "℃";
+      } else if (newSelection == "Humidity") {
+        _selectedHistoryShow = "humidity";
+        _unitDataShow = "%";
+      } else if (newSelection == "Luminous") {
+        _selectedHistoryShow = "ambient_light";
+        _unitDataShow = "Lux";
+      }
+    });
+  }
 
   // Nút bấm
   Widget _buildButton(String label, BuildContext context, {int pageIndex = 1}) {
