@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
@@ -85,6 +84,17 @@ class _LineChartWidgetState extends State<LineChartWidget> {
       return 70;
     } else if (widget.sensorType == "ambient_light") {
       return 2000;
+    }
+    return null;
+  }
+
+  Color? getColor() {
+    if (widget.sensorType == "temperature") {
+      return Colors.red;
+    } else if (widget.sensorType == "hunidity") {
+      return Colors.blue;
+    } else if (widget.sensorType == "ambient_light") {
+      return Colors.green;
     }
     return null;
   }
@@ -185,7 +195,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                 LineChartBarData(
                   spots: _spots,
                   isCurved: true,
-                  color: Colors.redAccent, // Line color
+                  color: getColor(), // Line color
                   barWidth: 5,
                   isStrokeCapRound: true,
                   dotData: FlDotData(
@@ -193,14 +203,14 @@ class _LineChartWidgetState extends State<LineChartWidget> {
                     getDotPainter: (spot, percent, barData, index) {
                       return FlDotCirclePainter(
                         radius: 1, // Dot size
-                        color: Colors.redAccent, // Dot color
+                        color: getColor()!, // Dot color
                         strokeWidth: 0, // No border
                       );
                     },
                   ),
                   belowBarData: BarAreaData(
                     show: true,
-                    color: Colors.red.withOpacity(0.3),
+                    color: getColor()?.withOpacity(0.5),
                   ),
                 ),
               ],

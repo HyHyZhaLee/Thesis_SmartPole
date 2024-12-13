@@ -55,6 +55,11 @@ dependencies:
   cloud_firestore: ^5.4.4
   shadcn_ui: ^0.16.0
   fl_chart: ^0.69.2
+  fastor_app_ui_widget: ^1.3.61
+  video_player: ^2.9.2
+  flutter_html: ^3.0.0-beta.2
+  youtube_player_iframe: ^5.2.1
+  youtube_player_flutter: ^9.1.1
 
 dev_dependencies:
   flutter_test:

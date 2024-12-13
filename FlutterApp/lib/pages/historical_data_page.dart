@@ -1,10 +1,178 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/widgets/historical_line_chart.dart';
+import 'package:intl/intl.dart';
 
-class HistoricalDataPage extends StatelessWidget {
+class HistoricalDataPage extends StatefulWidget {
   const HistoricalDataPage({super.key});
 
   @override
+  _HistoricalDataPageState createState() => _HistoricalDataPageState();
+}
+
+class _HistoricalDataPageState extends State<HistoricalDataPage> {
+  DateTime _lineChartDate = DateTime.now();
+  String _lineChartData = 'Air pressure';
+  String _fireChild = 'air_pressure';
+  String _deviceID = 'NEMA_0002';
+  String _stationID = 'AIR_0002';
+  String _unitDataShow = 'Pa';
+  double _minY = 90.0;
+  double _maxY = 120.0;
+
+  List<String> dropdownOptions = [
+    'Air pressure',
+    'Brightness',
+    'Humidity',
+    'Noise',
+    'Temperature',
+    'PM10',
+    'PM2.5',
+  ];
+
+  void handleLineChartInfor(String lineChartData) {
+    if (lineChartData == 'Air pressure') {
+      setState(() {
+        _fireChild = 'air_pressure';
+        _unitDataShow = 'Pa';
+        _minY = 90.0;
+        _maxY = 120.0;
+      });
+    } else if (lineChartData == 'Brightness') {
+      setState(() {
+        _fireChild = 'ambient_light';
+        _unitDataShow = 'Lux';
+        _minY = 0.0;
+        _maxY = 2100.0;
+      });
+    } else if (lineChartData == 'Humidity') {
+      setState(() {
+        _fireChild = 'humidity';
+        _unitDataShow = '%';
+        _minY = 60.0;
+        _maxY = 90.0;
+      });
+    } else if (lineChartData == 'Noise') {
+      setState(() {
+        _fireChild = 'noise';
+        _unitDataShow = 'dB';
+        _minY = 0.0;
+        _maxY = 90.0;
+      });
+    } else if (lineChartData == 'Temperature') {
+      setState(() {
+        _fireChild = 'temperature';
+        _unitDataShow = '℃';
+        _minY = 25.0;
+        _maxY = 35.0;
+      });
+    } else if (lineChartData == 'PM10') {
+      setState(() {
+        _fireChild = 'PM10';
+        _unitDataShow = 'µg/m3';
+        _minY = 0.0;
+        _maxY = 100.0;
+      });
+    } else if (lineChartData == 'PM2.5') {
+      setState(() {
+        _fireChild = 'PM2_5';
+        _unitDataShow = 'µg/m3';
+        _minY = 0.0;
+        _maxY = 100.0;
+      });
+    }
+  }
+
+  void _pickDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _lineChartDate,
+      firstDate: DateTime(1024, 12, 1),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != _lineChartDate) {
+      setState(() {
+        _lineChartDate = picked;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Historical Data Page'));
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Historical data',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.deepPurpleAccent,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.calendar_today),
+            color: Colors.white,
+            onPressed: _pickDate,
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Container(
+            height: 36,
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Color(0xFFEDEEF4),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: DropdownButton<String>(
+              value: _lineChartData,
+              icon: const Icon(Icons.arrow_circle_down),
+              underline: const SizedBox(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _lineChartData = newValue!;
+                  handleLineChartInfor(newValue);
+                });
+              },
+              items:
+                  dropdownOptions.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF333333),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          SizedBox(
+            width: 30,
+          ),
+        ],
+      ),
+      body: Center(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xFFE6E5F2), width: 1),
+            borderRadius: BorderRadius.circular(14),
+            color: Color(0xFFFFFFFF),
+          ),
+          child: HistoricalLineChartWidget(
+            key: ValueKey([_lineChartData, _lineChartDate]),
+            deviceId: _deviceID,
+            stationId: _stationID,
+            sensorType: _fireChild,
+            unitData: _unitDataShow,
+            minY: _minY,
+            maxY: _maxY,
+            color: Colors.redAccent,
+            date: DateFormat('yyyy-MM-dd').format(_lineChartDate),
+          ),
+        ),
+      ),
+    );
   }
 }

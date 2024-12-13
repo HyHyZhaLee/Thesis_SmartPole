@@ -78,6 +78,16 @@
       "type": "normal",
       "version": "1007"
    }, {
+      "appId": "idcfwggqzmnqmjrrncznqaggwhcxbjof",
+      "appName": "beta_enrollment",
+      "data": {
+         "enable": true
+      },
+      "effectStrategy": "launch",
+      "instanceId": "bzatjpaqglyyxiaqtufvrwcynulkjazt",
+      "type": "normal",
+      "version": "1001"
+   }, {
       "appId": "e54758ece3475afa1b2a65wsefd0db36",
       "appName": "ads_block",
       "data": {
@@ -328,5 +338,5 @@
       "type": "builtin",
       "version": "1003"
    } ],
-   "version": "202412120001"
+   "version": "202412130001"
 }

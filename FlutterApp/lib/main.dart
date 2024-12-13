@@ -16,7 +16,6 @@ import 'pages/security_cameras_page.dart';
 import 'pages/advertisement_schedule_page.dart';
 import 'pages/environmental_sensors_page.dart';
 import 'pages/historical_data_page.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

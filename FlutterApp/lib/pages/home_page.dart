@@ -8,7 +8,7 @@ import '../AppFunction/global_helper_function.dart'; // Để dùng getCurrentTi
 import '../widgets/dropdown_button_widget.dart';
 import '../provider/page_controller_provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:flutter_app/widgets/line_chart_temp_homepage.dart';
+// import 'package:flutter_app/widgets/line_chart_temp_homepage.dart';
 import 'package:flutter_app/widgets/temperature_line_chart.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,7 +24,6 @@ class _HomePageState extends State<HomePage> {
   String _deviceID = "NEMA_0002"; // ID của thiết bị
   String _stationID = "AIR_0002";
 
-  String _statusMessage = 'Disconnected'; // Trạng thái kết nối
   String _humidityValue = '80'; // Thông tin độ ẩm
   String _temperatureValue = '20'; // Thông tin nhiệt độ
   String _pm10 = '100'; // Thông tin hạt bụi mịn bán kính 10
@@ -510,7 +509,7 @@ class _HomePageState extends State<HomePage> {
                             decoration: BoxDecoration(
                               border: Border.all(
                                   color: Color(0xFFE6E5F2), width: 1),
-                              borderRadius: BorderRadius.circular(28),
+                              borderRadius: BorderRadius.circular(16),
                               color: Color(0xFFFFFFFF),
                             ),
                             child: LineChartWidget(
