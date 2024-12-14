@@ -18,7 +18,11 @@ MQTT_CONTROL_LIGHT_TOPIC = "BK_SmartPole/feeds/V20"
   "station_name": "Smart Pole 0002",
   "action": "control light",
   "device_id": "NEMA_0002",
-  "data": "70"
+  "data": {
+    "from": "NEMA_0002",
+    "to": "NEMA_0003",
+    "dimming": "70",
+  }
 }
 
 MQTT_NEMA_SENSOR_TOPIC = "BK_SmartPole/feeds/V15"
