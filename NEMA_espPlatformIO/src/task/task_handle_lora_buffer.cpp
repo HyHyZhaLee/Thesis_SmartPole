@@ -48,13 +48,10 @@ void taskHandleLoraBuffer(void *pvParameter)
               printlnData(MQTT_FEED_NOTHING, it->deviceId);
               printlnData(MQTT_FEED_NOTHING, it->deviceDimming);
 
-              if (xSemaphoreTake(semaphoreLora, portMAX_DELAY) == pdTRUE)
-              {
-                lora_waiting_ack_list.erase(it);
-                printlnData(MQTT_FEED_NOTHING, "erase out of the process");
-                printlnData(MQTT_FEED_NOTHING, String(lora_waiting_ack_list.size()));
-                xSemaphoreGive(semaphoreLora);
-              }
+              lora_waiting_ack_list.erase(it);
+              printlnData(MQTT_FEED_NOTHING, "erase out of the process");
+              printlnData(MQTT_FEED_NOTHING, String(lora_waiting_ack_list.size()));
+
               break;
             }    
           }
@@ -96,19 +93,14 @@ void taskWaitingAckProcess(void *pvParameter)
       {
         if (it->counter_resend <= 0)
         {
-          if (xSemaphoreTake(semaphoreLora, portMAX_DELAY) == pdTRUE)
-          {
-            printlnData(MQTT_FEED_TEST_LORA_SEND, "Error: Received ACK from " 
+          printlnData(MQTT_FEED_TEST_LORA_SEND, "Error: Received ACK from " 
               + it->deviceId
               + " failed");
 
-            // publish data error announcement  
-            publishData(MQTT_FEED_TEST_LORA_SEND, "Error: Received ACK from "
+          // publish data error announcement  
+          publishData(MQTT_FEED_TEST_LORA_SEND, "Error: Received ACK from "
               + it->deviceId
               + " failed");
-
-            xSemaphoreGive(semaphoreLora);
-          }
 
           it = lora_waiting_ack_list.erase(it);
           continue;
