@@ -290,60 +290,6 @@
       "languageVersion": "3.0"
     },
     {
-      "name": "flutter_html",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_html-3.0.0-beta.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.17"
-    },
-    {
-      "name": "flutter_inappwebview",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview-6.1.5",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "flutter_inappwebview_android",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview_android-1.1.3",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "flutter_inappwebview_internal_annotations",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview_internal_annotations-1.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.17"
-    },
-    {
-      "name": "flutter_inappwebview_ios",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview_ios-1.1.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "flutter_inappwebview_macos",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview_macos-1.1.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "flutter_inappwebview_platform_interface",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview_platform_interface-1.3.0+1",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "flutter_inappwebview_web",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview_web-1.1.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "flutter_inappwebview_windows",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview_windows-0.6.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
       "name": "flutter_launcher_icons",
       "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_launcher_icons-0.13.1",
       "packageUri": "lib/",
@@ -486,12 +432,6 @@
       "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/lints-3.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
-    },
-    {
-      "name": "list_counter",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/list_counter-1.0.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.18"
     },
     {
       "name": "log_debug",
@@ -866,54 +806,6 @@
       "languageVersion": "2.17"
     },
     {
-      "name": "url_launcher",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.3.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
-      "name": "url_launcher_android",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.3.14",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "url_launcher_ios",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_ios-6.3.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
-      "name": "url_launcher_linux",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_linux-3.2.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
-      "name": "url_launcher_macos",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_macos-3.2.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
-      "name": "url_launcher_platform_interface",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_platform_interface-2.3.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.1"
-    },
-    {
-      "name": "url_launcher_web",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_web-2.3.3",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
-      "name": "url_launcher_windows",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_windows-3.1.3",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
       "name": "uuid",
       "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/uuid-4.5.1",
       "packageUri": "lib/",
@@ -944,36 +836,6 @@
       "languageVersion": "2.14"
     },
     {
-      "name": "video_player",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/video_player-2.9.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
-      "name": "video_player_android",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_android-2.7.16",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "video_player_avfoundation",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_avfoundation-2.6.5",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
-      "name": "video_player_platform_interface",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_platform_interface-6.2.3",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
-      "name": "video_player_web",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_web-2.3.3",
-      "packageUri": "lib/",
-      "languageVersion": "3.4"
-    },
-    {
       "name": "vm_service",
       "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-14.2.5",
       "packageUri": "lib/",
@@ -984,30 +846,6 @@
       "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/web-1.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
-    },
-    {
-      "name": "webview_flutter",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter-4.10.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "webview_flutter_android",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_android-4.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "webview_flutter_platform_interface",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_platform_interface-2.10.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
-    },
-    {
-      "name": "webview_flutter_wkwebview",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_wkwebview-3.16.3",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
     },
     {
       "name": "xdg_directories",
@@ -1028,31 +866,13 @@
       "languageVersion": "2.19"
     },
     {
-      "name": "youtube_player_flutter",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/youtube_player_flutter-9.1.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "youtube_player_iframe",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/youtube_player_iframe-5.2.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "youtube_player_iframe_web",
-      "rootUri": "file:///C:/Users/royal/AppData/Local/Pub/Cache/hosted/pub.dev/youtube_player_iframe_web-3.1.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
       "name": "flutter_app",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-12-13T17:33:00.281410Z",
+  "generated": "2024-12-15T03:11:18.853706Z",
   "generator": "pub",
   "generatorVersion": "3.5.3",
   "flutterRoot": "file:///C:/flutter2/flutter",

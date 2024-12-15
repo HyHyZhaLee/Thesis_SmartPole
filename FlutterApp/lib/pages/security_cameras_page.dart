@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/widgets/stream_video_widget.dart';
 
 class SecurityCamerasPage extends StatelessWidget {
   const SecurityCamerasPage({super.key});
