@@ -13,6 +13,8 @@ import 'package:firebase_database_web/firebase_database_web.dart';
 import 'package:flutter_timezone/flutter_timezone_web.dart';
 import 'package:permission_handler_html/permission_handler_html.dart';
 import 'package:shared_preferences_web/shared_preferences_web.dart';
+import 'package:video_player_web/video_player_web.dart';
+import 'package:video_player_web_hls/video_player_web_hls.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void registerPlugins([final Registrar? pluginRegistrar]) {
@@ -24,5 +26,7 @@ void registerPlugins([final Registrar? pluginRegistrar]) {
   FlutterTimezonePlugin.registerWith(registrar);
   WebPermissionHandler.registerWith(registrar);
   SharedPreferencesPlugin.registerWith(registrar);
+  VideoPlayerPlugin.registerWith(registrar);
+  VideoPlayerPluginHls.registerWith(registrar);
   registrar.registerMessageHandler();
 }
