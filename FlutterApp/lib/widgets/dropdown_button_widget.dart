@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class DropdownButtonWidget extends StatefulWidget {
-  const DropdownButtonWidget({Key? key, required String label}) : super(key: key);
+  final void Function(String)
+      onOptionSelected; // Callback to pass the selected option
+
+  const DropdownButtonWidget({
+    Key? key,
+    required String label,
+    required this.onOptionSelected,
+  }) : super(key: key);
 
   @override
   _DropdownButtonWidgetState createState() => _DropdownButtonWidgetState();
@@ -33,6 +40,8 @@ class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
         onChanged: (String? newValue) {
           setState(() {
             selectedOption = newValue!;
+            widget.onOptionSelected(
+                newValue); // Trigger the callback with the new value
           });
         },
         items: options.map<DropdownMenuItem<String>>((String value) {

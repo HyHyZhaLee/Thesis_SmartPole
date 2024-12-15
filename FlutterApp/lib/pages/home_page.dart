@@ -8,6 +8,8 @@ import '../AppFunction/global_helper_function.dart'; // Để dùng getCurrentTi
 import '../widgets/dropdown_button_widget.dart';
 import '../provider/page_controller_provider.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+// import 'package:flutter_app/widgets/line_chart_temp_homepage.dart';
+import 'package:flutter_app/widgets/temperature_line_chart.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,14 +21,32 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   double _currentSliderValue = 0; // Giá trị ban đầu của slider
   bool _isSwitched = false; // Trạng thái cho switch bên phải
-  String _deviceID = 'NEMA_02'; // ID của thiết bị
-  String _statusMessage = 'Disconnected'; // Trạng thái kết nối
+  String _deviceID = "NEMA_0002"; // ID của thiết bị
+  String _stationID = "AIR_0002";
+
   String _humidityValue = '80'; // Thông tin độ ẩm
   String _temperatureValue = '20'; // Thông tin nhiệt độ
+  String _pm10 = '100'; // Thông tin hạt bụi mịn bán kính 10
+  String _pm2_5 = '100';
+  String _airPressure = "0";
+  String _ambientLight = "0";
+  String _noise = "0";
+
+  String _selectedHistoryShow = "temperature";
+  String _unitDataShow = "℃";
+
+  String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
   @override
   void initState() {
     super.initState();
     _loadInitialBrightness(); // Load dữ liệu ban đầu từ Firebase
+    listenForLastestDataAirSensor("temperature", "°C");
+    listenForLastestDataAirSensor("humidity", "%");
+    listenForLastestDataAirSensor("PM10", "μg/m³");
+    listenForLastestDataAirSensor("PM2_5", "μg/m³");
+    listenForLastestDataAirSensor("air_pressure", "Pa");
+    listenForLastestDataAirSensor("ambient_light", "lux");
+    listenForLastestDataAirSensor("noise", "dB");
   }
 
   Future<void> _loadInitialBrightness() async {
@@ -69,6 +89,44 @@ class _HomePageState extends State<HomePage> {
     global_databaseReference.child(deviceID).child("Newest data").set({
       "brightness": value.round(),
       "timestamp": getCurrentTimestamp(),
+    });
+  }
+
+  void listenForLastestDataAirSensor(String dataName, String dataUnit) {
+    global_databaseReference
+        .child(_deviceID)
+        .child(_stationID)
+        .child(dataName)
+        .child(today)
+        .orderByKey()
+        .limitToLast(1)
+        .onValue
+        .listen((event) {
+      if (event.snapshot.exists) {
+        Map<dynamic, dynamic> dataValue =
+            event.snapshot.value as Map<dynamic, dynamic>;
+        String latestKey = dataValue.keys.first;
+        double latestValue = dataValue[latestKey];
+        setState(() {
+          if (dataName == 'temperature') {
+            _temperatureValue = "$latestValue$dataUnit";
+          } else if (dataName == 'humidity') {
+            _humidityValue = "$latestValue$dataUnit";
+          } else if (dataName == 'PM10') {
+            _pm10 = "$latestValue $dataUnit";
+          } else if (dataName == 'PM2_5') {
+            _pm2_5 = "$latestValue $dataUnit";
+          } else if (dataName == 'air_pressure') {
+            _airPressure = "$latestValue $dataUnit";
+          } else if (dataName == 'ambient_light') {
+            _ambientLight = "$latestValue $dataUnit";
+          } else if (dataName == 'noise') {
+            _noise = "$latestValue $dataUnit";
+          } else {
+            print("Wrong data name");
+          }
+        });
+      }
     });
   }
 
@@ -355,15 +413,15 @@ class _HomePageState extends State<HomePage> {
                                             children: [
                                               buildEnvSensorInfo(
                                                   'lib/assets/svg/air-pressure.svg',
-                                                  '100.52 Pa',
+                                                  _airPressure,
                                                   'Air pressure'),
                                               buildEnvSensorInfo(
                                                   'lib/assets/svg/brightness.svg',
-                                                  '100.52 lux',
+                                                  _ambientLight,
                                                   'Luminous'),
                                               buildEnvSensorInfo(
                                                   'lib/assets/svg/sound.svg',
-                                                  '100.52 dB',
+                                                  _noise,
                                                   'Noise'),
                                             ],
                                           ),
@@ -391,7 +449,7 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                               buildAirQualityInfo(
                                                 'lib/assets/svg/pm2_5.svg',
-                                                '100.52 μg/m³',
+                                                _pm2_5,
                                               ),
                                               buildAirQualityInfo(
                                                 'lib/assets/svg/pm4_0.svg',
@@ -399,7 +457,7 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                               buildAirQualityInfo(
                                                 'lib/assets/svg/pm10.svg',
-                                                '100.52 μg/m³',
+                                                _pm10,
                                               ),
                                             ],
                                           ),
@@ -434,8 +492,11 @@ class _HomePageState extends State<HomePage> {
                                 flex: 1,
                                 child: Container(
                                   alignment: Alignment.centerRight,
-                                  child: const DropdownButtonWidget(
-                                      label: "temperature"),
+                                  child: DropdownButtonWidget(
+                                    label: "Temperature",
+                                    onOptionSelected:
+                                        handleHistoryChartSelection,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 20),
@@ -448,8 +509,16 @@ class _HomePageState extends State<HomePage> {
                             decoration: BoxDecoration(
                               border: Border.all(
                                   color: Color(0xFFE6E5F2), width: 1),
-                              borderRadius: BorderRadius.circular(28),
+                              borderRadius: BorderRadius.circular(16),
                               color: Color(0xFFFFFFFF),
+                            ),
+                            child: LineChartWidget(
+                              key: ValueKey(_selectedHistoryShow),
+                              deviceId: _deviceID,
+                              stationId: _stationID,
+                              sensorType: _selectedHistoryShow,
+                              unitData: _unitDataShow,
+                              color: Colors.redAccent,
                             ),
                           ),
                         ),
@@ -546,7 +615,7 @@ class _HomePageState extends State<HomePage> {
                   width: 40,
                 ),
                 Text(
-                  '$value°C',
+                  '$value',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 36,
@@ -584,7 +653,7 @@ class _HomePageState extends State<HomePage> {
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
               width: 140,
@@ -628,7 +697,7 @@ class _HomePageState extends State<HomePage> {
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SvgPicture.asset(
               svgPath,
@@ -650,6 +719,21 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       );
+
+  void handleHistoryChartSelection(String newSelection) {
+    setState(() {
+      if (newSelection == "Temperature") {
+        _selectedHistoryShow = "temperature";
+        _unitDataShow = "℃";
+      } else if (newSelection == "Humidity") {
+        _selectedHistoryShow = "humidity";
+        _unitDataShow = "%";
+      } else if (newSelection == "Luminous") {
+        _selectedHistoryShow = "ambient_light";
+        _unitDataShow = "Lux";
+      }
+    });
+  }
 
   // Nút bấm
   Widget _buildButton(String label, BuildContext context, {int pageIndex = 1}) {
