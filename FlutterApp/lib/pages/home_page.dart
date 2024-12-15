@@ -1,13 +1,14 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Để sử dụng SystemSound
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart'; // Để sử dụng Provider
 import 'dart:convert'; // Để encode dữ liệu JSON
 import '../AppFunction/global_variables.dart';
 import '../AppFunction/global_helper_function.dart'; // Để dùng getCurrentTimestamp()
 import '../widgets/dropdown_button_widget.dart';
 import '../provider/page_controller_provider.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:flutter_svg/flutter_svg.dart'; // Để sử dụng SVG
 // import 'package:flutter_app/widgets/line_chart_temp_homepage.dart';
 import 'package:flutter_app/widgets/temperature_line_chart.dart';
 
@@ -392,7 +393,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Text(
                                     'Air quality',
                                     style: TextStyle(
-                                      fontSize: 32,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -445,7 +446,7 @@ class _HomePageState extends State<HomePage> {
                                             children: [
                                               buildAirQualityInfo(
                                                 'lib/assets/svg/pm1_0.svg',
-                                                '100.52 μg/m³',
+                                                '5 μg/m³',
                                               ),
                                               buildAirQualityInfo(
                                                 'lib/assets/svg/pm2_5.svg',
@@ -453,7 +454,7 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                               buildAirQualityInfo(
                                                 'lib/assets/svg/pm4_0.svg',
-                                                '100.52 μg/m³',
+                                                '6 μg/m³',
                                               ),
                                               buildAirQualityInfo(
                                                 'lib/assets/svg/pm10.svg',
