@@ -209,6 +209,10 @@ class _HomePageState extends State<HomePage> {
                                         });
                                       },
                                       onChangeEnd: (value) {
+                                        if (value == 0) {
+                                          _isSwitched =
+                                              false; // Ensure switch is off if slider is set to 0
+                                        }
                                         _publishBrightness(value, _deviceID);
                                       },
                                     ),
@@ -328,6 +332,15 @@ class _HomePageState extends State<HomePage> {
                                         // Handle the toggle logic here
                                         setState(() {
                                           _isSwitched = value;
+                                          if (value) {
+                                            _currentSliderValue = 50.0;
+                                            _publishBrightness(
+                                                _currentSliderValue, _deviceID);
+                                          } else {
+                                            _currentSliderValue = 0;
+                                            _publishBrightness(
+                                                _currentSliderValue, _deviceID);
+                                          }
                                         });
                                         print("Streetlight toggled: $value");
                                       },
