@@ -751,30 +751,36 @@ class _HomePageState extends State<HomePage> {
 
   // Nút bấm
   Widget _buildButton(String label, BuildContext context, {int pageIndex = 1}) {
-    return SizedBox(
-      width: 201,
-      height: 53,
-      child: ElevatedButton(
-        onPressed: () {
-          context.read<PageControllerProvider>().setSelectedIndex(pageIndex);
-          print('$label button pressed');
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFD9D9D9),
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(0),
+    return Consumer<PageControllerProvider>(
+      builder: (context, pageControllerProvider, child) {
+        return SizedBox(
+          width: 201,
+          height: 53,
+          child: ElevatedButton(
+            onPressed: () {
+              pageControllerProvider.setIndex(pageIndex);
+              pageControllerProvider.pages
+                  .elementAt(pageControllerProvider.selectedIndex);
+              print('$label button pressed');
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFD9D9D9),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0),
+              ),
+            ),
+            child: Text(
+              label,
+              style: TextStyle(
+                color: PRIMARY_BLACK_COLOR,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: PRIMARY_BLACK_COLOR,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+        );
+      },
     );
   } // build
 }
