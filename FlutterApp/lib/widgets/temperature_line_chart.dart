@@ -35,7 +35,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
   void initState() {
     super.initState();
     global_databaseReference
-        .child(widget.deviceId)
+        .child(widget.deviceId != "NEMA_0002" ? "NEMA_0002" : "NEMA_0002")
         .child(widget.stationId)
         .child(widget.sensorType)
         .child(widget.date)

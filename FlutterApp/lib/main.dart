@@ -38,7 +38,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    MqttManager(); // Initialize MQTT Manager
     global_databaseReference = FirebaseDatabase.instanceFor(
       app: Firebase.app(),
       databaseURL: DATABASE_URL,
@@ -50,7 +49,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => PoleProvider(),
+          create: (_) => PoleProvider()..initializePoles(),
         ),
         ChangeNotifierProvider(
           create: (_) => CustomAppointmentProvider(),

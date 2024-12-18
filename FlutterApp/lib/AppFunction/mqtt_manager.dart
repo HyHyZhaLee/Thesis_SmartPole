@@ -1,6 +1,7 @@
 import 'package:flutter_app/AppFunction/global_helper_function.dart';
 import 'mqtt_helper.dart';
 import 'global_variables.dart';
+import 'package:flutter_app/provider/pole_provider.dart';
 
 class MqttManager {
   /* MQTT information:
@@ -14,7 +15,8 @@ class MqttManager {
 
   MqttManager() {
     String randomClientId = "Smartpole_0002; ${getCurrentTimestamp()}";
-    global_mqttHelper = MQTTHelper(MQTT_SERVER, randomClientId, MQTT_USERNAME, MQTT_PASSWORD);
+    global_mqttHelper =
+        MQTTHelper(MQTT_SERVER, randomClientId, MQTT_USERNAME, MQTT_PASSWORD);
     global_mqttHelper.onConnectedCallback = () {
       print("MQTT Connected");
       global_mqttHelper.subscribe(MQTT_TOPIC, _handleReceivedMessage);
