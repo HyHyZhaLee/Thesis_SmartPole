@@ -16,8 +16,6 @@ class _HistoricalDataPageState extends State<HistoricalDataPage> {
   String _lineChartData = 'Air pressure';
   String _fireChild = 'air_pressure';
   String _unitDataShow = 'Pa';
-  double _minY = 90.0;
-  double _maxY = 120.0;
 
   List<String> dropdownOptions = [
     'Air pressure',
@@ -34,50 +32,36 @@ class _HistoricalDataPageState extends State<HistoricalDataPage> {
       setState(() {
         _fireChild = 'air_pressure';
         _unitDataShow = 'Pa';
-        _minY = 90.0;
-        _maxY = 120.0;
       });
     } else if (lineChartData == 'Brightness') {
       setState(() {
         _fireChild = 'ambient_light';
         _unitDataShow = 'Lux';
-        _minY = 0.0;
-        _maxY = 2100.0;
       });
     } else if (lineChartData == 'Humidity') {
       setState(() {
         _fireChild = 'humidity';
         _unitDataShow = '%';
-        _minY = 60.0;
-        _maxY = 90.0;
       });
     } else if (lineChartData == 'Noise') {
       setState(() {
         _fireChild = 'noise';
         _unitDataShow = 'dB';
-        _minY = 0.0;
-        _maxY = 90.0;
       });
     } else if (lineChartData == 'Temperature') {
       setState(() {
         _fireChild = 'temperature';
         _unitDataShow = '℃';
-        _minY = 25.0;
-        _maxY = 35.0;
       });
     } else if (lineChartData == 'PM10') {
       setState(() {
         _fireChild = 'PM10';
         _unitDataShow = 'µg/m3';
-        _minY = 0.0;
-        _maxY = 100.0;
       });
     } else if (lineChartData == 'PM2.5') {
       setState(() {
         _fireChild = 'PM2_5';
         _unitDataShow = 'µg/m3';
-        _minY = 0.0;
-        _maxY = 100.0;
       });
     }
   }
@@ -86,7 +70,7 @@ class _HistoricalDataPageState extends State<HistoricalDataPage> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _lineChartDate,
-      firstDate: DateTime(1024, 12, 1),
+      firstDate: DateTime(2024, 12, 1),
       lastDate: DateTime.now(),
     );
     if (picked != null && picked != _lineChartDate) {
@@ -168,8 +152,6 @@ class _HistoricalDataPageState extends State<HistoricalDataPage> {
                 stationId: polesList.getSelectedStationID(),
                 sensorType: _fireChild,
                 unitData: _unitDataShow,
-                minY: _minY,
-                maxY: _maxY,
                 color: Colors.redAccent,
                 date: DateFormat('yyyy-MM-dd').format(_lineChartDate),
               );

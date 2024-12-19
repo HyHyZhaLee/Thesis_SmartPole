@@ -1,4 +1,6 @@
-2024/12/17-16:13:38.950 6bd0 Reusing MANIFEST C:\Users\royal\AppData\Local\Temp\flutter_tools.6c85464f\flutter_tools_chrome_device.dd837eb\Default\Local Storage\leveldb/MANIFEST-000001
-2024/12/17-16:13:38.958 6bd0 Recovering log #4
-2024/12/17-16:13:38.961 6bd0 Reusing old log C:\Users\royal\AppData\Local\Temp\flutter_tools.6c85464f\flutter_tools_chrome_device.dd837eb\Default\Local Storage\leveldb/000004.log 
-2024/12/17-16:13:38.962 6bd0 Delete type=0 #3
+2024/12/19-10:34:59.794 6c24 Reusing MANIFEST C:\Users\royal\AppData\Local\Temp\flutter_tools.3b5ae061\flutter_tools_chrome_device.bccace1d\Default\Local Storage\leveldb/MANIFEST-000001
+2024/12/19-10:34:59.802 6c24 Recovering log #4
+2024/12/19-10:34:59.802 6c24 Level-0 table #6: started
+2024/12/19-10:34:59.806 6c24 Level-0 table #6: 13712 bytes OK
+2024/12/19-10:34:59.810 6c24 Delete type=0 #3
+2024/12/19-10:34:59.810 6c24 Delete type=0 #4

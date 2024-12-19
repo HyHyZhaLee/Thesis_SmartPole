@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'AppFunction/mqtt_manager.dart';
+import 'package:flutter_app/AppFunction/global_helper_function.dart';
 
 // import 'pages/home_page.dart';
 // import 'pages/light_control_page.dart';
@@ -25,6 +26,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
+  MqttManager();
 }
 
 class MyApp extends StatefulWidget {
@@ -38,6 +40,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
     global_databaseReference = FirebaseDatabase.instanceFor(
       app: Firebase.app(),
       databaseURL: DATABASE_URL,
@@ -57,6 +60,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => PageControllerProvider())
       ],
       child: MaterialApp(
+        navigatorKey:
+            GlobalHelper.navigatorKey, // Assign the global navigator key
         theme: ThemeData(
           textTheme: GoogleFonts.mulishTextTheme(
             Theme.of(context).textTheme,

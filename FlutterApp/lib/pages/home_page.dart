@@ -13,7 +13,7 @@ import 'package:flutter_svg/flutter_svg.dart'; // Để sử dụng SVG
 import 'package:flutter_app/model/pole.dart';
 // import 'package:flutter_app/widgets/line_chart_temp_homepage.dart';
 import 'package:flutter_app/widgets/temperature_line_chart.dart';
-import '../AppFunction/mqtt_helper.dart';
+import '../AppFunction/mqtt_manager.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -36,10 +36,14 @@ class _HomePageState extends State<HomePage> {
 
   String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
+  late MqttManager mqttManager;
+
   @override
   void initState() {
     super.initState(); // Example method to load initial brightness data
-    MqttManager(); // Initialize MQTT Manager
+    // Defer MQTT initialization until after the first frame
+    // MqttManager(); // Now it's safe to use context
+
     listenForLastestDataAirSensor("temperature", "°C");
     listenForLastestDataAirSensor("humidity", "%");
     listenForLastestDataAirSensor("PM10", "μg/m³");
@@ -124,7 +128,7 @@ class _HomePageState extends State<HomePage> {
           } else if (dataName == 'air_pressure') {
             _airPressure = "$latestValue $dataUnit";
           } else if (dataName == 'ambient_light') {
-            _ambientLight = "$latestValue $dataUnit";
+            _ambientLight = "$latestValue";
           } else if (dataName == 'noise') {
             _noise = "$latestValue $dataUnit";
           } else {
@@ -245,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                                 top: 130,
                                 right: 110,
                                 child: _buildButton("AIR SENSOR", context,
-                                    pageIndex: 6),
+                                    pageIndex: 7),
                               ),
                               Positioned(
                                 top: 335,
@@ -749,7 +753,7 @@ class _HomePageState extends State<HomePage> {
         _unitDataShow = "%";
       } else if (newSelection == "Luminous") {
         _selectedHistoryShow = "ambient_light";
-        _unitDataShow = "Lux";
+        _unitDataShow = "";
       }
     });
   }

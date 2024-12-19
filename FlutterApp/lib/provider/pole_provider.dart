@@ -136,6 +136,20 @@ class PoleProvider extends ChangeNotifier {
     PoleInfor? foundPole =
         _poles.firstWhereOrNull((pole) => pole.poleName == poleName);
     if (foundPole != null) {
+      if (foundPole.dimmingData != value) {
+        foundPole.dimmingData = value;
+        foundPole.isSwitch = value == 0.0 ? false : true;
+      }
+    } else {
+      print("Pole not found!");
+    }
+    notifyListeners();
+  }
+
+  void setDimmingOfDeviceId(String deviceId, double value) {
+    PoleInfor? foundPole =
+        _poles.firstWhereOrNull((pole) => pole.poleId == deviceId);
+    if (foundPole != null) {
       foundPole.dimmingData = value;
       foundPole.isSwitch = value == 0.0 ? false : true;
     } else {

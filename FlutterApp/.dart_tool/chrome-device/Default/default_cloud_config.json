@@ -81,12 +81,12 @@
       "appId": "idcfwggqzmnqmjrrncznqaggwhcxbjof",
       "appName": "beta_enrollment",
       "data": {
-         "enable": false
+         "enable": true
       },
       "effectStrategy": "launch",
       "instanceId": "bzatjpaqglyyxiaqtufvrwcynulkjazt",
       "type": "normal",
-      "version": "1002"
+      "version": "1003"
    }, {
       "appId": "e54758ece3475afa1b2a65wsefd0db36",
       "appName": "ads_block",
@@ -338,5 +338,5 @@
       "type": "builtin",
       "version": "1003"
    } ],
-   "version": "202412180001"
+   "version": "202412180002"
 }
