@@ -62,8 +62,9 @@ void MyMQTT::callback(char* topic, byte* payload, unsigned int length) {
 
 void MyMQTT::reConnect() {
     while (!client.connected()) {
+        String clientName = "ESP32Client" + String(random(0,1000));  
         Serial.print("Attempting MQTT connection...");
-        if (client.connect("ESP32Client", user.c_str(), password.c_str())) {
+        if (client.connect(clientName.c_str(), user.c_str(), password.c_str())) {
             Serial.println("connected");
         } else {
             Serial.print("failed, rc=");
