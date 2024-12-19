@@ -15,9 +15,9 @@ String ON_Json()
     doc["device_id"] = "NEMA_0002";
 
     JsonObject dataObject = doc.createNestedObject("data");
-    doc["from"] = "ATOM_0002";
-    doc["to"] = "NEMA_0002";
-    doc["data"] = "30";
+    dataObject["from"] = "ATOM_0002";
+    dataObject["to"] = "NEMA_0002";
+    dataObject["dimming"] = "30";
 
     String jsonString;
     serializeJson(doc, jsonString);
@@ -43,9 +43,9 @@ String OFF_Json()
     doc["device_id"] = "NEMA_0002";
 
     JsonObject dataObject = doc.createNestedObject("data");
-    doc["from"] = "ATOM_0002";
-    doc["to"] = "NEMA_0002";
-    doc["data"] = "0";
+    dataObject["from"] = "ATOM_0002";
+    dataObject["to"] = "NEMA_0002";
+    dataObject["dimming"] = "0";
 
 
     String jsonString;
