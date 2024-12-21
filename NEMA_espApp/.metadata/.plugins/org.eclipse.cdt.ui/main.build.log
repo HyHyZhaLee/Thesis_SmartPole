@@ -1,0 +1,4 @@
+cmake --build . --target all
+The parameter is incorrect
+CMake Error: Generator: execution of make failed. Make command was:  -f Makefile all && 
+Build complete (0 errors, 0 warnings): H:\GithubProject\Thesis_SmartPole\NEMA_espApp\NBIOT-main\main\build\default

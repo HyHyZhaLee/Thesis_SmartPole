@@ -1,11 +1,11 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_app/AppFunction/global_variables.dart';
 import 'package:flutter_app/provider/event_provider.dart';
+import 'package:flutter_app/provider/pole_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_app/utils/convertDateTime.dart';
-import 'package:flutter_app/model/recurrence_type.dart';
-import 'package:flutter_app/utils/convert_datetime_recurencerule.dart';
 import 'package:flutter_app/model/appointment_extension.dart';
 
 class TextSizes {
@@ -20,11 +20,13 @@ class TextSizes {
 }
 
 class AddEventPage extends StatefulWidget {
-  final Appointment? newAppoitment;
+  final CustomAppointment? appointment;
+  final DateTime? date;
 
   const AddEventPage({
     super.key,
-    this.newAppoitment,
+    this.appointment,
+    this.date,
   });
 
   @override
@@ -32,43 +34,51 @@ class AddEventPage extends StatefulWidget {
 }
 
 class _AddEventPageStage extends State<AddEventPage> {
-  final _formKey = GlobalKey<FormState>();
-  final eventNameController = TextEditingController();
-  final notesController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late DateTime _startTime;
+  late DateTime _endTime;
 
-  final recurrenceIntervalController = TextEditingController(text: '1');
-  final recurrenceCountController = TextEditingController(text: '1');
+  TextEditingController _subjectController = TextEditingController();
+  TextEditingController _notesController = TextEditingController();
 
-  late DateTime startDate;
-  late DateTime endDate;
-  late String recurrenceFlag;
-  late String recurrenceType;
-  late bool isCheckedRecurrenceCount;
-
-  late bool isDropdownEnabled;
+  final String _subject = "";
+  String _deviceId = "NEMA_0002";
+  String _stationId = "AIR_0002";
 
   @override
   void initState() {
     super.initState();
-    if (widget.newAppoitment == null) {
-      startDate = DateTime.now();
-      endDate = DateTime.now().add(const Duration(hours: 2));
 
-      recurrenceFlag = 'Don\'t repeat';
-      recurrenceType = 'Week';
-      isCheckedRecurrenceCount = false;
+    PoleProvider polesInfor = Provider.of<PoleProvider>(context, listen: false);
 
-      isDropdownEnabled = false;
+    if (widget.appointment == null && widget.date == null) {
+      _startTime = DateTime.now();
+      _endTime = _startTime.add(const Duration(hours: 2));
+      _deviceId = polesInfor.getSelectedPoleID();
+      _stationId = polesInfor.getSelectedStationID();
+    } else if (widget.appointment == null && widget.date != null) {
+      _startTime = widget.date!;
+      _endTime = widget.date!.add(const Duration(hours: 2));
+      _deviceId = polesInfor.getSelectedPoleID();
+      _stationId = polesInfor.getSelectedStationID();
+    } else {
+      final appointment = widget.appointment!;
+      if (kDebugMode) {
+        print("editing triggered");
+      }
+
+      _subjectController =
+          TextEditingController(text: widget.appointment!.subject);
+      _notesController = TextEditingController(text: widget.appointment!.notes);
+      _startTime = appointment.startTime;
+      _endTime = appointment.endTime;
     }
   }
 
   @override
   void dispose() {
-    eventNameController.dispose();
-    notesController.dispose();
-
-    recurrenceCountController.dispose();
-    recurrenceIntervalController.dispose();
+    _subjectController.dispose();
+    _notesController.dispose();
 
     super.dispose();
   }
@@ -135,10 +145,10 @@ class _AddEventPageStage extends State<AddEventPage> {
           const Spacer(
             flex: 1,
           ),
-          Expanded(
-            flex: 5,
-            child: buildRecurrenceRule2(),
-          ),
+          // Expanded(
+          //   flex: 5,
+          //   child: buildRecurrenceRule2(),
+          // ),
           Expanded(
             flex: 5,
             child: buildHeader(
@@ -192,7 +202,7 @@ class _AddEventPageStage extends State<AddEventPage> {
               validator: (name) => name != null && name.isEmpty
                   ? 'Name event cannot be empty'
                   : null,
-              controller: eventNameController,
+              controller: _subjectController,
               onFieldSubmitted: (_) => saveForm(),
               decoration: const InputDecoration(
                 hintText: 'Event Name',
@@ -255,7 +265,7 @@ class _AddEventPageStage extends State<AddEventPage> {
                 color: Colors.transparent,
               ),
               child: buildDropdownField(
-                text: convertReadableDateTime.toDate(startDate),
+                text: convertReadableDateTime.toDate(_startTime),
                 onClicked: () => pickStartDateTime(pickDate: true),
               ),
             ),
@@ -269,7 +279,7 @@ class _AddEventPageStage extends State<AddEventPage> {
                 color: Colors.transparent,
               ),
               child: buildDropdownField(
-                text: convertReadableDateTime.toTime(startDate),
+                text: convertReadableDateTime.toTime(_startTime),
                 onClicked: () => pickStartDateTime(pickDate: false),
               ),
             ),
@@ -283,15 +293,15 @@ class _AddEventPageStage extends State<AddEventPage> {
   Future pickStartDateTime({
     required bool pickDate,
   }) async {
-    final date = await pickDateTime(startDate, pickDate: pickDate);
+    final date = await pickDateTime(_startTime, pickDate: pickDate);
     if (date == null) return;
 
-    if (date.isAfter(endDate)) {
-      endDate = DateTime(
-          date.year, date.month, date.day, endDate.hour, endDate.minute);
+    if (date.isAfter(_endTime)) {
+      _endTime = DateTime(
+          date.year, date.month, date.day, _endTime.hour, _endTime.minute);
     }
 
-    setState(() => startDate = date);
+    setState(() => _startTime = date);
   }
 
   Widget buildEnd() => Row(
@@ -307,7 +317,7 @@ class _AddEventPageStage extends State<AddEventPage> {
                 color: Colors.transparent,
               ),
               child: buildDropdownField(
-                text: convertReadableDateTime.toDate(endDate),
+                text: convertReadableDateTime.toDate(_endTime),
                 onClicked: () => pickEndDateTime(pickDate: true),
               ),
             ),
@@ -318,7 +328,7 @@ class _AddEventPageStage extends State<AddEventPage> {
           Expanded(
             flex: 3,
             child: buildDropdownField(
-              text: convertReadableDateTime.toTime(endDate),
+              text: convertReadableDateTime.toTime(_endTime),
               onClicked: () => pickEndDateTime(pickDate: false),
             ),
           ),
@@ -332,13 +342,13 @@ class _AddEventPageStage extends State<AddEventPage> {
     required bool pickDate,
   }) async {
     final date = await pickDateTime(
-      endDate,
+      _endTime,
       pickDate: pickDate,
-      firstDate: pickDate ? startDate : null,
+      firstDate: pickDate ? _startTime : null,
     );
     if (date == null) return;
 
-    setState(() => endDate = date);
+    setState(() => _endTime = date);
   }
 
   Widget buildDropdownField({
@@ -429,349 +439,33 @@ class _AddEventPageStage extends State<AddEventPage> {
         child: child!,
       );
 
-  Widget buildRecurrenceRule2() => Column(
-        children: [
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.055,
-                  width: MediaQuery.of(context).size.width * 0.12,
-                  color: Colors.white,
-                  child: buildReccurenceFlag(),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.01,
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.055,
-                  width: MediaQuery.of(context).size.width * 0.07,
-                  color: Colors.white,
-                  child: Opacity(
-                    opacity: recurrenceFlag != repeatOptionItems[0] ? 1.0 : 0.3,
-                    child: buildReccurenceInterval(),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.01,
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.055,
-                  width: MediaQuery.of(context).size.width * 0.08,
-                  color: Colors.white,
-                  child: Opacity(
-                    opacity: recurrenceFlag != repeatOptionItems[0] ? 1.0 : 0.3,
-                    child: buildReccurenceType(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          buildReccurenceCount(),
-        ],
-      );
-
-  Widget buildReccurenceFlag() => DropdownButtonFormField<String>(
-        value: repeatOptionItems[0],
-        items: repeatOptionItems.map((String item) {
-          return DropdownMenuItem<String>(value: item, child: Text(item));
-        }).toList(),
-        onChanged: (String? newValue) {
-          setState(() {
-            if (newValue != null) {
-              recurrenceFlag = newValue;
-            } else {
-              recurrenceFlag = 'Don\'t repeat';
-            }
-          });
-        },
+  Widget buildNote() => TextField(
+        controller: _notesController,
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(
               color: Colors.black, // Border color
               width: 1.0, // Border width
             ),
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(12),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: Colors.black, // Border color when focused
-              width: 2.0, // Border width when focused
-            ), // Adjust the padding to reduce height
-            borderRadius:
-                BorderRadius.circular(24), // Optional: Adjust border radius
-          ),
-        ),
-        style: const TextStyle(
-          fontSize: TextSizes.bodyTextSize,
-          fontWeight: FontWeight.bold, // Adjust font size to make it fit,
-        ),
-      );
-
-  Widget buildReccurenceInterval() => TextFormField(
-        enabled: recurrenceFlag != repeatOptionItems[0] ? true : false,
-        controller: recurrenceIntervalController, // Controller
-        keyboardType:
-            TextInputType.number, // Makes the keyboard number-friendly
-        inputFormatters: <TextInputFormatter>[
-          FilteringTextInputFormatter
-              .digitsOnly, // Restricts input to numbers only
-        ],
-        textAlign: TextAlign.left,
-        decoration: InputDecoration(
-          hintText: 'Number',
-          hintStyle: const TextStyle(
-            color: Colors.grey,
-            fontWeight: FontWeight.w300,
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: Colors.black, // Border color
-              width: 1.0, // Border width
-            ),
-            borderRadius: BorderRadius.circular(24),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: Colors.black, // Border color
-              width: 1.0, // Border width
-            ),
-            borderRadius: BorderRadius.circular(24),
-          ), // Adjust the padding to reduce height
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(
               color: Colors.black, // Border color when focused
               width: 2.0, // Border width when focused
             ),
             borderRadius:
-                BorderRadius.circular(24), // Optional: Adjust border radius
+                BorderRadius.circular(12), // Optional: Adjust border radius
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-        ),
-        style: const TextStyle(
-          fontSize: TextSizes.bodyTextSize,
-          fontWeight: FontWeight.bold,
-          color: Colors.black, // Adjust font size to make it fit
-        ),
-      );
-
-  Widget buildReccurenceType() => DropdownButtonFormField<String>(
-        value: recurrenceTypeItems[1], // Default selected value
-        items: recurrenceTypeItems.map((String item) {
-          return DropdownMenuItem<String>(value: item, child: Text(item));
-        }).toList(),
-        onChanged: recurrenceFlag != repeatOptionItems[0]
-            ? _handleDropdownChanged
-            : null,
-        decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: Colors.black, // Border color
-              width: 1.0, // Border width
-            ),
-            borderRadius: BorderRadius.circular(24),
+          labelStyle: const TextStyle(
+            fontSize: TextSizes.bodyTextSize,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: Colors.black, // Border color when focused
-              width: 2.0, // Border width when focused
-            ), // Adjust the padding to reduce height
-            borderRadius:
-                BorderRadius.circular(24), // Optional: Adjust border radius
-          ),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          alignLabelWithHint: true,
         ),
-        style: const TextStyle(
-          fontSize: TextSizes.bodyTextSize,
-          fontWeight: FontWeight.bold, // Adjust font size to make it fit
-        ),
-      );
-
-  void _handleDropdownChanged(String? newValue) {
-    setState(() {
-      if (newValue != null) {
-        recurrenceType = newValue;
-      } else {
-        recurrenceType = 'Week';
-      }
-    });
-  }
-
-  Widget buildReccurenceCount() => IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Opacity(
-              opacity: recurrenceFlag != repeatOptionItems[0] ? 1.0 : 0.3,
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.02,
-                height: MediaQuery.of(context).size.height * 0.05,
-                color: Colors.white,
-                child: Checkbox(
-                  value: isCheckedRecurrenceCount,
-                  onChanged: recurrenceFlag != repeatOptionItems[0]
-                      ? (newBool) {
-                          setState(() {
-                            if (newBool != null) {
-                              isCheckedRecurrenceCount = newBool;
-                            } else {
-                              isCheckedRecurrenceCount = false;
-                            }
-                          });
-                        }
-                      : null,
-                ),
-              ),
-            ),
-            Opacity(
-              opacity: recurrenceFlag != repeatOptionItems[0] &&
-                      isCheckedRecurrenceCount != false
-                  ? 1.0
-                  : 0.3,
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.05,
-                height: MediaQuery.of(context).size.height * 0.05,
-                color: Colors.white,
-                child: const Center(
-                  child: Text(
-                    'After',
-                    style: TextStyle(
-                      fontSize: TextSizes.subBodyTextSize,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Opacity(
-              opacity: recurrenceFlag != repeatOptionItems[0] &&
-                      isCheckedRecurrenceCount != false
-                  ? 1.0
-                  : 0.3,
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.05,
-                height: MediaQuery.of(context).size.height * 0.05,
-                color: Colors.white,
-                child: TextFormField(
-                  enabled: recurrenceFlag != repeatOptionItems[0] &&
-                          isCheckedRecurrenceCount != false
-                      ? true
-                      : false,
-                  keyboardType: TextInputType
-                      .number, // Makes the keyboard number-friendly
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter
-                        .digitsOnly, // Restricts input to numbers only
-                  ],
-                  controller: recurrenceCountController,
-                  textAlign: TextAlign.left,
-                  decoration: InputDecoration(
-                    disabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.black, // Border color
-                        width: 1.0, // Border width
-                      ),
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.black, // Border color
-                        width: 1.0, // Border width
-                      ),
-                      borderRadius: BorderRadius.circular(24),
-                    ), // Adjust the padding to reduce height
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.black, // Border color when focused
-                        width: 2.0, // Border width when focused
-                      ),
-                      borderRadius: BorderRadius.circular(
-                          24), // Optional: Adjust border radius
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  ),
-                  style: const TextStyle(
-                    fontSize: TextSizes.bodyTextSize,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black, // Adjust font size to make it fit
-                  ),
-                ),
-              ),
-            ),
-            Opacity(
-              opacity: recurrenceFlag != repeatOptionItems[0] &&
-                      isCheckedRecurrenceCount != false
-                  ? 1.0
-                  : 0.3,
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.07,
-                height: MediaQuery.of(context).size.height * 0.05,
-                color: Colors.white,
-                child: const Center(
-                  child: Text(
-                    'Occurrences',
-                    style: TextStyle(
-                      fontSize: TextSizes.subBodyTextSize,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-
-  Widget buildNote() => Container(
-        width: MediaQuery.of(context).size.width * 0.6,
-        height: MediaQuery.of(context).size.height * 0.1,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.grey, // Shadow color with opacity
-              spreadRadius: 0, // How much the shadow spreads
-              blurRadius: 4, // The blurring effect of the shadow
-              offset: Offset(0, 2), // Offset in X and Y (horizontal, vertical)
-            ),
-          ],
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: TextField(
-          controller: notesController,
-          decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.black, // Border color
-                width: 1.0, // Border width
-              ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.black, // Border color when focused
-                width: 2.0, // Border width when focused
-              ),
-              borderRadius:
-                  BorderRadius.circular(12), // Optional: Adjust border radius
-            ),
-            labelStyle: const TextStyle(
-              fontSize: TextSizes.bodyTextSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            alignLabelWithHint: true,
-          ),
-          maxLines: 3,
-        ),
+        maxLines: 4,
       );
 
   Widget buildCancelSaveButton() => IntrinsicHeight(
@@ -822,7 +516,7 @@ class _AddEventPageStage extends State<AddEventPage> {
           padding: const EdgeInsets.all(8),
         ),
         child: const Text(
-          'Add',
+          'Save',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -830,46 +524,64 @@ class _AddEventPageStage extends State<AddEventPage> {
         ),
       );
 
-  String? _handleRecurrenceRule() {
-    String? recType;
-    if (recurrenceFlag != repeatOptionItems[0]) {
-      switch (recurrenceType) {
-        case 'Day':
-          recType = 'FREQ=DAILY';
-        case 'Week':
-          recType =
-              'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate)}';
-        case 'Month':
-          recType = 'FREQ=MONTHLY;BYMONTHDAY=${startDate.day}';
-        case 'Year':
-          recType = 'FREQ=YEARLY;BYMONTH=${startDate.month}';
-        default:
-          recType = 'FREQ=DAILY';
-      }
+  // String? _handleRecurrenceRule() {
+  //   String? recType;
+  //   if (recurrenceFlag != repeatOptionItems[0]) {
+  //     switch (recurrenceType) {
+  //       case 'Day':
+  //         recType = 'FREQ=DAILY';
+  //       case 'Week':
+  //         recType =
+  //             'FREQ=WEEKLY;BYDAY=${DayOfWeekUtils.getDayOfWeek(startDate)}';
+  //       case 'Month':
+  //         recType = 'FREQ=MONTHLY;BYMONTHDAY=${startDate.day}';
+  //       case 'Year':
+  //         recType = 'FREQ=YEARLY;BYMONTH=${startDate.month}';
+  //       default:
+  //         recType = 'FREQ=DAILY';
+  //     }
 
-      recType += ';INTERVAL=${recurrenceIntervalController.text}';
+  //     recType += ';INTERVAL=${recurrenceIntervalController.text}';
 
-      if (isCheckedRecurrenceCount != false) {
-        recType += ';COUNT=${recurrenceCountController.text}';
-      }
-    }
-    return recType;
-  }
+  //     if (isCheckedRecurrenceCount != false) {
+  //       recType += ';COUNT=${recurrenceCountController.text}';
+  //     }
+  //   }
+  //   return recType;
+  // }
 
   Future saveForm() async {
     final isValid = _formKey.currentState!.validate();
 
     if (isValid) {
-      final appointment = Appointment(
-        subject: eventNameController.text,
-        notes: notesController.text,
-        startTime: startDate,
-        endTime: endDate,
+      CustomAppointment appointment = CustomAppointment(
+        subject: _subjectController.text,
+        notes: _notesController.text,
+        startTime: _startTime,
+        endTime: _endTime,
         color: Colors.blue,
-        recurrenceRule: _handleRecurrenceRule(),
+        // recurrenceRule: _handleRecurrenceRule(),
       );
-      final provider = Provider.of<AppointmentProvider>(context, listen: false);
-      provider.addAppointment(appointment);
+      final isEditing = widget.appointment != null;
+      print(isEditing);
+
+      final provider =
+          Provider.of<CustomAppointmentProvider>(context, listen: false);
+
+      if (isEditing) {
+        DatabaseReference ref = global_databaseReference
+            .child("Schedule light")
+            .child("name_event: ${widget.appointment!.subject}")
+            .child("${widget.appointment!.firebaseKey}");
+        ref.remove();
+
+        provider.editAppointment(appointment, widget.appointment!);
+
+        appointment.saveToFirebase(_deviceId, _stationId);
+      } else {
+        provider.addAppointment(appointment);
+        appointment.saveToFirebase(_deviceId, _stationId);
+      }
 
       Navigator.of(context).pop();
     }
