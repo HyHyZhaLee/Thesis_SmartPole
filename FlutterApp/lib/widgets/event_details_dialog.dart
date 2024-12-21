@@ -1,14 +1,19 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-
+import 'package:flutter_app/AppFunction/global_variables.dart';
+import 'package:flutter_app/model/appointment_extension.dart';
+import 'package:flutter_app/utils/custom_route.dart';
 import 'package:flutter_app/AppFunction/get_event_details.dart'; // Import the file where GetEventsDetails is defined
+import 'package:flutter_app/widgets/add_event_dialog.dart';
+import 'package:flutter_app/provider/event_provider.dart';
+import 'package:provider/provider.dart';
 
 class EventDetailsDialog {
   static Future<void> show(
-    BuildContext context, 
-    Appointment appointment,
-    Function(Appointment) onDelete,
-    ) async {
+    BuildContext context,
+    CustomAppointment appointment,
+  ) async {
     const double bodyFontSize = 20;
     const double headerFontSize = 20;
     const double subjectFontSize = 36;
@@ -95,7 +100,8 @@ class EventDetailsDialog {
                                   ),
                                 ),
                                 Text(
-                                  GetEventsDetails.formatDate(appointment.endTime),
+                                  GetEventsDetails.formatDate(
+                                      appointment.endTime),
                                   style: const TextStyle(
                                     fontSize: bodyFontSize,
                                   ),
@@ -138,7 +144,8 @@ class EventDetailsDialog {
                                 ),
                               ),
                               Text(
-                                GetEventsDetails.formatTime(appointment.startTime),
+                                GetEventsDetails.formatTime(
+                                    appointment.startTime),
                                 style: const TextStyle(
                                   fontSize: bodyFontSize,
                                 ),
@@ -160,148 +167,13 @@ class EventDetailsDialog {
                                 ),
                               ),
                               Text(
-                                GetEventsDetails.formatTime(appointment.endTime),
+                                GetEventsDetails.formatTime(
+                                    appointment.endTime),
                                 style: const TextStyle(
                                   fontSize: bodyFontSize,
                                 ),
                               ),
                             ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Divider(
-                    height: 10,
-                    thickness: 2,
-                    color: Colors.grey,
-                  ),
-                  IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          color: Colors.white,
-                          child: const Icon(
-                            Icons.repeat,
-                            color: Colors.blue,
-                            size: 36,
-                          ),
-                        ),
-                        const SizedBox(width: 15),
-                        Expanded(
-                          child: IntrinsicWidth(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      'Recurrence Rule:',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: headerFontSize,
-                                      ),
-                                    ),
-                                    Text(
-                                      GetEventsDetails.recurrenceRuleParser(
-                                          appointment.recurrenceRule),
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        fontSize: bodyFontSize,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                const Divider(
-                                  height: 10,
-                                  thickness: 2,
-                                ),
-                                IntrinsicHeight(
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            const Text(
-                                              'Interval:',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: headerFontSize,
-                                              ),
-                                            ),
-                                            Text(
-                                              (GetEventsDetails
-                                                              .recurrenceInterval(
-                                                                  appointment
-                                                                      .recurrenceRule) !=
-                                                          null &&
-                                                      GetEventsDetails
-                                                              .recurrenceInterval(
-                                                                  appointment
-                                                                      .recurrenceRule)! >
-                                                          0)
-                                                  ? '1'
-                                                  : GetEventsDetails
-                                                      .recurrenceInterval(
-                                                          appointment
-                                                              .recurrenceRule)
-                                                      .toString(),
-                                              style: const TextStyle(
-                                                fontSize: bodyFontSize,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            const Text(
-                                              'Repeat Times:',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: headerFontSize,
-                                              ),
-                                            ),
-                                            Text(
-                                              (GetEventsDetails.recurrenceCount(
-                                                              appointment
-                                                                  .recurrenceRule) !=
-                                                          null &&
-                                                      GetEventsDetails
-                                                              .recurrenceCount(
-                                                                  appointment
-                                                                      .recurrenceRule)! >
-                                                          0)
-                                                  ? GetEventsDetails
-                                                      .recurrenceCount(appointment
-                                                          .recurrenceRule)
-                                                      .toString()
-                                                  : 'Infinity',
-                                              style: const TextStyle(
-                                                fontSize: bodyFontSize,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
                           ),
                         ),
                       ],
@@ -368,10 +240,33 @@ class EventDetailsDialog {
               },
             ),
             TextButton(
+              child: const Text(
+                'Edit',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                  fontSize: headerFontSize,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(AddEventPageRuote(
+                    page: AddEventPage(appointment: appointment)));
+              },
+            ),
+            TextButton(
               onPressed: () {
                 // Assuming you have access to _appointments and setState here
-                onDelete(appointment);
-                Navigator.of(context).pop();
+                Provider.of<CustomAppointmentProvider>(context, listen: false)
+                    .deleteAppointment(appointment);
+
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop(); // Close the dialog
+                // ignore: use_build_context_synchronously
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Appointment deleted successfully')),
+                );
               },
               child: const Text(
                 'Delete',
@@ -386,5 +281,45 @@ class EventDetailsDialog {
         );
       },
     );
+  }
+
+  static void deleteAppointment(
+      BuildContext context, CustomAppointment appointment) {
+    // Assuming Firebase has been initialized in the main.dart or similar global scope
+    if (kDebugMode) {
+      print(appointment.firebaseKey);
+    }
+    DatabaseReference ref = global_databaseReference
+        .child("Schedule light")
+        .child("name_event: ${appointment.subject}")
+        .child("${appointment.firebaseKey}");
+
+    print("${appointment.firebaseKey}");
+    print("name_event: ${appointment.subject}");
+
+    ref.remove().then((_) {
+      if (kDebugMode) {
+        print("Deleted appointment from Firebase successfully");
+      }
+      // Now remove from the local list
+      // ignore: use_build_context_synchronously
+      Provider.of<CustomAppointmentProvider>(context, listen: false)
+          .deleteAppointment(appointment);
+
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pop(); // Close the dialog
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Appointment deleted successfully')),
+      );
+    }).catchError((error) {
+      if (kDebugMode) {
+        print("Failed to delete appointment from Firebase: $error");
+      }
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete appointment')),
+      );
+    });
   }
 }

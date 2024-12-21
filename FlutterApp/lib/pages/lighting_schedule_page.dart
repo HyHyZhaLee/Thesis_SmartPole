@@ -1,12 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_app/widgets/add_event_dialog.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_app/widgets/event_details_dialog.dart';
 import 'package:flutter_app/utils/custom_route.dart';
 import 'package:flutter_app/provider/event_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_app/model/appointment_extension.dart';
 
 class LightingSchedulePage extends StatefulWidget {
   const LightingSchedulePage({super.key});
@@ -16,97 +16,28 @@ class LightingSchedulePage extends StatefulWidget {
 }
 
 class _LightingSchedulePage extends State<LightingSchedulePage> {
-  late List<Appointment> _appointments;
-  CalendarView _calendarView = CalendarView.month;
-  late CalendarDataSource _calendarDataSource;
+  late List<CustomAppointment> _appointments;
+  final CalendarView _calendarView = CalendarView.month;
+  late CustomAppointmentDataSource _calendarDataSource;
+  CustomAppointmentProvider? _provider; // Reference to the provider
 
   @override
   void initState() {
     super.initState();
-    _appointments = getAppointments();
-    _calendarDataSource = AdvertiseDataSource(_appointments);
-    _loadAppointments();
+    _provider = Provider.of<CustomAppointmentProvider>(context, listen: false);
+    _provider!.listenForRealtimeUpdates();
+
+    _appointments = _provider!.appointments;
+    _calendarDataSource = CustomAppointmentDataSource(_appointments);
+
+    // Add a listener to provider changes
+    _provider!.addListener(updateAppointments);
   }
 
-  Future<void> _loadAppointments() async {
-    final String response = await rootBundle.loadString('/jsonfile/data.json');
-    final List<dynamic> jsonData = json.decode(response);
-    for (var event in jsonData) {
-      _addAppointmentFromJson(event);
-    }
-    setState(() {
-      _calendarDataSource = AdvertiseDataSource(_appointments);
-    });
-  }
-
-  void _changeCalendarView(CalendarView view) {
-    setState(() {
-      _calendarView = view;
-    });
-  }
-
-  void _addAppointmentFromJson(Map<String, dynamic> event) {
-    final eventName = event['event_name'];
-    final startDate = DateTime.parse(event['start_date']);
-    final endDate = DateTime.parse(event['end_date']);
-    final startTime = TimeOfDay(
-      hour: int.parse(event['start_time'].split(':')[0]),
-      minute: int.parse(event['start_time'].split(':')[1]),
-    );
-    final endTime = TimeOfDay(
-      hour: int.parse(event['end_time'].split(':')[0]),
-      minute: int.parse(event['end_time'].split(':')[1]),
-    );
-    final recurrenceType = event['recurrence_type'];
-    final interval = event['interval'];
-    final count = event['count'];
-    final note = event['note'];
-
-    final startDateTime = DateTime(
-      startDate.year,
-      startDate.month,
-      startDate.day,
-      startTime.hour,
-      startTime.minute,
-    );
-    final endDateTime = DateTime(
-      endDate.year,
-      endDate.month,
-      endDate.day,
-      endTime.hour,
-      endTime.minute,
-    );
-
-    String recurrenceRule = '';
-    if (recurrenceType != 'None') {
-      switch (recurrenceType) {
-        case 'Daily':
-          recurrenceRule = 'FREQ=DAILY;INTERVAL=$interval;COUNT=$count';
-          break;
-        case 'Weekly':
-          recurrenceRule =
-              'FREQ=WEEKLY;BYDAY=${_getDayOfWeek(startDate)};INTERVAL=$interval;COUNT=$count';
-          break;
-        case 'Monthly':
-          recurrenceRule =
-              'FREQ=MONTHLY;BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
-          break;
-        case 'Yearly':
-          recurrenceRule =
-              'FREQ=YEARLY;BYMONTH=${startDate.month};BYMONTHDAY=${startDate.day};INTERVAL=$interval;COUNT=$count';
-          break;
-      }
-    }
-
-    final appointment = Appointment(
-      startTime: startDateTime,
-      endTime: endDateTime,
-      subject: eventName,
-      notes: note,
-      recurrenceRule: recurrenceRule,
-      color: Colors.blue,
-    );
-    _appointments.add(appointment);
+  @override
+  void dispose() {
+    _provider?.removeListener(updateAppointments); // Use cached provider
+    super.dispose();
   }
 
   String _getDayOfWeek(DateTime date) {
@@ -130,9 +61,17 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
     }
   }
 
+  void updateAppointments() {
+    final provider =
+        Provider.of<CustomAppointmentProvider>(context, listen: false);
+    setState(() {
+      _appointments = provider.appointments;
+      _calendarDataSource = CustomAppointmentDataSource(_appointments);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final appointments = Provider.of<AppointmentProvider>(context).appointments;
     return Scaffold(
       body: SfCalendar(
         view: _calendarView,
@@ -143,8 +82,8 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
           backgroundColor: Colors.blue,
         ),
         firstDayOfWeek: 1,
-        dataSource: AdvertiseDataSource(appointments),
-        allowDragAndDrop: true,
+        dataSource: _calendarDataSource,
+        allowDragAndDrop: false,
         showNavigationArrow: false,
         showDatePickerButton: true,
         showTodayButton: true,
@@ -154,14 +93,15 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
         cellBorderColor: Colors.transparent,
         onTap: handleCalendarTap,
         monthViewSettings: const MonthViewSettings(
-          appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-        ),
+            showAgenda: true,
+            agendaViewHeight: 200.0,
+            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurpleAccent,
         shape: const CircleBorder(),
-        onPressed: () =>
-            Navigator.of(context).push(AddEventPageRuote(page: const AddEventPage())),
+        onPressed: () => Navigator.of(context)
+            .push(AddEventPageRuote(page: const AddEventPage())),
         child: const Icon(
           Icons.add,
           color: Colors.white,
@@ -170,31 +110,32 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
     );
   }
 
-  // Widget addEventShowDialog() => Container(
-  //         width: MediaQuery.of(context).size.width *0.5,
-  //         height: MediaQuery.of(context).size.height *0.5,
-  //         padding: const EdgeInsets.all(4),
-  //         decoration:  BoxDecoration(
-  //           color: Colors.blue,  // Content background is still white
-  //           borderRadius: BorderRadius.circular(16),
-  //         ),
-  //         child: AddEventPage(),
-  //       );
-
   void handleCalendarTap(CalendarTapDetails details) {
-    if (details.targetElement == CalendarElement.appointment) {
-      final Appointment appointment = details.appointments!.first;
-      EventDetailsDialog.show(context, appointment,
-          (Appointment appointmentToDelete) {
-        setState(() {
-          _appointments.remove(appointmentToDelete);
-        });
-      });
-      if (_calendarView == CalendarView.month) {
-        setState(() {
-          _calendarView = CalendarView.day;
-        });
+    if (details.targetElement == CalendarElement.appointment &&
+        details.appointments != null &&
+        details.appointments!.isNotEmpty) {
+      final CustomAppointment appointment = details.appointments!.first;
+      EventDetailsDialog.show(
+        context,
+        appointment,
+      );
+    } else if (details.targetElement == CalendarElement.calendarCell &&
+        details.date != null &&
+        (details.appointments == null || details.appointments!.isEmpty)) {
+      if (kDebugMode) {
+        print("Tapped on Date: ${details.date}");
       }
+      // Here you can handle other actions like navigating to an add event page
+      navigateToAddEventPage(context, details.date);
+    }
+  }
+
+  void navigateToAddEventPage(BuildContext context, DateTime? selectedDate) {
+    if (selectedDate != null) {
+      Navigator.of(context).push(AddEventPageRuote(
+          page: AddEventPage(
+        date: selectedDate,
+      )));
     }
   }
 
@@ -231,22 +172,4 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       ],
     );
   }
-
-  List<Appointment> getAppointments() {
-    List<Appointment> meetings = <Appointment>[];
-    final DateTime today = DateTime.now();
-    final DateTime startTime =
-        DateTime(today.year, today.month, today.day, 9, 0, 0);
-    final DateTime endTime = startTime.add(const Duration(hours: 2));
-
-    return meetings;
-  }
-}
-
-class AdvertiseDataSource extends CalendarDataSource {
-  AdvertiseDataSource(List<Appointment> appointments) {
-    this.appointments = appointments;
-  }
-
-  Appointment getAppointment(int index) => appointments![index];
 }
