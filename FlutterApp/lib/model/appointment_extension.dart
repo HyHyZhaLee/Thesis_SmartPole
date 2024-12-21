@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/AppFunction/global_variables.dart';
+import 'package:flutter_app/model/pole.dart';
+import 'package:flutter_app/provider/pole_provider.dart';
 import 'package:intl/intl.dart';
 import 'dart:html' as html;
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CustomAppointment extends Appointment {
@@ -22,11 +25,12 @@ class CustomAppointment extends Appointment {
           notes: notes,
         );
 
-  Map<String, dynamic> toJson(DateTime timeStamp) {
+  Map<String, dynamic> toJson(
+      String deviceId, String stationId, DateTime timeStamp) {
     return {
-      'station_id': "SmartPole_0002",
-      'station_name': "Smart Pole 0002",
-      'device_id': "NEMA_0002",
+      'station_id': stationId,
+      'station_name': stationId,
+      'device_id': deviceId,
       'data': {
         'startTime':
             "${DateFormat("dd-MM-yyyy HH:mm:ss").format(startTime)} GMT+0700",
@@ -48,14 +52,16 @@ class CustomAppointment extends Appointment {
     return key;
   }
 
-  Future<void> saveToFirebase() async {
+  Future<void> saveToFirebase(String deviceId, String stationId) async {
     if (kDebugMode) {
       print("triggering firebase");
     }
 
     // Tham chiếu đến node "Schedule light"
     var pushRef =
-        global_databaseReference.child('NEMA_0002').child('Schedule light');
+        global_databaseReference.child(deviceId).child('Schedule light');
+
+    print("Firebase triggered on $deviceId");
 
     try {
       // Lấy dữ liệu của lịch mới nhất
@@ -86,7 +92,9 @@ class CustomAppointment extends Appointment {
 
       // Ghi dữ liệu mới vào Firebase
       var newScheduleRef = pushRef.child(newScheduleName);
-      await newScheduleRef.set(toJson(DateTime.now())).then((_) {
+      await newScheduleRef
+          .set(toJson(deviceId, stationId, DateTime.now()))
+          .then((_) {
         if (kDebugMode) {
           print('Data successfully written with key ${newScheduleRef.key}');
         }

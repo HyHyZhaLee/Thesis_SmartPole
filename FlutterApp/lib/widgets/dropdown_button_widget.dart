@@ -16,7 +16,7 @@ class DropdownButtonWidget extends StatefulWidget {
 
 class _DropdownButtonWidgetState extends State<DropdownButtonWidget> {
   // Danh sách các tùy chọn
-  final List<String> options = ['Temperature', 'Humidity', 'Luminous'];
+  final List<String> options = ['Temperature', 'Humidity', 'Noise'];
 
   // Giá trị được chọn
   String selectedOption = 'Temperature';

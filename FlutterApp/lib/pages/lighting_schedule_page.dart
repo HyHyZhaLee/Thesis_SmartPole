@@ -1,15 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_app/widgets/add_event_dialog.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_app/widgets/event_details_dialog.dart';
 import 'package:flutter_app/utils/custom_route.dart';
 import 'package:flutter_app/provider/event_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_app/widgets/app_bar_custom.dart';
 import 'package:flutter_app/model/appointment_extension.dart';
 
 class LightingSchedulePage extends StatefulWidget {
@@ -23,36 +19,24 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
   late List<CustomAppointment> _appointments;
   final CalendarView _calendarView = CalendarView.month;
   late CustomAppointmentDataSource _calendarDataSource;
+  CustomAppointmentProvider? _provider; // Reference to the provider
 
   @override
   void initState() {
     super.initState();
-    // Set up listener to update appointments from provider
-    final provider =
-        Provider.of<CustomAppointmentProvider>(context, listen: false);
+    _provider = Provider.of<CustomAppointmentProvider>(context, listen: false);
+    _provider!.listenForRealtimeUpdates();
 
-    provider.listenForRealtimeUpdates();
-
-    _appointments = provider.appointments;
+    _appointments = _provider!.appointments;
     _calendarDataSource = CustomAppointmentDataSource(_appointments);
 
     // Add a listener to provider changes
-    provider.addListener(updateAppointments);
-  }
-
-  void updateAppointments() {
-    final provider =
-        Provider.of<CustomAppointmentProvider>(context, listen: false);
-    setState(() {
-      _appointments = provider.appointments;
-      _calendarDataSource = CustomAppointmentDataSource(_appointments);
-    });
+    _provider!.addListener(updateAppointments);
   }
 
   @override
   void dispose() {
-    Provider.of<CustomAppointmentProvider>(context, listen: false)
-        .removeListener(updateAppointments);
+    _provider?.removeListener(updateAppointments); // Use cached provider
     super.dispose();
   }
 
@@ -75,6 +59,15 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       default:
         return 'MO';
     }
+  }
+
+  void updateAppointments() {
+    final provider =
+        Provider.of<CustomAppointmentProvider>(context, listen: false);
+    setState(() {
+      _appointments = provider.appointments;
+      _calendarDataSource = CustomAppointmentDataSource(_appointments);
+    });
   }
 
   @override
