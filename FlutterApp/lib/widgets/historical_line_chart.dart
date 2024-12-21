@@ -59,8 +59,8 @@ class _HistoricalLineChartWidgetState extends State<HistoricalLineChartWidget> {
         });
         setState(() {
           _spots = spots; // Ensure the spots are ordered by time
-          _minValue = minValue - 5.0;
-          _maxValue = maxValue + 5.0;
+          _minValue = minValue - 1.0;
+          _maxValue = maxValue + 1.0;
         });
       }
     });
