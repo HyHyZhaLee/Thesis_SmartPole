@@ -19,7 +19,6 @@ class _HistoricalDataPageState extends State<HistoricalDataPage> {
 
   List<String> dropdownOptions = [
     'Air pressure',
-    'Brightness',
     'Humidity',
     'Noise',
     'Temperature',
@@ -32,11 +31,6 @@ class _HistoricalDataPageState extends State<HistoricalDataPage> {
       setState(() {
         _fireChild = 'air_pressure';
         _unitDataShow = 'Pa';
-      });
-    } else if (lineChartData == 'Brightness') {
-      setState(() {
-        _fireChild = 'ambient_light';
-        _unitDataShow = 'Lux';
       });
     } else if (lineChartData == 'Humidity') {
       setState(() {
@@ -70,7 +64,7 @@ class _HistoricalDataPageState extends State<HistoricalDataPage> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _lineChartDate,
-      firstDate: DateTime(2024, 12, 1),
+      firstDate: DateTime(2024, 12, 4),
       lastDate: DateTime.now(),
     );
     if (picked != null && picked != _lineChartDate) {

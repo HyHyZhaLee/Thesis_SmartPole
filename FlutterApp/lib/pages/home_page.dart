@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
           } else if (dataName == 'air_pressure') {
             _airPressure = "$latestValue $dataUnit";
           } else if (dataName == 'ambient_light') {
-            _ambientLight = "$latestValue";
+            _ambientLight = "$latestValue $dataUnit";
           } else if (dataName == 'noise') {
             _noise = "$latestValue $dataUnit";
           } else {
@@ -249,19 +249,19 @@ class _HomePageState extends State<HomePage> {
                                 top: 130,
                                 right: 110,
                                 child: _buildButton("AIR SENSOR", context,
-                                    pageIndex: 7),
+                                    pageIndex: 5),
                               ),
                               Positioned(
                                 top: 335,
                                 right: 110,
                                 child: _buildButton("SCREEN", context,
-                                    pageIndex: 5),
+                                    pageIndex: 3),
                               ),
                               Positioned(
                                 top: 500,
                                 right: 110,
                                 child: _buildButton("CHARGER", context,
-                                    pageIndex: 7),
+                                    pageIndex: 0),
                               ),
                             ],
                           ),
@@ -751,9 +751,9 @@ class _HomePageState extends State<HomePage> {
       } else if (newSelection == "Humidity") {
         _selectedHistoryShow = "humidity";
         _unitDataShow = "%";
-      } else if (newSelection == "Luminous") {
-        _selectedHistoryShow = "ambient_light";
-        _unitDataShow = "";
+      } else if (newSelection == "Noise") {
+        _selectedHistoryShow = "noise";
+        _unitDataShow = "dB";
       }
     });
   }

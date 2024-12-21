@@ -1,4 +1,4 @@
-import 'dart:ui' as ui;
+import 'dart:ui_web' as ui;
 import 'package:flutter/material.dart';
 import 'dart:html' as html;
 
@@ -8,7 +8,6 @@ class SecurityCamerasPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const String viewType = 'twitch-player';
-    // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(viewType, (int viewId) {
       final iframe = html.IFrameElement()
         ..src = 'https://player.twitch.tv/?channel=duyvtvnpro&parent=localhost'

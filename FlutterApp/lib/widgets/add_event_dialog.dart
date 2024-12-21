@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/AppFunction/global_variables.dart';
 import 'package:flutter_app/provider/event_provider.dart';
+import 'package:flutter_app/provider/pole_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_app/utils/convertDateTime.dart';
 import 'package:flutter_app/model/appointment_extension.dart';
@@ -40,21 +41,32 @@ class _AddEventPageStage extends State<AddEventPage> {
   TextEditingController _subjectController = TextEditingController();
   TextEditingController _notesController = TextEditingController();
 
+  final String _subject = "";
+  String _deviceId = "NEMA_0002";
+  String _stationId = "AIR_0002";
+
   @override
   void initState() {
     super.initState();
 
+    PoleProvider polesInfor = Provider.of<PoleProvider>(context, listen: false);
+
     if (widget.appointment == null && widget.date == null) {
       _startTime = DateTime.now();
       _endTime = _startTime.add(const Duration(hours: 2));
+      _deviceId = polesInfor.getSelectedPoleID();
+      _stationId = polesInfor.getSelectedStationID();
     } else if (widget.appointment == null && widget.date != null) {
       _startTime = widget.date!;
       _endTime = widget.date!.add(const Duration(hours: 2));
+      _deviceId = polesInfor.getSelectedPoleID();
+      _stationId = polesInfor.getSelectedStationID();
     } else {
       final appointment = widget.appointment!;
       if (kDebugMode) {
         print("editing triggered");
       }
+
       _subjectController =
           TextEditingController(text: widget.appointment!.subject);
       _notesController = TextEditingController(text: widget.appointment!.notes);
@@ -66,6 +78,7 @@ class _AddEventPageStage extends State<AddEventPage> {
   @override
   void dispose() {
     _subjectController.dispose();
+    _notesController.dispose();
 
     super.dispose();
   }
@@ -564,10 +577,10 @@ class _AddEventPageStage extends State<AddEventPage> {
 
         provider.editAppointment(appointment, widget.appointment!);
 
-        appointment.saveToFirebase();
+        appointment.saveToFirebase(_deviceId, _stationId);
       } else {
         provider.addAppointment(appointment);
-        appointment.saveToFirebase();
+        appointment.saveToFirebase(_deviceId, _stationId);
       }
 
       Navigator.of(context).pop();

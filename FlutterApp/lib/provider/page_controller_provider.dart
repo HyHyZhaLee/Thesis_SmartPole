@@ -4,8 +4,7 @@ import 'package:flutter_app/pages/home_page.dart';
 import 'package:flutter_app/pages/light_control_page.dart';
 import 'package:flutter_app/pages/lighting_schedule_page.dart';
 import 'package:flutter_app/pages/security_cameras_page.dart';
-import 'package:flutter_app/pages/advertisement_schedule_page.dart';
-import 'package:flutter_app/pages/environmental_sensors_page.dart';
+
 import 'package:flutter_app/pages/historical_data_page.dart';
 
 class PageControllerProvider extends ChangeNotifier {
@@ -16,8 +15,6 @@ class PageControllerProvider extends ChangeNotifier {
     const LightControlPage(),
     const LightingSchedulePage(),
     const SecurityCamerasPage(),
-    const AdvertisementSchedulePage(),
-    const EnvironmentalSensorsPage(),
     const HistoricalDataPage(),
     const HomePage(),
   ];

@@ -78,120 +78,125 @@ class _HistoricalLineChartWidgetState extends State<HistoricalLineChartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-      child: Container(
-        height: 700,
-        width: 1600, // Set a fixed width for the container that holds the chart
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 32, horizontal: 32),
-          child: LineChart(
-            LineChartData(
-              minY: _minValue,
-              maxY: _maxValue,
-              lineTouchData: LineTouchData(
-                touchTooltipData:
-                    LineTouchTooltipData(getTooltipItems: (touchedSpots) {
-                  return touchedSpots.map((spot) {
-                    return LineTooltipItem(
-                      '${spot.y}', // Display y value
-                      TextStyle(
-                          color: Colors.white,
-                          fontWeight:
-                              FontWeight.bold), // Customize text style here
+    return SizedBox(
+      width: 1600,
+      height: 700,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+        child: Container(
+          height: 700,
+          width:
+              1600, // Set a fixed width for the container that holds the chart
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 32, horizontal: 32),
+            child: LineChart(
+              LineChartData(
+                minY: _minValue,
+                maxY: _maxValue,
+                lineTouchData: LineTouchData(
+                  touchTooltipData:
+                      LineTouchTooltipData(getTooltipItems: (touchedSpots) {
+                    return touchedSpots.map((spot) {
+                      return LineTooltipItem(
+                        '${spot.y}', // Display y value
+                        TextStyle(
+                            color: Colors.white,
+                            fontWeight:
+                                FontWeight.bold), // Customize text style here
+                      );
+                    }).toList();
+                  }),
+                ),
+                gridData: FlGridData(
+                  show: false,
+                  drawVerticalLine: true,
+                  drawHorizontalLine: true,
+                  getDrawingHorizontalLine: (value) {
+                    return FlLine(
+                      color: Colors.grey[300],
+                      strokeWidth: 1.0,
                     );
-                  }).toList();
-                }),
-              ),
-              gridData: FlGridData(
-                show: false,
-                drawVerticalLine: true,
-                drawHorizontalLine: true,
-                getDrawingHorizontalLine: (value) {
-                  return FlLine(
-                    color: Colors.grey[300],
-                    strokeWidth: 1.0,
-                  );
-                },
-                getDrawingVerticalLine: (value) {
-                  return FlLine(
-                    color: Colors.grey[300],
-                    strokeWidth: 1.0,
-                  );
-                },
-              ),
-              titlesData: FlTitlesData(
-                show: true,
-                topTitles: AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
+                  },
+                  getDrawingVerticalLine: (value) {
+                    return FlLine(
+                      color: Colors.grey[300],
+                      strokeWidth: 1.0,
+                    );
+                  },
                 ),
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 30,
-                    interval: 10, // Show label every 5 intervals
-                    getTitlesWidget: (value, meta) {
-                      // Convert minutes since midnight back to time format
-                      int totalMinutes = value.toInt();
-                      int hours = totalMinutes ~/ 60;
-                      int minutes = totalMinutes % 60;
-                      // Show label only at specific minute marks each hour
-                      if (minutes == 0 || minutes == 30) {
-                        // Adjust these values for your specific needs
-                        String formattedTime =
-                            '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
-                        return Text(formattedTime,
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 10));
-                      }
-                      return Text(
-                          ''); // Return an empty Text widget for other minutes
-                    },
+                titlesData: FlTitlesData(
+                  show: true,
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 40,
+                      interval: 10, // Show label every 5 intervals
+                      getTitlesWidget: (value, meta) {
+                        // Convert minutes since midnight back to time format
+                        int totalMinutes = value.toInt();
+                        int hours = totalMinutes ~/ 60;
+                        int minutes = totalMinutes % 60;
+                        // Show label only at specific minute marks each hour
+                        if (minutes == 0 || minutes == 30) {
+                          // Adjust these values for your specific needs
+                          String formattedTime =
+                              '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
+                          return Text(formattedTime,
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 10));
+                        }
+                        return Text(
+                            ''); // Return an empty Text widget for other minutes
+                      },
+                    ),
+                  ),
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 50,
+                      getTitlesWidget: (double value, TitleMeta meta) {
+                        return Text(
+                          '${value.toInt()} ${widget.unitData}', // Append '°C' to the y-value
+                          style: TextStyle(color: Colors.black, fontSize: 10),
+                        );
+                      },
+                    ),
                   ),
                 ),
-                rightTitles: AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
+                borderData: FlBorderData(
+                  show: true,
+                  border: Border.all(color: Colors.grey[300]!, width: 1),
                 ),
-                leftTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 40,
-                    getTitlesWidget: (double value, TitleMeta meta) {
-                      return Text(
-                        '${value.toInt()} ${widget.unitData}', // Append '°C' to the y-value
-                        style: TextStyle(color: Colors.black, fontSize: 10),
-                      );
-                    },
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: _spots,
+                    isCurved: false,
+                    color: widget.color, // Line color
+                    barWidth: 5,
+                    isStrokeCapRound: true,
+                    dotData: FlDotData(
+                      show: true, // Set to true if you want to show dots
+                      getDotPainter: (spot, percent, barData, index) {
+                        return FlDotCirclePainter(
+                          radius: 1, // Dot size
+                          color: widget.color, // Dot color
+                          strokeWidth: 0, // No border
+                        );
+                      },
+                    ),
+                    belowBarData: BarAreaData(
+                      show: true,
+                      color: widget.color.withOpacity(0.5),
+                    ),
                   ),
-                ),
+                ],
               ),
-              borderData: FlBorderData(
-                show: true,
-                border: Border.all(color: Colors.grey[300]!, width: 1),
-              ),
-              lineBarsData: [
-                LineChartBarData(
-                  spots: _spots,
-                  isCurved: false,
-                  color: widget.color, // Line color
-                  barWidth: 5,
-                  isStrokeCapRound: true,
-                  dotData: FlDotData(
-                    show: true, // Set to true if you want to show dots
-                    getDotPainter: (spot, percent, barData, index) {
-                      return FlDotCirclePainter(
-                        radius: 1, // Dot size
-                        color: widget.color, // Dot color
-                        strokeWidth: 0, // No border
-                      );
-                    },
-                  ),
-                  belowBarData: BarAreaData(
-                    show: true,
-                    color: widget.color.withOpacity(0.5),
-                  ),
-                ),
-              ],
             ),
           ),
         ),
