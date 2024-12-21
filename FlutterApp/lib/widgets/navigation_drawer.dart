@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/AppFunction/global_variables.dart';
 
-const double space_between_icon = 30.0;
+const double space_between_icon = 45.0;
 const double space = 10.0;
 const space_before_white_panel = 32.0;
 const space_before_icon = 24.0;
@@ -86,6 +86,9 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer>
                                   'lib/Assets/icons/page_icons/home_unclicked.png',
                             ),
                           ),
+                        ),
+                        const SizedBox(
+                          height: 40,
                         ),
                         Expanded(
                           flex: 705,

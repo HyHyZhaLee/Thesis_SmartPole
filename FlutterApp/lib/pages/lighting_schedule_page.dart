@@ -19,36 +19,24 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
   late List<CustomAppointment> _appointments;
   final CalendarView _calendarView = CalendarView.month;
   late CustomAppointmentDataSource _calendarDataSource;
+  CustomAppointmentProvider? _provider; // Reference to the provider
 
   @override
   void initState() {
     super.initState();
-    // Set up listener to update appointments from provider
-    final provider =
-        Provider.of<CustomAppointmentProvider>(context, listen: false);
+    _provider = Provider.of<CustomAppointmentProvider>(context, listen: false);
+    _provider!.listenForRealtimeUpdates();
 
-    provider.listenForRealtimeUpdates();
-
-    _appointments = provider.appointments;
+    _appointments = _provider!.appointments;
     _calendarDataSource = CustomAppointmentDataSource(_appointments);
 
     // Add a listener to provider changes
-    provider.addListener(updateAppointments);
-  }
-
-  void updateAppointments() {
-    final provider =
-        Provider.of<CustomAppointmentProvider>(context, listen: false);
-    setState(() {
-      _appointments = provider.appointments;
-      _calendarDataSource = CustomAppointmentDataSource(_appointments);
-    });
+    _provider!.addListener(updateAppointments);
   }
 
   @override
   void dispose() {
-    Provider.of<CustomAppointmentProvider>(context, listen: false)
-        .removeListener(updateAppointments);
+    _provider?.removeListener(updateAppointments); // Use cached provider
     super.dispose();
   }
 
@@ -71,6 +59,15 @@ class _LightingSchedulePage extends State<LightingSchedulePage> {
       default:
         return 'MO';
     }
+  }
+
+  void updateAppointments() {
+    final provider =
+        Provider.of<CustomAppointmentProvider>(context, listen: false);
+    setState(() {
+      _appointments = provider.appointments;
+      _calendarDataSource = CustomAppointmentDataSource(_appointments);
+    });
   }
 
   @override
