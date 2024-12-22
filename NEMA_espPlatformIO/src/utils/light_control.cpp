@@ -2,6 +2,13 @@
 
 // Constructor function for LightControl
 
+void LightControl :: getFromString(String strJson)
+{
+  for (int i = 0; i < strJson.length(); i++)
+  {
+    
+  }
+}
 LightControl :: LightControl(String strJson)
 {
   if (strJson[0] != '{' || strJson.endsWith("}") != true)

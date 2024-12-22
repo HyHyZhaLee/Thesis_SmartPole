@@ -120,7 +120,7 @@
 #define delay_dimming_debug             (100)
 
 // DEFINE WATCH DOG
-#define RESET_WATCHDOG_TIME             (300)   // seconds
+#define RESET_WATCHDOG_TIME             (120)   // seconds
 
 // DEFINE RELAY
 #define RELAY_PIN   18

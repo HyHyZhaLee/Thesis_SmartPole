@@ -127,8 +127,6 @@ class _HomePageState extends State<HomePage> {
             _pm2_5 = "$latestValue $dataUnit";
           } else if (dataName == 'air_pressure') {
             _airPressure = "$latestValue $dataUnit";
-          } else if (dataName == 'ambient_light') {
-            _ambientLight = "$latestValue $dataUnit";
           } else if (dataName == 'noise') {
             _noise = "$latestValue $dataUnit";
           } else {

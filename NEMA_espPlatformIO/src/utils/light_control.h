@@ -33,6 +33,7 @@ class LightControl{
         to(to), 
         dimming(dimming)  {}
     ~LightControl(){};
+    void getFromString(String strJson);
     String getStationId(){ return station_id; }
     void setStationId(String station_id){ this->station_id = station_id; }
     String getStationName(){ return station_name; }

@@ -140,11 +140,11 @@ class PoleProvider extends ChangeNotifier {
       if (foundPole.dimmingData != value) {
         foundPole.dimmingData = value;
         foundPole.isSwitch = value == 0.0 ? false : true;
+        notifyListeners();
       }
     } else {
       print("Pole not found!");
     }
-    notifyListeners();
   }
 
   void setDimmingOfDeviceId(String deviceId, double value) {
@@ -153,10 +153,10 @@ class PoleProvider extends ChangeNotifier {
     if (foundPole != null) {
       foundPole.dimmingData = value;
       foundPole.isSwitch = value == 0.0 ? false : true;
+      notifyListeners();
     } else {
       print("Pole not found!");
     }
-    notifyListeners();
   }
 
   void setSwitchStateOf(String switchName, bool value) {
@@ -166,17 +166,18 @@ class PoleProvider extends ChangeNotifier {
       if (foundPole.isSwitch != value) {
         foundPole.isSwitch = value;
         foundPole.dimmingData = value ? 50.0 : 0.0;
+        notifyListeners();
       }
     } else {
       print("Pole not found!");
     }
-    notifyListeners();
   }
 
   void setToggleSwitchOf(String switchName) {
     PoleInfor? foundPole =
         _poles.firstWhereOrNull((pole) => pole.poleName == switchName);
     if (foundPole != null) {
+      // _poles.firstWhereOrNull((pole) => pole.poleName == switchName).isSwitch = _poles.firstWhereOrNull((pole) => pole.poleName == switchName).isSwitch
       foundPole.isSwitch = !foundPole.isSwitch;
       foundPole.dimmingData = foundPole.isSwitch ? 50.0 : 0.0;
     } else {

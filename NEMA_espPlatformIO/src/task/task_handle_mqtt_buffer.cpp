@@ -23,6 +23,8 @@ void taskHandleMqttBuffer(void *pvParameter)
       mqttBuffer.erase(mqttBuffer.begin());
       LightControl lightControl(stringJson);
 
+      
+
       if (lightControl.getAction().compareTo("control light") == 0)
       { // This part is for control this device
         if (lightControl.getTo().compareTo(DEVICE_ID) == 0)
