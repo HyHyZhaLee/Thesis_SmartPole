@@ -6,7 +6,9 @@ import 'package:flutter_app/util/smart_device_box.dart';
 import 'package:flutter_app/util/sensor_data_box.dart';
 import 'package:flutter_app/AppFunction/mqtt_helper.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:flutter_app/global_variables.dart';
+
 const MQTT_SERVER = "mqtt.ohstem.vn";
 const MQTT_PORT = 8084;
 const MQTT_USERNAME = "BK_SmartPole";
@@ -24,6 +26,15 @@ class _HomePageState extends State<HomePage> {
   late MQTTHelper mqttHelper;
   String _statusMessage = 'Disconnected';
   List<Map<String, String>> mySensors = [];
+  List mySmartDevices = [
+    ["NEMA_0002", "lib/icons/light-bulb.png", false],
+    ["NEMA_0003", "lib/icons/light-bulb.png", false],
+  ];
+
+  double temperatureValue = 0.0;
+  double humidityValue = 0.0;
+  double pm25Value = 0.0;
+  double pm10Value = 0.0;
 
   @override
   void initState() {
@@ -32,8 +43,13 @@ class _HomePageState extends State<HomePage> {
       app: Firebase.app(),
       databaseURL: DATABASE_URL,
     ).ref();
+    fetchSensorData("temperature", );
+    fetchSensorData("humidity", );
+    fetchSensorData("PM2_5" );
+    fetchSensorData("PM10" );
     mqttHelper = MQTTHelper(MQTT_SERVER, 'SmartPole_0002', MQTT_USERNAME, MQTT_PASSWORD);
     initializeMQTT();
+
   }
 
   Future<void> initializeMQTT() async {
@@ -57,7 +73,6 @@ class _HomePageState extends State<HomePage> {
       if (msg['station_id'] == 'SmartPole_0002' &&
           msg['station_name'] == 'Smart Pole 0002' &&
           msg['action'] == 'control light') {
-        // Handle specific logic here based on the message
         print("Control light action received: ${msg['data']}");
       }
     } catch (e) {
@@ -71,17 +86,75 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  List mySmartDevices = [
-    ["NEMA_0002", "lib/icons/light-bulb.png", false],
-    ["NEMA_0003", "lib/icons/light-bulb.png", false],
-  ];
+  Future<void> fetchSensorData(String dataName) async {
+    String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    String sensorName = "";
+    String iconPath = "";
+
+    // Set sensor details based on the data name
+    if (dataName == "temperature") {
+      sensorName = "Temperature";
+      iconPath = "lib/icons/temperature.png";
+    } else if (dataName == "humidity") {
+      sensorName = "Humidity";
+      iconPath = "lib/icons/humidity.png";
+    } else if (dataName == "PM2_5") {
+      sensorName = "PM2_5";
+      iconPath = "lib/icons/pm25.png";
+    } else if (dataName == "PM10") {
+      sensorName = "PM10";
+      iconPath = "lib/icons/pm10.png";
+    } else {
+      print("Unknown sensor: $dataName");
+      return; // Exit the function for unknown sensors
+    }
+
+    // Fetch the latest sensor data from Firebase
+    global_databaseReference
+        .child("NEMA_0002")
+        .child("AIR_0002")
+        .child(dataName)
+        .child(today)
+        .orderByKey()
+        .limitToLast(1)
+        .onValue
+        .listen((event) {
+      if (event.snapshot.exists) {
+        try {
+          // Extract the latest value from the snapshot
+          Map<dynamic, dynamic> dataValue = event.snapshot.value as Map<dynamic, dynamic>;
+          var latestValueRaw = dataValue.values.first;
+
+          // Convert the value to double
+          double latestValue = latestValueRaw is int
+              ? latestValueRaw.toDouble()
+              : (latestValueRaw is double
+              ? latestValueRaw
+              : double.tryParse(latestValueRaw.toString()) ?? 0.0);
+
+
+          // Update UI with the new sensor data
+          setState(() {
+            mySensors.add({
+              "sensorName": sensorName,
+              "iconPath": iconPath,
+              "sensorData": "$latestValue",
+            });
+          });
+        } catch (e) {
+          print("Error processing data for $dataName: $e");
+        }
+      } else {
+        print("No data available for $dataName on $today.");
+      }
+    });
+  }
 
   void powerSwitchChanged(bool value, int index) {
     setState(() {
       mySmartDevices[index][2] = value;
       String deviceId = mySmartDevices[index][0];
 
-      // Prepare the message structure as per the new MQTT topic
       var message = jsonEncode({
         "station_id": "SmartPole_0002",
         "station_name": "Smart Pole 0002",
@@ -89,8 +162,8 @@ class _HomePageState extends State<HomePage> {
         "device_id": "NEMA_0002",
         "data": {
           "from": "NEMA_0002",
-          "to": deviceId, // Example target device
-          "dimming": value ? "70" : "0", // Adjust dimming based on the switch
+          "to": deviceId,
+          "dimming": value ? "70" : "0",
         }
       });
 
