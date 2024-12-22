@@ -1,10 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_app/util/smart_device_box.dart';
 import 'package:flutter_app/util/sensor_data_box.dart';
 import 'package:flutter_app/AppFunction/mqtt_helper.dart';
 import 'dart:convert';
-
+import 'package:flutter_app/global_variables.dart';
 const MQTT_SERVER = "mqtt.ohstem.vn";
 const MQTT_PORT = 8084;
 const MQTT_USERNAME = "BK_SmartPole";
@@ -26,6 +28,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    global_databaseReference = FirebaseDatabase.instanceFor(
+      app: Firebase.app(),
+      databaseURL: DATABASE_URL,
+    ).ref();
     mqttHelper = MQTTHelper(MQTT_SERVER, 'SmartPole_0002', MQTT_USERNAME, MQTT_PASSWORD);
     initializeMQTT();
   }
