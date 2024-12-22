@@ -105,9 +105,8 @@ class _CustomSliderWidgetState extends State<CustomSliderWidget> {
             onPressed: () {
               setState(() {
                 _isSwitched = !_isSwitched; // Toggle the state of the switch
-                _currentSliderValue = _isSwitched
-                    ? _currentSliderValue
-                    : 0; // Set slider to 0 if switched off
+                _currentSliderValue =
+                    _isSwitched ? 50.0 : 0; // Set slider to 0 if switched off
               });
               widget.onSwitchValueToggle();
             },

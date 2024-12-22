@@ -6,9 +6,9 @@
 // DEFINE POLE INFORMATION
 // #define _ESP_NUMBER_ONE_
 // #define _ESP_NUMBER_TWO_
-// #define _ESP_NUMBER_THREE_
+#define _ESP_NUMBER_THREE_
 // #define _ESP_NUMBER_FOUR_
-#define _ESP_NUMBER_FIVE_
+// #define _ESP_NUMBER_FIVE_
 
 #ifdef _ESP_NUMBER_ONE_
   #define DEVICE_ID                  "NEMA_0002"

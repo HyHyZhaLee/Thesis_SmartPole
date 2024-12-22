@@ -10,6 +10,8 @@ String message;
 String textBuffer;
 bool isConfgured = false;
 
+
+
 bool loraSend(String message)
 {
   if (lora.SendFrame(config, (uint8_t *)(message.c_str()), message.length()) == 0) {
@@ -68,6 +70,7 @@ void taskLoraInit(void *pvParameters)
 void taskLoraRecv (void* pvParameters)
 {
   vTaskDelay(delay_for_initialization);
+
   while (true)
   {
     if (lora.RecieveFrame(&data) == 0)
@@ -84,7 +87,6 @@ void taskLoraRecv (void* pvParameters)
 
 void taskLoraSend(void* pvParameters)
 {
-  
   vTaskDelay(delay_for_initialization);
   String msg = "Hello, world!";
   while (true)

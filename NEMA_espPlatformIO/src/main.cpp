@@ -12,7 +12,7 @@ void setup() {
     Serial.begin(115200);
     lora.Init(&Serial1, 9600, SERIAL_8N1, UART_LORA_TXD_PIN, UART_LORA_RXD_PIN);
   }
-  semaphoreLora = xSemaphoreCreateMutex();
+
 
   initWatchdogTimer(RESET_WATCHDOG_TIME);
 

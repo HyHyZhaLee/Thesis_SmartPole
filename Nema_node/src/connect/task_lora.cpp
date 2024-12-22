@@ -27,7 +27,7 @@ void taskLoraInit(void *pvParameters)
   lora.SetDefaultConfigValue(config);
 
   // Set initial configuration values
-  config.own_address              = 0x0002;
+  config.own_address              = 0x0003;
   config.baud_rate                = BAUD_9600;
   config.air_data_rate            = BW125K_SF9;
   config.subpacket_size           = SUBPACKET_200_BYTE;
