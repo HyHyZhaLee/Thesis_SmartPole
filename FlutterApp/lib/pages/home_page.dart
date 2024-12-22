@@ -3,15 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_app/util/smart_device_box.dart';
 import 'package:flutter_app/util/sensor_data_box.dart';
 import 'package:flutter_app/AppFunction/mqtt_helper.dart';
-import 'dart:convert'; // For JSON decoding
-import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-const MQTT_SERVER = "mqttserver.tk";
-const MQTT_PORT = 1883;
-const MQTT_USERNAME = "innovation";
-const MQTT_PASSWORD = "Innovation_RgPQAZoA5N";
-const MQTT_TOPIC = "/innovation/airmonitoring/SmartPole";
-const SENSOR_DATA_URL = "https://ezdata2.m5stack.com/api/v2/4827E2E30938/dataMacByKey/raw";
+const MQTT_SERVER = "mqtt.ohstem.vn";
+const MQTT_PORT = 8084;
+const MQTT_USERNAME = "BK_SmartPole";
+const MQTT_PASSWORD = "";
+const MQTT_CONTROL_LIGHT_TOPIC = "BK_SmartPole/feeds/V20";
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,9 +21,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late MQTTHelper mqttHelper;
   String _statusMessage = 'Disconnected';
-  double _brightness = 0;
-  bool _isLightOn = false;
-
   List<Map<String, String>> mySensors = [];
 
   @override
@@ -33,13 +28,12 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     mqttHelper = MQTTHelper(MQTT_SERVER, 'SmartPole_0002', MQTT_USERNAME, MQTT_PASSWORD);
     initializeMQTT();
-    fetchSensorData();
   }
 
   Future<void> initializeMQTT() async {
     bool isConnected = await mqttHelper.initializeMQTTClient();
     if (isConnected) {
-      mqttHelper.subscribe(MQTT_TOPIC, handleReceivedMessage);
+      mqttHelper.subscribe(MQTT_CONTROL_LIGHT_TOPIC, handleReceivedMessage);
       setState(() {
         _statusMessage = 'Connected';
       });
@@ -50,32 +44,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> fetchSensorData() async {
-    try {
-      final response = await http.get(Uri.parse(SENSOR_DATA_URL));
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final sensorDataRaw = data['data']['value'];
-        final sensorData = json.decode(sensorDataRaw.replaceAll(r'\"', '"'));
-        setState(() {
-          mySensors = [
-            {"sensorName": "Temperature", "iconPath": "lib/icons/temperature.png", "sensorData": "${sensorData['sen55']['temperature'].toStringAsFixed(2)}°C"},
-            {"sensorName": "Humidity", "iconPath": "lib/icons/humidity.png", "sensorData": "${sensorData['sen55']['humidity'].toStringAsFixed(2)}%"},
-            {"sensorName": "PM1.0", "iconPath": "lib/icons/pm1_0.png", "sensorData": "${sensorData['sen55']['pm1.0'].toStringAsFixed(2)} µg/m³"},
-            {"sensorName": "PM2.5", "iconPath": "lib/icons/pm25.png", "sensorData": "${sensorData['sen55']['pm2.5'].toStringAsFixed(2)} µg/m³"},
-            {"sensorName": "PM4.0", "iconPath": "lib/icons/pm40.png", "sensorData": "${sensorData['sen55']['pm4.0'].toStringAsFixed(2)} µg/m³"},
-            {"sensorName": "PM10", "iconPath": "lib/icons/pm10.png", "sensorData": "${sensorData['sen55']['pm10.0'].toStringAsFixed(2)} µg/m³"},
-            {"sensorName": "CO2", "iconPath": "lib/icons/co2.png", "sensorData": "${sensorData['scd40']['co2']} ppm"},
-          ];
-        });
-      } else {
-        throw Exception('Failed to load sensor data');
-      }
-    } catch (e) {
-      print('Failed to fetch sensor data: $e');
-    }
-  }
-
   void handleReceivedMessage(dynamic message) {
     print("Handling message: $message");
     try {
@@ -83,11 +51,8 @@ class _HomePageState extends State<HomePage> {
       if (msg['station_id'] == 'SmartPole_0002' &&
           msg['station_name'] == 'Smart Pole 0002' &&
           msg['action'] == 'control light') {
-        double brightnessValue = double.tryParse(msg['data'].toString()) ?? _brightness;
-        setState(() {
-          _brightness = brightnessValue;
-          _isLightOn = _brightness > 0;
-        });
+        // Handle specific logic here based on the message
+        print("Control light action received: ${msg['data']}");
       }
     } catch (e) {
       print('Error processing received message: $e');
@@ -100,34 +65,32 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  final double horizontalPadding = 40;
-  final double verticalPadding = 25;
-
   List mySmartDevices = [
-    ["NEMA 0001", "lib/icons/light-bulb.png", false],
-    ["NEMA 0002", "lib/icons/light-bulb.png", false],
+    ["NEMA_0002", "lib/icons/light-bulb.png", false],
+    ["NEMA_0003", "lib/icons/light-bulb.png", false],
   ];
 
   void powerSwitchChanged(bool value, int index) {
     setState(() {
       mySmartDevices[index][2] = value;
       String deviceId = mySmartDevices[index][0];
-      if(deviceId == "NEMA 0001") {
-        deviceId = "NEMA_0001";
-      } else if(deviceId == "NEMA 0002") {
-        deviceId = "NEMA_0002";
-      }
+
+      // Prepare the message structure as per the new MQTT topic
       var message = jsonEncode({
         "station_id": "SmartPole_0002",
         "station_name": "Smart Pole 0002",
         "action": "control light",
-        "device_id": deviceId,
-        "data": value ? "90" : "0"
+        "device_id": "NEMA_0002",
+        "data": {
+          "from": "NEMA_0002",
+          "to": deviceId, // Example target device
+          "dimming": value ? "70" : "0", // Adjust dimming based on the switch
+        }
       });
-      mqttHelper.publish(MQTT_TOPIC, message);
+
+      mqttHelper.publish(MQTT_CONTROL_LIGHT_TOPIC, message);
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +102,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             SizedBox(height: 20),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 25),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -150,7 +113,7 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 20),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -161,12 +124,12 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 25),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40.0),
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
               child: Divider(thickness: 1, color: Color.fromARGB(255, 204, 204, 204)),
             ),
             SizedBox(height: 25),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Text("Smart Devices", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Colors.grey.shade800)),
             ),
             SizedBox(height: 10),
@@ -180,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                   height: height,
                   child: GridView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: itemCount,
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

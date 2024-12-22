@@ -405,7 +405,7 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///C:/Users/Admin/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-14.2.3",
+      "rootUri": "file:///C:/Users/Admin/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-14.2.4",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -446,10 +446,10 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-06-17T02:40:57.701696Z",
+  "generated": "2024-12-22T07:01:03.839024Z",
   "generator": "pub",
-  "generatorVersion": "3.5.0-250.0.dev",
+  "generatorVersion": "3.5.0-323.0.dev",
   "flutterRoot": "file:///C:/flutter",
-  "flutterVersion": "3.23.0-13.0.pre.196",
+  "flutterVersion": "3.24.0-1.0.pre.54",
   "pubCache": "file:///C:/Users/Admin/AppData/Local/Pub/Cache"
 }
